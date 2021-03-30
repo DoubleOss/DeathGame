@@ -1,0 +1,8 @@
+name: DeathGame
+main: doubleos.deathgame.Main
+version: 1.0
+commands:
+  죽술:
+    aliases: [ deathgame ]
+    description:
+description: HalfTeamPlugin

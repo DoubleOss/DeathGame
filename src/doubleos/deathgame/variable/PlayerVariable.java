@@ -1,0 +1,40 @@
+package doubleos.deathgame.variable;
+
+import doubleos.deathgame.Main;
+import org.bukkit.entity.Player;
+
+public class PlayerVariable
+{
+
+    public enum HumanType
+    {
+        HUMAN,
+        KILLER;
+
+    }
+
+    Player m_player;
+
+    HumanType m_humanType;
+
+
+    public PlayerVariable(Player m_player)
+    {
+        this.m_player = m_player;
+        this.m_humanType = HumanType.HUMAN;
+        Main.instance.variablePlayer.put(m_player, this);
+    }
+
+
+    public void setHumanType(HumanType type)
+    {
+        this.m_humanType = type;
+    }
+
+    public HumanType getHumanType()
+    {
+        return this.m_humanType;
+    }
+
+
+}

@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="CatServer-ac735a0-universal">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../마인크래프트 Api/CatServer-ac735a0-universal.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../마인크래프트 Api/ScoreboardLib.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

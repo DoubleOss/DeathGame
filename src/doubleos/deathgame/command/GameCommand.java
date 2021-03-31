@@ -3,7 +3,9 @@ package doubleos.deathgame.command;
 
 
 import doubleos.deathgame.Main;
+import doubleos.deathgame.scoreboard.Scoreboard;
 import doubleos.deathgame.variable.GameVariable;
+import doubleos.deathgame.variable.MissionManager;
 import doubleos.deathgame.variable.PlayerVariable;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -38,10 +40,7 @@ public class GameCommand implements CommandExecutor
                 }
                 if (strings[0].equalsIgnoreCase("시작"))
                 {
-
-                    setPlayerVariable();
                     GameVariable.Instance().setGameState(GameVariable.GameState.PLAY);
-
                     Bukkit.broadcastMessage("잠시후 랜덤으로 킬러가 설정됩니다.");
 
                     BukkitTask task = new BukkitRunnable()
@@ -50,7 +49,7 @@ public class GameCommand implements CommandExecutor
                         public void run()
                         {
                             Collections.shuffle(m_GamePlayerList);
-
+                            setPlayerVariable();
                             if(GameVariable.Instance().getCheckKiller() == false)
                             {
                                 Main.instance.variablePlayer.get(m_GamePlayerList.get(0)).setHumanType(PlayerVariable.HumanType.KILLER);
@@ -72,6 +71,7 @@ public class GameCommand implements CommandExecutor
 
                     }.runTaskTimer(Main.instance, 20l, 1l);
 
+                    GameVariable.Instance().setTimeStart(true);
                     return true;
 
                 }
@@ -120,6 +120,7 @@ public class GameCommand implements CommandExecutor
 
     void setPlayerVariable()
     {
+        MissionManager.Instance().setMission();
         for(Player p : Bukkit.getOnlinePlayers())
         {
 
@@ -128,6 +129,7 @@ public class GameCommand implements CommandExecutor
                 p.sendMessage("통과");
                 m_GamePlayerList.add(p);
                 PlayerVariable playerVariable = new PlayerVariable(p);
+                Scoreboard score = new Scoreboard(p);
             }
             else
             {
@@ -137,6 +139,7 @@ public class GameCommand implements CommandExecutor
                     {
                         p.sendMessage("통과");
                         m_GamePlayerList.add(p);
+                        Scoreboard score = new Scoreboard(p);
                         PlayerVariable playerVariable = new PlayerVariable(p);
                     }
                 }
@@ -148,6 +151,8 @@ public class GameCommand implements CommandExecutor
                 GameVariable.Instance().setCheckKiller(true);
             }
 
+
+
         }
     }
 
@@ -156,14 +161,15 @@ public class GameCommand implements CommandExecutor
         m_GamePlayerList.clear();
         Main.instance.variablePlayer.clear();
         GameVariable.Instance().setCheckKiller(false);
-
+        GameVariable.Instance().GameReset();
 
 
     }
     void help(Player p)
     {
         p.sendMessage("      죽음의 술래잡기");
-        p.sendMessage("/죽술 시작 - 게임을 시작합니다.");
+        p.sendMessage("/죽술 시작 [스테이지] - 게임을 시작합니다.");
+        p.sendMessage("[스테이지] - 1 : 연구소, 2 : 성당, 3: 공장");
         p.sendMessage("/죽술 중지 - 게임을 일시 중단 합니다. ");
         p.sendMessage("/죽술 진행 - 일시 중단된 게임을 재개 합니다.");
         p.sendMessage("/죽술 종료 - 게임을 종료 합니다.");

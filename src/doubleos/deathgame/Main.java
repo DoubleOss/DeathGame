@@ -32,6 +32,8 @@ public class Main extends JavaPlugin {
         getServer().getMessenger().registerOutgoingPluginChannel((Plugin) this, "ExampleMod");
 
 
+
+
     }
 
     public void onDisaable()

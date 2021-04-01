@@ -1,10 +1,13 @@
 package doubleos.deathgame.variable;
 
 import doubleos.deathgame.Main;
+import doubleos.deathgame.ablilty.KillerCommon;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+
+import java.util.ArrayList;
 
 public class GameVariable
 {
@@ -35,7 +38,8 @@ public class GameVariable
         }
         return _instance;
     }
-    
+
+    ArrayList<Player> m_GamePlayerList = new ArrayList<>();
 
     GameStage m_GameStage = GameStage.LAB;
 
@@ -158,5 +162,17 @@ public class GameVariable
         m_GameTime_Sec = 0;
         setTimeStart(false);
     }
+
+    public ArrayList<Player> getGamePlayerList()
+    {
+        return m_GamePlayerList;
+    }
+
+    public void addGamePlayerList(Player player)
+    {
+        m_GamePlayerList.add(player);
+    }
+
+
 
 }

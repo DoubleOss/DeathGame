@@ -23,13 +23,14 @@ import java.util.Collections;
 public class GameCommand implements CommandExecutor
 {
 
-    ArrayList<Player> m_GamePlayerList = new ArrayList<>();
+
 
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings)
     {
 
         if(sender instanceof Player)
         {
+            GameVariable gamevariable = GameVariable.Instance();
             Player player = (Player)sender;
             if(s.equalsIgnoreCase("죽술"))
             {
@@ -40,7 +41,8 @@ public class GameCommand implements CommandExecutor
                 }
                 if (strings[0].equalsIgnoreCase("시작"))
                 {
-                    GameVariable.Instance().setGameState(GameVariable.GameState.PLAY);
+
+                    gamevariable.setGameState(GameVariable.GameState.PLAY);
                     Bukkit.broadcastMessage("잠시후 랜덤으로 킬러가 설정됩니다.");
 
                     BukkitTask task = new BukkitRunnable()
@@ -48,22 +50,23 @@ public class GameCommand implements CommandExecutor
                         @Override
                         public void run()
                         {
-                            Collections.shuffle(m_GamePlayerList);
                             setPlayerVariable();
-                            if(GameVariable.Instance().getCheckKiller() == false)
+                            Collections.shuffle(gamevariable.getGamePlayerList());
+
+                            if(gamevariable.getCheckKiller() == false)
                             {
-                                Main.instance.variablePlayer.get(m_GamePlayerList.get(0)).setHumanType(PlayerVariable.HumanType.KILLER);
+                                Main.instance.variablePlayer.get(gamevariable.getGamePlayerList().get(0)).setHumanType(PlayerVariable.HumanType.KILLER);
                                 GameVariable.Instance().setCheckKiller(true);
-                                GameVariable.Instance().setKillerName(m_GamePlayerList.get(0));
-                                m_GamePlayerList.get(0).sendMessage("당신은 킬러가 되셨습니다.");
+                                GameVariable.Instance().setKillerName(gamevariable.getGamePlayerList().get(0));
+                                gamevariable.getGamePlayerList().get(0).sendMessage("당신은 킬러가 되셨습니다.");
                             }
                             else
                             {
                                 player.sendMessage("킬러가 이미 존재함으로 킬러 뽑기는 스킵됩니다.");
                             }
 
-                            player.sendMessage("테스트 " + m_GamePlayerList);
-                            player.sendMessage("테스트2 " + Main.instance.variablePlayer.get(m_GamePlayerList.get(0)).getHumanType());
+                            player.sendMessage("테스트 " + gamevariable.getGamePlayerList());
+                            player.sendMessage("테스트2 " + Main.instance.variablePlayer.get(gamevariable.getGamePlayerList().get(0)).getHumanType());
 
                             this.cancel();
 
@@ -93,7 +96,7 @@ public class GameCommand implements CommandExecutor
                 }
                 if (strings[0].equalsIgnoreCase("플레이어"))
                 {
-                    player.sendMessage("참가중인 플레이어: " + m_GamePlayerList);
+                    player.sendMessage("참가중인 플레이어: " + gamevariable.getGamePlayerList());
                     return true;
                 }
                 if (strings[0].equalsIgnoreCase("살인마지정"))
@@ -126,8 +129,7 @@ public class GameCommand implements CommandExecutor
 
             if(Main.instance.adminList.isEmpty())
             {
-                p.sendMessage("통과");
-                m_GamePlayerList.add(p);
+                GameVariable.Instance().addGamePlayerList(p);
                 PlayerVariable playerVariable = new PlayerVariable(p);
                 Scoreboard score = new Scoreboard(p);
             }
@@ -137,8 +139,7 @@ public class GameCommand implements CommandExecutor
                 {
                     if(!Main.instance.adminList.get(i).equals(p))
                     {
-                        p.sendMessage("통과");
-                        m_GamePlayerList.add(p);
+                        GameVariable.Instance().addGamePlayerList(p);
                         Scoreboard score = new Scoreboard(p);
                         PlayerVariable playerVariable = new PlayerVariable(p);
                     }
@@ -147,7 +148,7 @@ public class GameCommand implements CommandExecutor
             }
             if (p == GameVariable.Instance().getKillerName())
             {
-                Main.instance.variablePlayer.get(m_GamePlayerList.get(0)).setHumanType(PlayerVariable.HumanType.KILLER);
+                Main.instance.variablePlayer.get(GameVariable.Instance().getGamePlayerList().get(0)).setHumanType(PlayerVariable.HumanType.KILLER);
                 GameVariable.Instance().setCheckKiller(true);
             }
 
@@ -158,7 +159,7 @@ public class GameCommand implements CommandExecutor
 
     void resetGame()
     {
-        m_GamePlayerList.clear();
+        GameVariable.Instance().getGamePlayerList().clear();
         Main.instance.variablePlayer.clear();
         GameVariable.Instance().setCheckKiller(false);
         GameVariable.Instance().GameReset();

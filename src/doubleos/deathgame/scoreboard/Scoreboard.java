@@ -2,15 +2,12 @@ package doubleos.deathgame.scoreboard;
 
 
 import doubleos.deathgame.Main;
+import doubleos.deathgame.util.SimpleScoreboard;
 import doubleos.deathgame.variable.GameVariable;
 import doubleos.deathgame.variable.MissionManager;
-import nl.itslars.scoreboardlib.EasyScoreboardLib;
-import nl.itslars.scoreboardlib.scoreboard.EasyScoreboard;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-
-import java.util.List;
 
 public class Scoreboard
 {
@@ -34,9 +31,29 @@ public class Scoreboard
             @Override
             public void run()
             {
-                initScoreboard(player);
+                GameVariable gamevariable = GameVariable.Instance();
+                SimpleScoreboard scoreboard = new SimpleScoreboard("[죽음의 술래잡기]");
+                scoreboard.add("&f", 11);
+                scoreboard.add("게임 시간: " + gamevariable.getGameTimeMin() + " : " + gamevariable.getGameTimeSec(), 10);
+                scoreboard.add("", 9);
+                if(player.equals(GameVariable.Instance().getKillerName()))
+                {
+                    MissionManager mission = MissionManager.Instance();
+                    String mission1_Suc = (mission.getMission1Success() ? "완료" : "미수행");
+                    String mission2_Suc = (mission.getMission2Success() ? "완료" : "미수행");
+
+                    scoreboard.add(mission.getMission1Title() + ": " + mission1_Suc, 8);
+                    scoreboard.add(mission.getMission2Title() + ": " + mission2_Suc, 7);
+
+                }
+                scoreboard.send(player);
+                scoreboard.update();
                 if(GameVariable.Instance().getGameState() == GameVariable.GameState.END)
+                {
                     this.cancel();
+                    scoreboard.reset();
+                }
+
             }
 
         }.runTaskTimer(Main.instance,0l,20l);
@@ -47,7 +64,13 @@ public class Scoreboard
 
     void initScoreboard(Player player)
     {
-        GameVariable gamevariable = GameVariable.Instance();
+
+
+
+
+
+
+        /*
         EasyScoreboard scoreboard = EasyScoreboardLib.createScoreboard(player, "[죽음의 술래잡기]");
         scoreboard.setLineText(11, "");
         scoreboard.setLineText(10, "게임 시간: " + gamevariable.getGameTimeMin() + " : " + gamevariable.getGameTimeSec());
@@ -65,6 +88,8 @@ public class Scoreboard
         }
         scoreboard.enable();
         scoreboard.setUpdateSpeed(1);
+
+         */
 
     }
 

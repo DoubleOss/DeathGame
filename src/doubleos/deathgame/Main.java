@@ -1,6 +1,7 @@
 package doubleos.deathgame;
 
 import doubleos.deathgame.ablilty.KillerCommon;
+import doubleos.deathgame.ablilty.KillerHidden1;
 import doubleos.deathgame.command.GameCommand;
 import doubleos.deathgame.variable.PlayerVariable;
 import org.bukkit.Bukkit;
@@ -32,6 +33,7 @@ public class Main extends JavaPlugin {
 
         getServer().getMessenger().registerOutgoingPluginChannel((Plugin) this, "ExampleMod");
         Bukkit.getPluginManager().registerEvents(new KillerCommon(), this);
+        Bukkit.getPluginManager().registerEvents(new KillerHidden1(), this);
 
 
 

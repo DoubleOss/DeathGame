@@ -99,6 +99,14 @@ public class MissionManager
         return m_mission2_Success;
     }
 
+    public void setMission1Success(boolean bool)
+    {
+        m_mission1_Success = bool;
+    }
 
+    public void setMission2Success(boolean bool)
+    {
+        m_mission2_Success = bool;
+    }
 
 }

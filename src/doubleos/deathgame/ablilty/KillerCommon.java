@@ -38,7 +38,6 @@ public class KillerCommon implements Listener
     }
     Player m_killer;
 
-    int m_skill1_Amount;
 
     int m_skill2_Cooltime = 0;
 

@@ -2,6 +2,7 @@ package doubleos.deathgame.variable;
 
 import doubleos.deathgame.Main;
 import doubleos.deathgame.ablilty.KillerCommon;
+import doubleos.deathgame.ablilty.KillerHidden2;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -48,6 +49,8 @@ public class GameVariable
     Boolean m_Checkkiller = false;
 
     Player m_killerPlayer;
+
+    KillerHidden2 m_KillerHidden2;
 
     boolean m_TimeStart = false;
 
@@ -172,6 +175,16 @@ public class GameVariable
     {
         m_GamePlayerList.add(player);
     }
+
+    public void setKillerHidden2(KillerHidden2 hidden2)
+    {
+        m_KillerHidden2 = hidden2;
+    }
+    public KillerHidden2 getKillerHidden2()
+    {
+        return m_KillerHidden2;
+    }
+
 
 
 

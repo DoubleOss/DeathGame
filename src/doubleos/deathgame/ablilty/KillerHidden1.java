@@ -76,14 +76,11 @@ public class KillerHidden1 implements Listener
     @EventHandler
     void hidden1RightClickEvent(PlayerInteractEvent event)
     {
-        event.getPlayer().sendMessage("@");
         MissionManager mission = MissionManager.Instance();
         if(event.getAction().equals(Action.RIGHT_CLICK_AIR))
         {
-            event.getPlayer().sendMessage("@@");
             if(event.getPlayer().equals(GameVariable.Instance().getKillerName()))
             {
-                event.getPlayer().sendMessage("@@@");
                 if(m_hiddenAbliltyTime != 0)
                 {
                     ItemStack stack1 = new ItemStack(Material.STRING);
@@ -99,23 +96,17 @@ public class KillerHidden1 implements Listener
                     {
                         if(mission.getMission1Success() == true && mission.getMission2Success() == true)
                         {
-                            event.getPlayer().sendMessage("@@@@");
-                            shootEgg(event.getPlayer());
+
                             if(m_skill2Cooltime <= 0)
                             {
-                                event.getPlayer().sendMessage("@@@@@");
-
+                                shootEgg(event.getPlayer());
                             }
 
                         }
                     }
                 }
-
-
             }
-
         }
-
     }
 
     @EventHandler
@@ -144,7 +135,7 @@ public class KillerHidden1 implements Listener
         Egg egg = p.launchProjectile(Egg.class);
 
         egg.setShooter(p);
-        
+
         egg.setVelocity(p.getLocation().getDirection().normalize().multiply(2));
         m_skill2Cooltime = 30;
 

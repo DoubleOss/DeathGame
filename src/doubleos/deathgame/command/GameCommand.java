@@ -3,7 +3,9 @@ package doubleos.deathgame.command;
 
 
 import doubleos.deathgame.Main;
+import doubleos.deathgame.ablilty.Hidden2Gui;
 import doubleos.deathgame.ablilty.KillerHidden1;
+import doubleos.deathgame.ablilty.KillerHidden2;
 import doubleos.deathgame.scoreboard.Scoreboard;
 import doubleos.deathgame.variable.GameVariable;
 import doubleos.deathgame.variable.MissionManager;
@@ -87,8 +89,8 @@ public class GameCommand implements CommandExecutor
                 if (strings[0].equalsIgnoreCase("진행"))
                 {
                     //GameVariable.Instance().setGameState(GameVariable.GameState.PLAY);
-                    KillerHidden1 killerHidden1 = new KillerHidden1();
-                    killerHidden1.initKillerHidden1();
+                    KillerHidden2 KillerHidden2 = new KillerHidden2();
+
                     MissionManager.Instance().setMission1Success(true);
                     MissionManager.Instance().setMission2Success(true);
 
@@ -116,6 +118,13 @@ public class GameCommand implements CommandExecutor
                         Bukkit.getPlayer(strings[1]).sendMessage("당신이 살인마로 지정되었습니다.");
                         return true;
                     }
+
+                }
+                if(strings[0].equalsIgnoreCase("전도"))
+                {
+                    Hidden2Gui hidden2Gui = new Hidden2Gui();
+                    hidden2Gui.initGuiItem();
+                    hidden2Gui.openInventory(player);
 
                 }
 

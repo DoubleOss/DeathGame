@@ -26,14 +26,52 @@ public class KillerHidden2 implements Listener
 
     int m_hiddenAbliltyTime = 120;
 
+    Player m_killerName;
+
+
+    public void initKillerHidden2()
+    {
+        this.m_killerName = GameVariable.Instance().getOrignalKillerPlayer();
+        m_hiddenAbliltyTime = 120;
+
+        m_skill1Cooltime = 0;
+        m_skill2Cooltime = 0;
+
+        ItemStack helmet = new ItemStack(Material.PUMPKIN);
+        ItemStack air = new ItemStack(Material.AIR);
+
+        m_killerName.getInventory().setHelmet(helmet);
+
+        BukkitTask task = new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                if(m_hiddenAbliltyTime <= 0)
+                {
+                    m_killerName.getInventory().setHelmet(air);
+                    m_killerName.sendMessage("변신이 풀렸습니다!");
+                    GameVariable.Instance().setIsKillerCheckTras(false);
+                    this.cancel();
+                }
+                if(!GameVariable.Instance().getGameState().equals(GameVariable.GameState.PAUSE))
+                {
+                    m_hiddenAbliltyTime--;
+                }
+            }
+        }.runTaskTimer(Main.instance, 0l, 20l);
+    }
+
     @EventHandler
     void hidden2RightClickEvent(PlayerInteractEvent event)
     {
         MissionManager mission = MissionManager.Instance();
         if(event.getAction().equals(Action.RIGHT_CLICK_AIR))
         {
-            if(event.getPlayer().equals(GameVariable.Instance().getKillerName()))
+            if(GameVariable.Instance().getIsKillerCheckTras() == true)
             {
+                if(event.getPlayer().equals(GameVariable.Instance().getOrignalKillerPlayer()))
+                {
                     ItemStack stack1  = new ItemStack(Material.CLAY_BRICK);
                     if(event.getPlayer().getInventory().getItemInMainHand().equals(stack1))
                     {
@@ -62,7 +100,9 @@ public class KillerHidden2 implements Listener
                     }
                 }
             }
+
         }
+    }
 
     void flash(Player p)
     {

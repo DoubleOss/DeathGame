@@ -53,16 +53,20 @@ public class KillerCommon implements Listener
     @EventHandler
     void onMoveEvent(PlayerMoveEvent event)
     {
-        if(event.getPlayer().equals(GameVariable.Instance().getKillerName()) == false)
+        if(GameVariable.Instance().getGameState().equals(GameVariable.GameState.PLAY))
         {
-            for(int i = 0; i<m_skill1_pos.size(); i++)
+            if(event.getPlayer().equals(GameVariable.Instance().getKillerListName(event.getPlayer())) == false)
             {
-                //event.getPlayer().sendMessage(String.format("%f",event.getFrom().distance(m_skill1_pos.get(i))));
-                if(event.getFrom().distance(m_skill1_pos.get(i)) <= 1.5)
+                for(int i = 0; i<m_skill1_pos.size(); i++)
                 {
-                    m_skill1_pos.remove(i);
-                    setSkill1Effect(event.getPlayer());
+                    //event.getPlayer().sendMessage(String.format("%f",event.getFrom().distance(m_skill1_pos.get(i))));
+                    if(event.getFrom().distance(m_skill1_pos.get(i)) <= 1.5)
+                    {
+                        m_skill1_pos.remove(i);
+                        setSkill1Effect(event.getPlayer());
+                    }
                 }
+
             }
 
         }
@@ -72,7 +76,7 @@ public class KillerCommon implements Listener
     @EventHandler
     void onRightClickEvent(PlayerInteractEvent event)
     {
-        if(event.getPlayer().equals(GameVariable.Instance().getKillerName()))
+        if(event.getPlayer().equals(GameVariable.Instance().getKillerListName(event.getPlayer())))
         {
             if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
             {
@@ -115,9 +119,9 @@ public class KillerCommon implements Listener
     {
         for (Player p : GameVariable.Instance().getGamePlayerList())
         {
-            if(GameVariable.Instance().getKillerName().equals(p) == false)
+            if(GameVariable.Instance().getKillerListName(p).equals(null))
             {
-                p.sendMessage("@@@@@");
+
                 PotionEffect effect = new PotionEffect(PotionEffectType.GLOWING, 60, 0);
                 p.addPotionEffect(effect, true);
 

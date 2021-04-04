@@ -46,17 +46,25 @@ public class GameVariable
 
     GameState m_GameState = GameState.END;
 
-    Boolean m_Checkkiller = false;
 
-    Player m_killerPlayer;
+
+    ArrayList<Player> m_killerPlayerList = new ArrayList<>();
+
+    Player m_orignalKillerPlayer;
+
 
     KillerHidden2 m_KillerHidden2;
 
-    boolean m_TimeStart = false;
+
 
     int m_GameTime_Min = 20;
 
     int m_GameTime_Sec = 0;
+
+    boolean m_isKillerCheckTras = false;
+    boolean m_TimeStart = false;
+
+    Boolean m_Checkkiller = false;
 
 
 
@@ -131,13 +139,21 @@ public class GameVariable
     }
 
 
-    public void setKillerName(Player killer)
+    public void addKillerListName(Player killer)
     {
-        m_killerPlayer = killer;
+        m_killerPlayerList.add(killer);
+
     }
-    public Player getKillerName()
+    public Player getKillerListName(Player killer)
     {
-        return m_killerPlayer;
+        for(int i = 0; i<m_killerPlayerList.size(); i++)
+        {
+            if(m_killerPlayerList.get(i).equals(killer))
+            {
+                return m_killerPlayerList.get(i);
+            }
+        }
+        return null;
     }
 
     public void setGameTimeMin(int min)
@@ -159,12 +175,6 @@ public class GameVariable
         return m_GameTime_Sec;
     }
 
-    public void GameReset()
-    {
-        m_GameTime_Min = 20;
-        m_GameTime_Sec = 0;
-        setTimeStart(false);
-    }
 
     public ArrayList<Player> getGamePlayerList()
     {
@@ -184,6 +194,39 @@ public class GameVariable
     {
         return m_KillerHidden2;
     }
+
+    public boolean getIsKillerCheckTras()
+    {
+        return m_isKillerCheckTras;
+    }
+    public void setIsKillerCheckTras(boolean bool)
+    {
+        m_isKillerCheckTras = bool;
+    }
+
+    public Player getOrignalKillerPlayer()
+    {
+        return m_orignalKillerPlayer;
+    }
+    public void setOrignalKillerPlayer(Player killer)
+    {
+        m_orignalKillerPlayer = killer;
+    }
+
+    public void GameReset()
+    {
+        m_GameTime_Min = 20;
+        m_GameTime_Sec = 0;
+
+        m_killerPlayerList.clear();
+        m_GamePlayerList.clear();
+
+        m_orignalKillerPlayer = null;
+
+        setTimeStart(false);
+    }
+
+
 
 
 

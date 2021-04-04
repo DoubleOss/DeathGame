@@ -6,6 +6,7 @@ import doubleos.deathgame.Main;
 import doubleos.deathgame.ablilty.Hidden2Gui;
 import doubleos.deathgame.ablilty.KillerHidden1;
 import doubleos.deathgame.ablilty.KillerHidden2;
+import doubleos.deathgame.ablilty.KillerHidden3;
 import doubleos.deathgame.scoreboard.Scoreboard;
 import doubleos.deathgame.variable.GameVariable;
 import doubleos.deathgame.variable.MissionManager;
@@ -37,103 +38,117 @@ public class GameCommand implements CommandExecutor
             Player player = (Player)sender;
             if(s.equalsIgnoreCase("죽술"))
             {
-                if (strings[0].length()==0 || strings[0].equalsIgnoreCase("도움말"))
+                if(strings.length <1)
                 {
                     help(player);
                     return true;
                 }
-                if (strings[0].equalsIgnoreCase("시작"))
+                switch (strings[0])
                 {
-
-                    gamevariable.setGameState(GameVariable.GameState.PLAY);
-                    Bukkit.broadcastMessage("잠시후 랜덤으로 킬러가 설정됩니다.");
-
-                    BukkitTask task = new BukkitRunnable()
-                    {
-                        @Override
-                        public void run()
+                    case "시작":
+                        gamevariable.setGameState(GameVariable.GameState.PLAY);
+                        Bukkit.broadcastMessage("잠시후 랜덤으로 킬러가 설정됩니다.");
+                        setPlayerVariable();
+                        BukkitTask task = new BukkitRunnable()
                         {
-                            setPlayerVariable();
-                            Collections.shuffle(gamevariable.getGamePlayerList());
-
-                            if(gamevariable.getCheckKiller() == false)
+                            @Override
+                            public void run()
                             {
-                                Main.instance.variablePlayer.get(gamevariable.getGamePlayerList().get(0)).setHumanType(PlayerVariable.HumanType.KILLER);
-                                GameVariable.Instance().setCheckKiller(true);
-                                GameVariable.Instance().setKillerName(gamevariable.getGamePlayerList().get(0));
-                                gamevariable.getGamePlayerList().get(0).sendMessage("당신은 킬러가 되셨습니다.");
+                                Collections.shuffle(gamevariable.getGamePlayerList());
+                                sender.sendMessage(Boolean.toString(gamevariable.getCheckKiller()));
+                                if(gamevariable.getCheckKiller() == false)
+                                {
+                                    Main.instance.variablePlayer.get(gamevariable.getGamePlayerList().get(0)).setHumanType(PlayerVariable.HumanType.KILLER);
+                                    sender.sendMessage(gamevariable.getGamePlayerList().get(0).getName());
+                                    GameVariable.Instance().addKillerListName(gamevariable.getGamePlayerList().get(0));
+                                    GameVariable.Instance().setOrignalKillerPlayer(gamevariable.getGamePlayerList().get(0));
+                                    GameVariable.Instance().setCheckKiller(true);
+
+
+                                    gamevariable.getGamePlayerList().get(0).sendMessage("당신은 킬러가 되셨습니다.");
+                                }
+                                else
+                                {
+                                    player.sendMessage("킬러가 이미 존재함으로 킬러 뽑기는 스킵됩니다.");
+                                }
+
+                                player.sendMessage("테스트 " + gamevariable.getGamePlayerList());
+                                player.sendMessage("테스트2 " + Main.instance.variablePlayer.get(gamevariable.getGamePlayerList().get(0)).getHumanType());
+
+                                GameVariable.Instance().setTimeStart(true);
+                                this.cancel();
+
                             }
-                            else
+                        }.runTaskTimer(Main.instance, 0l, 40l);
+                        return true;
+                    case "중지":
+                        GameVariable.Instance().setGameState(GameVariable.GameState.PAUSE);
+                        return true;
+                    case "진행":
+                        GameVariable.Instance().setGameState(GameVariable.GameState.PLAY);
+                        return true;
+                    case "초기화":
+                        GameVariable.Instance().setGameState(GameVariable.GameState.END);
+                        resetGame();
+                        sender.sendMessage("초기화 되었습니다");
+                        return true;
+                    case "플레이어":
+                        player.sendMessage("참가중인 플레이어: " + gamevariable.getGamePlayerList());
+                        return true;
+                    case "살인마지정":
+                        if((strings[1].isEmpty())==false)
+                        {
+                            player.sendMessage("지정한 플레이어" + strings[1] + "으로 살인마 설정이 완료 되었습니다.");
+                            GameVariable.Instance().setCheckKiller(true);
+                            GameVariable.Instance().addKillerListName(Bukkit.getPlayer(strings[1]));
+                            GameVariable.Instance().setOrignalKillerPlayer(Bukkit.getPlayer(strings[1]));
+
+                            Bukkit.getPlayer(strings[1]).sendMessage("당신이 살인마로 지정되었습니다.");
+                            return true;
+                        }
+                    case "전도":
+                        Hidden2Gui hidden2Gui = new Hidden2Gui();
+                        hidden2Gui.initGuiItem();
+                        hidden2Gui.openInventory(player);
+                        return true;
+                    case "살인마보기":
+                        sender.sendMessage(GameVariable.Instance().getOrignalKillerPlayer().getName());
+                    case "변신":
+                        if((strings[1].isEmpty())==false)
+                        {
+                            MissionManager.Instance().setMission1Success(true);
+                            MissionManager.Instance().setMission2Success(true);
+                            if(strings[1].equalsIgnoreCase("1"))
                             {
-                                player.sendMessage("킬러가 이미 존재함으로 킬러 뽑기는 스킵됩니다.");
+                                KillerHidden1 killerhidden1 = new KillerHidden1();
+                                killerhidden1.initKillerHidden1();
+                                GameVariable.Instance().setIsKillerCheckTras(true);
                             }
-
-                            player.sendMessage("테스트 " + gamevariable.getGamePlayerList());
-                            player.sendMessage("테스트2 " + Main.instance.variablePlayer.get(gamevariable.getGamePlayerList().get(0)).getHumanType());
-
-                            this.cancel();
+                            if(strings[1].equalsIgnoreCase("2"))
+                            {
+                                KillerHidden2 killerhidden2 = new KillerHidden2();
+                                killerhidden2.initKillerHidden2();
+                                GameVariable.Instance().setIsKillerCheckTras(true);
+                            }
+                            if(strings[1].equalsIgnoreCase("3"))
+                            {
+                                KillerHidden3 killerhidden3 = new KillerHidden3();
+                                killerhidden3.initKillerHidden3();
+                                GameVariable.Instance().setIsKillerCheckTras(true);
+                            }
 
                         }
-
-                    }.runTaskTimer(Main.instance, 20l, 1l);
-
-                    GameVariable.Instance().setTimeStart(true);
-                    return true;
-
-                }
-                if (strings[0].equalsIgnoreCase("중지"))
-                {
-                    GameVariable.Instance().setGameState(GameVariable.GameState.PAUSE);
-                    return true;
-                }
-                if (strings[0].equalsIgnoreCase("진행"))
-                {
-                    //GameVariable.Instance().setGameState(GameVariable.GameState.PLAY);
-                    KillerHidden2 KillerHidden2 = new KillerHidden2();
-
-                    MissionManager.Instance().setMission1Success(true);
-                    MissionManager.Instance().setMission2Success(true);
-
-                    return true;
-                }
-                if (strings[0].equalsIgnoreCase("초기화"))
-                {
-                    GameVariable.Instance().setGameState(GameVariable.GameState.END);
-                    resetGame();
-                    return true;
-                }
-                if (strings[0].equalsIgnoreCase("플레이어"))
-                {
-                    player.sendMessage("참가중인 플레이어: " + gamevariable.getGamePlayerList());
-                    return true;
-                }
-                if (strings[0].equalsIgnoreCase("살인마지정"))
-                {
-                    if((strings[1].isEmpty())==false)
-                    {
-                        player.sendMessage("지정한 플레이어" + strings[1] + "으로 살인마 설정이 완료 되었습니다.");
-                        GameVariable.Instance().setCheckKiller(true);
-                        GameVariable.Instance().setKillerName(Bukkit.getPlayer(strings[1]));
-
-                        Bukkit.getPlayer(strings[1]).sendMessage("당신이 살인마로 지정되었습니다.");
                         return true;
-                    }
-
+                    case "도움말":
+                        help(player);
+                        return true;
+                    default:
+                        help(player);
                 }
-                if(strings[0].equalsIgnoreCase("전도"))
-                {
-                    Hidden2Gui hidden2Gui = new Hidden2Gui();
-                    hidden2Gui.initGuiItem();
-                    hidden2Gui.openInventory(player);
-
-                }
-
-
-                return true;
+                return false;
             }
-            return true;
         }
-        return true;
+        return false;
     }
 
     void setPlayerVariable()
@@ -141,7 +156,6 @@ public class GameCommand implements CommandExecutor
         MissionManager.Instance().setMission();
         for(Player p : Bukkit.getOnlinePlayers())
         {
-
             if(Main.instance.adminList.isEmpty())
             {
                 GameVariable.Instance().addGamePlayerList(p);
@@ -161,13 +175,6 @@ public class GameCommand implements CommandExecutor
                 }
 
             }
-            if (p == GameVariable.Instance().getKillerName())
-            {
-                Main.instance.variablePlayer.get(GameVariable.Instance().getGamePlayerList().get(0)).setHumanType(PlayerVariable.HumanType.KILLER);
-                GameVariable.Instance().setCheckKiller(true);
-            }
-
-
 
         }
     }
@@ -179,6 +186,7 @@ public class GameCommand implements CommandExecutor
         GameVariable.Instance().setCheckKiller(false);
         GameVariable.Instance().GameReset();
         MissionManager.Instance().setMission();
+        GameVariable.Instance().setIsKillerCheckTras(false);
 
 
     }
@@ -193,6 +201,8 @@ public class GameCommand implements CommandExecutor
         p.sendMessage("/죽술 초기화 - 게임을 리셋 시킵니다.");
         p.sendMessage("/죽술 플레이어 - 참가하는 플레이어 목록을 확인합니다.");
         p.sendMessage("/죽술 살인마지정 닉네임 - 살인마를 지정합니다.");
+        p.sendMessage("/죽술 변신 [번호] - 1번 연구소 2번 성당 3번 인형공장");
+        
 
         
 

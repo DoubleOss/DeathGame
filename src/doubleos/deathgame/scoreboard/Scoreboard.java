@@ -23,36 +23,38 @@ public class Scoreboard
 
     void setScoreBoard(Player player)
     {
-
-
         BukkitTask task = new BukkitRunnable()
         {
 
             @Override
             public void run()
             {
-                GameVariable gamevariable = GameVariable.Instance();
-                SimpleScoreboard scoreboard = new SimpleScoreboard("[죽음의 술래잡기]");
-                scoreboard.add("&f", 11);
-                scoreboard.add("게임 시간: " + gamevariable.getGameTimeMin() + " : " + gamevariable.getGameTimeSec(), 10);
-                scoreboard.add("", 9);
-                if(player.equals(GameVariable.Instance().getKillerName()))
+                if(!GameVariable.Instance().getGameState().equals(GameVariable.GameState.PAUSE))
                 {
-                    MissionManager mission = MissionManager.Instance();
-                    String mission1_Suc = (mission.getMission1Success() ? "완료" : "미수행");
-                    String mission2_Suc = (mission.getMission2Success() ? "완료" : "미수행");
+                    GameVariable gamevariable = GameVariable.Instance();
+                    SimpleScoreboard scoreboard = new SimpleScoreboard("[죽음의 술래잡기]");
+                    scoreboard.add("&f", 11);
+                    scoreboard.add("게임 시간: " + gamevariable.getGameTimeMin() + " : " + gamevariable.getGameTimeSec(), 10);
+                    scoreboard.add("", 9);
+                    if(player.equals(GameVariable.Instance().getOrignalKillerPlayer()))
+                    {
+                        MissionManager mission = MissionManager.Instance();
+                        String mission1_Suc = (mission.getMission1Success() ? "완료" : "미수행");
+                        String mission2_Suc = (mission.getMission2Success() ? "완료" : "미수행");
 
-                    scoreboard.add(mission.getMission1Title() + ": " + mission1_Suc, 8);
-                    scoreboard.add(mission.getMission2Title() + ": " + mission2_Suc, 7);
+                        scoreboard.add(mission.getMission1Title() + ": " + mission1_Suc, 8);
+                        scoreboard.add(mission.getMission2Title() + ": " + mission2_Suc, 7);
 
+                    }
+                    scoreboard.send(player);
+                    scoreboard.update();
+                    if(GameVariable.Instance().getGameState() == GameVariable.GameState.END)
+                    {
+                        this.cancel();
+                        scoreboard.reset();
+                    }
                 }
-                scoreboard.send(player);
-                scoreboard.update();
-                if(GameVariable.Instance().getGameState() == GameVariable.GameState.END)
-                {
-                    this.cancel();
-                    scoreboard.reset();
-                }
+
 
             }
 

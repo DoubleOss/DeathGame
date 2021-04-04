@@ -1,9 +1,6 @@
 package doubleos.deathgame;
 
-import doubleos.deathgame.ablilty.Hidden2Gui;
-import doubleos.deathgame.ablilty.KillerCommon;
-import doubleos.deathgame.ablilty.KillerHidden1;
-import doubleos.deathgame.ablilty.KillerHidden2;
+import doubleos.deathgame.ablilty.*;
 import doubleos.deathgame.command.GameCommand;
 import doubleos.deathgame.variable.PlayerVariable;
 import org.bukkit.Bukkit;
@@ -38,7 +35,10 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new KillerCommon(), this);
         Bukkit.getPluginManager().registerEvents(new KillerHidden1(), this);
         Bukkit.getPluginManager().registerEvents(new KillerHidden2(), this);
+        Bukkit.getPluginManager().registerEvents(new KillerHidden3(), this);
+
         Bukkit.getPluginManager().registerEvents(new Hidden2Gui(), this);
+
 
     }
 

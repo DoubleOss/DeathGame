@@ -97,6 +97,7 @@ public class Hidden2Gui implements Listener
     }
 
 
+    @EventHandler
     void hidden2Ablilty(InventoryClickEvent event)
     {
         m_target = Bukkit.getServer().getPlayer(event.getCurrentItem().getItemMeta().getDisplayName().replace("§f", ""));

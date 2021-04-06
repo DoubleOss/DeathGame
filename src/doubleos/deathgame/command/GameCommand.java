@@ -7,6 +7,7 @@ import doubleos.deathgame.ablilty.Hidden2Gui;
 import doubleos.deathgame.ablilty.KillerHidden1;
 import doubleos.deathgame.ablilty.KillerHidden2;
 import doubleos.deathgame.ablilty.KillerHidden3;
+import doubleos.deathgame.gui.PotionMakeGui;
 import doubleos.deathgame.scoreboard.Scoreboard;
 import doubleos.deathgame.variable.GameVariable;
 import doubleos.deathgame.variable.MissionManager;
@@ -18,9 +19,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import sun.invoke.empty.Empty;
 
-import java.util.ArrayList;
 import java.util.Collections;
 
 
@@ -110,6 +109,11 @@ public class GameCommand implements CommandExecutor
                         Hidden2Gui hidden2Gui = new Hidden2Gui();
                         hidden2Gui.initGuiItem();
                         hidden2Gui.openInventory(player);
+                        return true;
+                    case"포션제작":
+                        PotionMakeGui potiongui = new PotionMakeGui();
+                        potiongui.initGuiItem();
+                        potiongui.openInventory(player);
                         return true;
                     case "살인마보기":
                         sender.sendMessage(GameVariable.Instance().getOrignalKillerPlayer().getName());

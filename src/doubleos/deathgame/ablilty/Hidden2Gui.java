@@ -100,26 +100,30 @@ public class Hidden2Gui implements Listener
     @EventHandler
     void hidden2Ablilty(InventoryClickEvent event)
     {
-        m_target = Bukkit.getServer().getPlayer(event.getCurrentItem().getItemMeta().getDisplayName().replace("§f", ""));
-        Bukkit.broadcastMessage(m_target.getName());
-        Player p = (Player) event.getWhoClicked();
-        p.sendMessage(ChatColor.WHITE + m_target.getName() + " 님을 전도 대상으로 고르셨습니다.");
-        GameVariable.Instance().getKillerHidden2().m_skill2Cooltime = 120;
-
-        BukkitTask task = new BukkitRunnable()
+        if(event.getInventory().getTitle().equalsIgnoreCase("기도 지정"))
         {
-            @Override
-            public void run()
+            m_target = Bukkit.getServer().getPlayer(event.getCurrentItem().getItemMeta().getDisplayName().replace("§f", ""));
+            Bukkit.broadcastMessage(m_target.getName());
+            Player p = (Player) event.getWhoClicked();
+            p.sendMessage(ChatColor.WHITE + m_target.getName() + " 님을 전도 대상으로 고르셨습니다.");
+            GameVariable.Instance().getKillerHidden2().m_skill2Cooltime = 120;
+
+            BukkitTask task = new BukkitRunnable()
             {
-                if(GameVariable.Instance().getKillerHidden2().m_skill2Cooltime <= 0)
+                @Override
+                public void run()
                 {
-                    this.cancel();
+                    if(GameVariable.Instance().getKillerHidden2().m_skill2Cooltime <= 0)
+                    {
+                        this.cancel();
+                    }
+                    else
+                    {
+                        GameVariable.Instance().getKillerHidden2().m_skill2Cooltime--;
+                    }
                 }
-                else
-                {
-                    GameVariable.Instance().getKillerHidden2().m_skill2Cooltime--;
-                }
-            }
-        }.runTaskTimer(Main.instance, 0l, 20l);
+            }.runTaskTimer(Main.instance, 0l, 20l);
+        }
+
     }
 }

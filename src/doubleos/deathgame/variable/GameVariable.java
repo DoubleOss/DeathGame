@@ -58,13 +58,19 @@ public class GameVariable
 
 
     int m_GameTime_Min = 20;
-
     int m_GameTime_Sec = 0;
+
+    int m_MissionRotateNumber = 1;
+
+    int m_repairBoxCount = 0;
+
 
     boolean m_isKillerCheckTras = false;
     boolean m_TimeStart = false;
 
-    Boolean m_Checkkiller = false;
+    boolean m_Checkkiller = false;
+
+
 
 
 
@@ -213,6 +219,51 @@ public class GameVariable
         m_orignalKillerPlayer = killer;
     }
 
+
+
+    public int getMissionRotateNumber()
+    {
+        return m_MissionRotateNumber;
+    }
+    public void setMissionRotateNumber(int number)
+    {
+        m_MissionRotateNumber = number;
+    }
+
+    public void setRepairBoxCount(int number)
+    {
+        m_repairBoxCount = number;
+    }
+    public int getRepairBoxCount()
+    {
+        return m_repairBoxCount;
+    }
+
+
+    public void setMissionRotate()
+    {
+        if(m_MissionRotateNumber == 1)
+        {
+            m_MissionRotateNumber = 2;
+            MissionManager.Instance().setActiveMission(MissionManager.ActiveMission.MISSION2);
+        }
+        else if (m_MissionRotateNumber ==2)
+        {
+            m_MissionRotateNumber = 3;
+            MissionManager.Instance().setActiveMission(MissionManager.ActiveMission.MISSION3);
+        }
+        else if (m_MissionRotateNumber == 3)
+        {
+            m_MissionRotateNumber = 4;
+            MissionManager.Instance().setActiveMission(MissionManager.ActiveMission.MISSION4);
+        }
+        else if (m_MissionRotateNumber == 4)
+        {
+            MissionManager.Instance().setActiveMission(MissionManager.ActiveMission.MISSION1);
+        }
+
+    }
+
     public void GameReset()
     {
         m_GameTime_Min = 20;
@@ -222,6 +273,8 @@ public class GameVariable
         m_GamePlayerList.clear();
 
         m_orignalKillerPlayer = null;
+
+        MissionManager.Instance().setActiveMission(MissionManager.ActiveMission.MISSION1);
 
         setTimeStart(false);
     }

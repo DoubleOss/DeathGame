@@ -63,6 +63,8 @@ public class KillerHidden1 implements Listener
                     m_killerName.getInventory().setHelmet(air);
                     m_killerName.sendMessage("변신이 풀렸습니다!");
                     m_hiddenAbliltyTime = 0;
+                    GameVariable.Instance().setMissionRotateNumber(GameVariable.Instance().getMissionRotateNumber()+1);
+                    GameVariable.Instance().setMissionRotate();
                     GameVariable.Instance().setIsKillerCheckTras(false);
                     this.cancel();
                 }

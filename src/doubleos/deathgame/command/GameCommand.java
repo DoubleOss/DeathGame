@@ -7,6 +7,7 @@ import doubleos.deathgame.ablilty.Hidden2Gui;
 import doubleos.deathgame.ablilty.KillerHidden1;
 import doubleos.deathgame.ablilty.KillerHidden2;
 import doubleos.deathgame.ablilty.KillerHidden3;
+import doubleos.deathgame.gui.CellularGame;
 import doubleos.deathgame.gui.PotionMakeGui;
 import doubleos.deathgame.scoreboard.Scoreboard;
 import doubleos.deathgame.variable.GameVariable;
@@ -111,10 +112,30 @@ public class GameCommand implements CommandExecutor
                         hidden2Gui.openInventory(player);
                         return true;
                     case"포션제작":
-                        PotionMakeGui potiongui = new PotionMakeGui();
-                        potiongui.initGuiItem();
-                        potiongui.openInventory(player);
+                        if(MissionManager.Instance().getMission1PotionCount() != 3)
+                        {
+                            PotionMakeGui potiongui = new PotionMakeGui();
+                            potiongui.initGuiItem();
+                            potiongui.openInventory(player);
+                            return true;
+                        }
+                    case"세포게임":
+                        CellularGame game = new CellularGame();
+                        game.initGuiItem();
+                        game.openInventory(player);
                         return true;
+                    case"미션완료":
+                        if(strings[1].isEmpty() == false)
+                        {
+                            if(strings[1].equalsIgnoreCase("1"))
+                            {
+                                MissionManager.Instance().setMission1Success(true);
+                            }
+                            else if (strings[1].equalsIgnoreCase("2"))
+                            {
+                                MissionManager.Instance().setMission2Success(true);
+                            }
+                        }
                     case "살인마보기":
                         sender.sendMessage(GameVariable.Instance().getOrignalKillerPlayer().getName());
                     case "변신":
@@ -206,9 +227,9 @@ public class GameCommand implements CommandExecutor
         p.sendMessage("/죽술 플레이어 - 참가하는 플레이어 목록을 확인합니다.");
         p.sendMessage("/죽술 살인마지정 닉네임 - 살인마를 지정합니다.");
         p.sendMessage("/죽술 변신 [번호] - 1번 연구소 2번 성당 3번 인형공장");
-        
+        p.sendMessage("/죽술 포션제작 - 살인마 변신 미션 기능");
+        p.sendMessage("/죽술 미션완료 [번호] - 1번 = 1번미션 강제완료 2번 = 2번 강제완료");
 
-        
 
     }
 

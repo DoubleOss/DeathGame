@@ -1,5 +1,7 @@
 package doubleos.deathgame.variable;
 
+import org.bukkit.Bukkit;
+
 import java.util.HashMap;
 
 public class MissionManager
@@ -32,6 +34,8 @@ public class MissionManager
 
     boolean m_mission1_Success = false;
     boolean m_mission2_Success = false;
+
+    int m_Mission1_PotionCount = 0;
 
 
     public void setMission()
@@ -107,6 +111,20 @@ public class MissionManager
     public void setMission2Success(boolean bool)
     {
         m_mission2_Success = bool;
+    }
+
+    public int getMission1PotionCount()
+    {
+        return m_Mission1_PotionCount;
+    }
+    public void setMissionPotionCount(int number)
+    {
+        m_Mission1_PotionCount = number;
+        if(m_Mission1_PotionCount ==3)
+        {
+            m_mission1_Success = true;
+            Bukkit.broadcastMessage("살인마 변신미션1 완료");
+        }
     }
 
 }

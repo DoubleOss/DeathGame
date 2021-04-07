@@ -2,6 +2,7 @@ package doubleos.deathgame.gui;
 
 import doubleos.deathgame.Main;
 import doubleos.deathgame.variable.GameVariable;
+import doubleos.deathgame.variable.MissionManager;
 import doubleos.deathgame.variable.PotionRecipe;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -33,6 +34,8 @@ public class PotionMakeGui implements Listener
     Inventory m_inv;
 
     Player m_target;
+
+    PotionRecipe.Potion m_potion;
 
     public void initGuiItem()
     {
@@ -67,10 +70,7 @@ public class PotionMakeGui implements Listener
 
     }
 
-    public void openInventory(final HumanEntity ent)
-    {
-        ent.openInventory(m_inv);
-    }
+
 
     ItemStack createGuiGlassItem(final Material material, short number, final String name, final String lore)
     {
@@ -124,12 +124,16 @@ public class PotionMakeGui implements Listener
     {
         if(event.getInventory().getTitle().equalsIgnoreCase("포션 제작"))
         {
+            if(event.getRawSlot() == 16|| event.getRawSlot() == 25|| event.getRawSlot() == 34)
+                event.setCancelled(true);
+
             event.setCancelled(true);
             if (event.getRawSlot() == 10 || event.getRawSlot() == 19 || event.getRawSlot() == 28)
             {
                 ArrayList<ItemStack> potionrecipe = PotionRecipe.Instance().getPotionMatrial().get(getPotionRecipe(event.getRawSlot()));
                 if(potionrecipe != null)
                 {
+                    m_potion = getPotionRecipe(event.getRawSlot());
                     event.getInventory().setItem(16,potionrecipe.get(0));
                     event.getInventory().setItem(25,potionrecipe.get(1));
                     event.getInventory().setItem(34,potionrecipe.get(2));
@@ -146,26 +150,79 @@ public class PotionMakeGui implements Listener
         if(event.getInventory().getTitle().equalsIgnoreCase("포션 제작"))
         {
             event.setCancelled(true);
-            if (event.getRawSlot() != 16 || event.getRawSlot() != 25 || event.getRawSlot() != 34)
+            if (event.getCurrentItem() != null)
             {
-                int[] slot = new int[]{16, 25, 34};
-
-                for (int i = 0; i<3; i++)
+                if (event.getRawSlot() != 16 || event.getRawSlot() != 25 || event.getRawSlot() != 34)
                 {
-                    if(event.getCurrentItem().getType().equals(event.getInventory().getItem(slot[i]).getType()))
-                    {
-                        Bukkit.broadcastMessage(event.getInventory().getItem(slot[i]).toString());
-                        if(getGuiSlotAir(event.getInventory()) != 100)
-                        {
-                            event.getInventory().setItem(getGuiSlotAir(event.getInventory()), event.getInventory().getItem(slot[i]));
-                            break;
-                        }
+                    int[] slot = new int[]{16, 25, 34};
 
+                    for (int i = 0; i<3; i++)
+                    {
+                        if(event.getCurrentItem().getType().equals(event.getInventory().getItem(slot[i]).getType()))
+                        {
+                            Bukkit.broadcastMessage(event.getInventory().getItem(slot[i]).toString());
+                            if(getGuiSlotAir(event.getInventory()) != 100)
+                            {
+                                event.getInventory().setItem(getGuiSlotAir(event.getInventory()), event.getInventory().getItem(slot[i]));
+                                break;
+                            }
+
+                        }
                     }
                 }
             }
+
+        }
+    }
+    @EventHandler
+    public void onInventoryClickPotionMake(InventoryClickEvent event)
+    {
+        if(event.getInventory().getTitle().equalsIgnoreCase("포션 제작"))
+        {
+            event.setCancelled(true);
+            if (event.getRawSlot() == 22)
+            {
+                boolean item_check1 = event.getWhoClicked().getInventory().containsAtLeast(PotionRecipe.Instance().getPotionMatrial().get(m_potion).get(0), PotionRecipe.Instance().getPotionMatrial().get(m_potion).get(0).getAmount());
+                boolean item_check2 = event.getWhoClicked().getInventory().containsAtLeast(PotionRecipe.Instance().getPotionMatrial().get(m_potion).get(1), PotionRecipe.Instance().getPotionMatrial().get(m_potion).get(1).getAmount());
+                boolean item_check3 = event.getWhoClicked().getInventory().containsAtLeast(PotionRecipe.Instance().getPotionMatrial().get(m_potion).get(2), PotionRecipe.Instance().getPotionMatrial().get(m_potion).get(2).getAmount());
+                event.getWhoClicked().sendMessage(Boolean.toString(item_check1)+" " + Boolean.toString(item_check2) +" " + Boolean.toString(item_check3));
+                if(item_check1 && item_check2 && item_check3)
+                {
+                    ArrayList<ItemStack> itemlist= PotionRecipe.Instance().getPotionMatrial().get(m_potion);
+                    event.getWhoClicked().getInventory().removeItem(new ItemStack[]{ new ItemStack(itemlist.get(0).getType(), itemlist.get(0).getAmount())});
+                    event.getWhoClicked().getInventory().removeItem(new ItemStack[]{ new ItemStack(itemlist.get(1).getType(), itemlist.get(1).getAmount())});
+                    event.getWhoClicked().getInventory().removeItem(new ItemStack[]{ new ItemStack(itemlist.get(2).getType(), itemlist.get(2).getAmount())});
+                    MissionManager mission = MissionManager.Instance();
+                    mission.setMissionPotionCount(mission.getMission1PotionCount() + 1);
+                    event.getWhoClicked().sendMessage("포션을 1개 만드셨습니다 " + mission.getMission1PotionCount() + " | 3");
+                    ItemStack item = new ItemStack(Material.AIR);
+                    event.getInventory().setItem(30, item);
+                    event.getInventory().setItem(31, item);
+                    event.getInventory().setItem(32, item);
+
+                    if(mission.getMission1PotionCount() == 3)
+                    {
+                        event.getWhoClicked().closeInventory();
+                    }
+                }
+
+            }
         }
 
+    }
+
+    @EventHandler
+    public void onInventoryDrag(final InventoryDragEvent event)
+    {
+        if(event.getInventory().getTitle().equalsIgnoreCase("포션 제작"))
+        {
+            event.setCancelled(true);
+        }
+    }
+
+    public void openInventory(final HumanEntity ent)
+    {
+        ent.openInventory(m_inv);
     }
 
     int getGuiSlotAir(Inventory inven)
@@ -185,14 +242,6 @@ public class PotionMakeGui implements Listener
         return 100;
     }
 
-    @EventHandler
-    public void onInventoryDrag(final InventoryDragEvent event)
-    {
-        if(event.getInventory().getTitle().equalsIgnoreCase("포션 제작"))
-        {
-            event.setCancelled(true);
-        }
-    }
 
 
     PotionRecipe.Potion getPotionRecipe(int slot)

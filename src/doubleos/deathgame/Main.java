@@ -2,6 +2,7 @@ package doubleos.deathgame;
 
 import doubleos.deathgame.ablilty.*;
 import doubleos.deathgame.command.GameCommand;
+import doubleos.deathgame.gui.CellularGame;
 import doubleos.deathgame.gui.PotionMakeGui;
 import doubleos.deathgame.variable.PlayerVariable;
 import doubleos.deathgame.variable.PotionRecipe;
@@ -41,6 +42,8 @@ public class Main extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new Hidden2Gui(), this);
         Bukkit.getPluginManager().registerEvents(new PotionMakeGui(), this);
+
+        Bukkit.getPluginManager().registerEvents(new CellularGame(), this);
 
         PotionRecipe.Instance().initPotionRecipe();
 

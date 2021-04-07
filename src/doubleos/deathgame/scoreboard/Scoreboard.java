@@ -46,6 +46,10 @@ public class Scoreboard
                         scoreboard.add(mission.getMission2Title() + ": " + mission2_Suc, 7);
 
                     }
+                    else
+                    {
+                        scoreboard.add("배전박스 수리 " + GameVariable.Instance().getRepairBoxCount() + " | 8" , 8);
+                    }
                     scoreboard.send(player);
                     scoreboard.update();
                     if(GameVariable.Instance().getGameState() == GameVariable.GameState.END)

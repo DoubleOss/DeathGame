@@ -49,7 +49,7 @@ public class GameCommand implements CommandExecutor
                         gamevariable.setGameState(GameVariable.GameState.PLAY);
                         Bukkit.broadcastMessage("잠시후 랜덤으로 킬러가 설정됩니다.");
                         setPlayerVariable();
-                        BukkitTask task = new BukkitRunnable()
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable()
                         {
                             @Override
                             public void run()
@@ -76,10 +76,9 @@ public class GameCommand implements CommandExecutor
                                 player.sendMessage("테스트2 " + Main.instance.variablePlayer.get(gamevariable.getGamePlayerList().get(0)).getHumanType());
 
                                 GameVariable.Instance().setTimeStart(true);
-                                this.cancel();
 
                             }
-                        }.runTaskTimer(Main.instance, 0l, 40l);
+                        }, 40l);
                         return true;
                     case "중지":
                         GameVariable.Instance().setGameState(GameVariable.GameState.PAUSE);
@@ -121,7 +120,7 @@ public class GameCommand implements CommandExecutor
                         }
                     case"세포게임":
                         CellularGame game = new CellularGame();
-                        game.initGuiItem();
+                        game.initGuiItem(((Player) sender).getPlayer());
                         game.openInventory(player);
                         return true;
                     case"미션완료":

@@ -3,12 +3,15 @@ package doubleos.deathgame.variable;
 import doubleos.deathgame.Main;
 import doubleos.deathgame.ablilty.KillerCommon;
 import doubleos.deathgame.ablilty.KillerHidden2;
+import doubleos.deathgame.gui.CellularGame;
+import javafx.scene.control.Cell;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GameVariable
 {
@@ -41,14 +44,14 @@ public class GameVariable
     }
 
     ArrayList<Player> m_GamePlayerList = new ArrayList<>();
+    ArrayList<Player> m_killerPlayerList = new ArrayList<>();
+
+    HashMap<Player, CellularGame> m_cellGameClassPlayer = new HashMap<>();
 
     GameStage m_GameStage = GameStage.LAB;
 
     GameState m_GameState = GameState.END;
 
-
-
-    ArrayList<Player> m_killerPlayerList = new ArrayList<>();
 
     Player m_orignalKillerPlayer;
 
@@ -237,6 +240,19 @@ public class GameVariable
     public int getRepairBoxCount()
     {
         return m_repairBoxCount;
+    }
+
+    public CellularGame getCellGameClassPlayer(Player player)
+    {
+        return m_cellGameClassPlayer.get(player);
+    }
+    public void addCellGameClassGetPlayer(CellularGame cellclass, Player player)
+    {
+        m_cellGameClassPlayer.put(player, cellclass);
+    }
+    public HashMap<Player, CellularGame> getcellClassHash()
+    {
+        return m_cellGameClassPlayer;
     }
 
 

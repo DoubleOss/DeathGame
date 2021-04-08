@@ -83,7 +83,6 @@ public class PotionMakeGui implements Listener
         item.setItemMeta(meta);
 
         return item;
-
     }
     ItemStack createPotionGuiItem(final Material material,PotionEffectType type, PotionType ptype,final String name, final String lore)
     {
@@ -171,7 +170,6 @@ public class PotionMakeGui implements Listener
                     }
                 }
             }
-
         }
     }
     @EventHandler

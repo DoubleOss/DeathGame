@@ -37,6 +37,8 @@ public class MissionManager
 
     int m_Mission1_PotionCount = 0;
 
+    int m_BoxRepair = 0;
+
 
     public void setMission()
     {
@@ -117,6 +119,16 @@ public class MissionManager
     {
         return m_Mission1_PotionCount;
     }
+
+    public int getBoxRepair()
+    {
+        return m_BoxRepair;
+    }
+    public void setBoxRepair(int number)
+    {
+        m_BoxRepair = number;
+    }
+
     public void setMissionPotionCount(int number)
     {
         m_Mission1_PotionCount = number;

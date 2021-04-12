@@ -20,7 +20,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-public class KillerHidden3 implements Listener
+public class KillerHidden3 implements Listener , Hidden
 {
 
     int m_skill1Cooltime = 0;
@@ -31,7 +31,7 @@ public class KillerHidden3 implements Listener
 
     Player m_killerName;
 
-    int m_hiddenAbliltyTime = 120;
+    public int m_hiddenAbliltyTime = 120;
 
 
     public void initKillerHidden3()
@@ -41,6 +41,7 @@ public class KillerHidden3 implements Listener
 
         m_skill1Cooltime = 0;
         m_skill2Cooltime = 0;
+        GameVariable.Instance().addKillerHiddenClass(this.m_killerName, this);
 
         ItemStack helmet = new ItemStack(Material.PUMPKIN);
         ItemStack air = new ItemStack(Material.AIR);
@@ -59,6 +60,7 @@ public class KillerHidden3 implements Listener
                     GameVariable.Instance().setMissionRotateNumber(GameVariable.Instance().getMissionRotateNumber()+1);
                     GameVariable.Instance().setMissionRotate();
                     GameVariable.Instance().setIsKillerCheckTras(false);
+                    GameVariable.Instance().getKillerHiddenClass().remove(m_killerName);
                     this.cancel();
                 }
                 if(!GameVariable.Instance().getGameState().equals(GameVariable.GameState.PAUSE))

@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public class KillerHidden1 implements Listener
+public class KillerHidden1 implements Listener, Hidden
 {
 
     Player m_killerName;
@@ -40,13 +40,15 @@ public class KillerHidden1 implements Listener
     int m_skill2Cooltime = 0;
 
 
-    int m_hiddenAbliltyTime = 120;
+    public int m_hiddenAbliltyTime = 120;
 
     public void initKillerHidden1()
     {
         this.m_killerName = GameVariable.Instance().getOrignalKillerPlayer();
         m_hiddenAbliltyTime = 120;
         m_skill1Cooltime = 0;
+
+        GameVariable.Instance().addKillerHiddenClass(this.m_killerName, this);
 
         ItemStack helmet = new ItemStack(Material.PUMPKIN);
         ItemStack air = new ItemStack(Material.AIR);
@@ -66,6 +68,7 @@ public class KillerHidden1 implements Listener
                     GameVariable.Instance().setMissionRotateNumber(GameVariable.Instance().getMissionRotateNumber()+1);
                     GameVariable.Instance().setMissionRotate();
                     GameVariable.Instance().setIsKillerCheckTras(false);
+                    GameVariable.Instance().getKillerHiddenClass().remove(m_killerName);
                     this.cancel();
                 }
                 else

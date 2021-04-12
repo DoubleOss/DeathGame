@@ -1,9 +1,11 @@
 package doubleos.deathgame.variable;
 
 import doubleos.deathgame.Main;
+import doubleos.deathgame.ablilty.Hidden;
 import doubleos.deathgame.ablilty.KillerCommon;
 import doubleos.deathgame.ablilty.KillerHidden2;
 import doubleos.deathgame.gui.CellularGame;
+import doubleos.deathgame.gui.DefectiveGame;
 import javafx.scene.control.Cell;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -47,6 +49,9 @@ public class GameVariable
     ArrayList<Player> m_killerPlayerList = new ArrayList<>();
 
     HashMap<Player, CellularGame> m_cellGameClassPlayer = new HashMap<>();
+    HashMap<Player, DefectiveGame> m_defectiveGameClassPlayer = new HashMap<>();
+    HashMap<Player, Hidden> m_killerHiddenClass = new HashMap<>();
+
 
     GameStage m_GameStage = GameStage.LAB;
 
@@ -228,6 +233,7 @@ public class GameVariable
     {
         return m_MissionRotateNumber;
     }
+
     public void setMissionRotateNumber(int number)
     {
         m_MissionRotateNumber = number;
@@ -256,27 +262,52 @@ public class GameVariable
     }
 
 
+    public DefectiveGame getDefectiveGameClassPlayer(Player player)
+    {
+        return m_defectiveGameClassPlayer.get(player);
+    }
+
+    public void addDefectiveClassGetPlayer(DefectiveGame defclass, Player player)
+    {
+        m_defectiveGameClassPlayer.put(player, defclass);
+    }
+    public HashMap<Player, DefectiveGame> getdefectiveClassHash()
+    {
+        return m_defectiveGameClassPlayer;
+    }
+    public HashMap<Player, Hidden> getKillerHiddenClass()
+    {
+        return m_killerHiddenClass;
+    }
+    public void addKillerHiddenClass(Player player, Hidden hiddenclass)
+    {
+        m_killerHiddenClass.put(player, hiddenclass);
+    }
+
     public void setMissionRotate()
     {
-        if(m_MissionRotateNumber == 1)
+        if(m_MissionRotateNumber == 2)
         {
             m_MissionRotateNumber = 2;
             MissionManager.Instance().setActiveMission(MissionManager.ActiveMission.MISSION2);
+
         }
-        else if (m_MissionRotateNumber ==2)
+        else if (m_MissionRotateNumber ==3)
         {
             m_MissionRotateNumber = 3;
             MissionManager.Instance().setActiveMission(MissionManager.ActiveMission.MISSION3);
         }
-        else if (m_MissionRotateNumber == 3)
+        else if (m_MissionRotateNumber == 4)
         {
             m_MissionRotateNumber = 4;
             MissionManager.Instance().setActiveMission(MissionManager.ActiveMission.MISSION4);
         }
-        else if (m_MissionRotateNumber == 4)
+        else
         {
+            m_MissionRotateNumber = 1;
             MissionManager.Instance().setActiveMission(MissionManager.ActiveMission.MISSION1);
         }
+        MissionManager.Instance().setMission();
 
     }
 

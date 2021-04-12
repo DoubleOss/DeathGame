@@ -17,14 +17,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
-public class KillerHidden2 implements Listener
+public class KillerHidden2 implements Listener , Hidden
 {
 
     int m_skill1Cooltime = 0;
 
     int m_skill2Cooltime = 0;
 
-    int m_hiddenAbliltyTime = 120;
+    public int m_hiddenAbliltyTime = 120;
 
     Player m_killerName;
 
@@ -36,6 +36,7 @@ public class KillerHidden2 implements Listener
 
         m_skill1Cooltime = 0;
         m_skill2Cooltime = 0;
+        GameVariable.Instance().addKillerHiddenClass(this.m_killerName, this);
 
         ItemStack helmet = new ItemStack(Material.PUMPKIN);
         ItemStack air = new ItemStack(Material.AIR);
@@ -54,6 +55,7 @@ public class KillerHidden2 implements Listener
                     GameVariable.Instance().setMissionRotateNumber(GameVariable.Instance().getMissionRotateNumber()+1);
                     GameVariable.Instance().setMissionRotate();
                     GameVariable.Instance().setIsKillerCheckTras(false);
+                    GameVariable.Instance().getKillerHiddenClass().remove(m_killerName);
                     this.cancel();
                 }
                 if(!GameVariable.Instance().getGameState().equals(GameVariable.GameState.PAUSE))

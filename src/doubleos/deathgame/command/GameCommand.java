@@ -3,11 +3,10 @@ package doubleos.deathgame.command;
 
 
 import doubleos.deathgame.Main;
-import doubleos.deathgame.ablilty.Hidden2Gui;
-import doubleos.deathgame.ablilty.KillerHidden1;
-import doubleos.deathgame.ablilty.KillerHidden2;
-import doubleos.deathgame.ablilty.KillerHidden3;
+import doubleos.deathgame.ablilty.*;
 import doubleos.deathgame.gui.CellularGame;
+import doubleos.deathgame.gui.DefectiveGame;
+import doubleos.deathgame.gui.MechanicalRepair;
 import doubleos.deathgame.gui.PotionMakeGui;
 import doubleos.deathgame.scoreboard.Scoreboard;
 import doubleos.deathgame.variable.GameVariable;
@@ -18,8 +17,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Collections;
 
@@ -63,6 +60,8 @@ public class GameCommand implements CommandExecutor
                                     GameVariable.Instance().addKillerListName(gamevariable.getGamePlayerList().get(0));
                                     GameVariable.Instance().setOrignalKillerPlayer(gamevariable.getGamePlayerList().get(0));
                                     GameVariable.Instance().setCheckKiller(true);
+                                    KillerSound sound = new KillerSound();
+                                    sound.initSound((Player)sender);
 
 
                                     gamevariable.getGamePlayerList().get(0).sendMessage("당신은 킬러가 되셨습니다.");
@@ -122,6 +121,16 @@ public class GameCommand implements CommandExecutor
                         CellularGame game = new CellularGame();
                         game.initGuiItem(((Player) sender).getPlayer());
                         game.openInventory(player);
+                        return true;
+                    case"기계수리":
+                        MechanicalRepair repair = new MechanicalRepair();
+                        repair.initGuiItem(((Player) sender).getPlayer());
+                        repair.openInventory(player);
+                        return true;
+                    case"불량품게임":
+                        DefectiveGame defgame = new DefectiveGame();
+                        defgame.initGuiItem(((Player) sender).getPlayer());
+                        defgame.openInventory(player);
                         return true;
                     case"미션완료":
                         if(strings[1].isEmpty() == false)

@@ -52,6 +52,8 @@ public class GameVariable
     HashMap<Player, DefectiveGame> m_defectiveGameClassPlayer = new HashMap<>();
     HashMap<Player, Hidden> m_killerHiddenClass = new HashMap<>();
 
+    HashMap<Player, PlayerVariable> m_playerVariable = new HashMap<>();
+
 
     GameStage m_GameStage = GameStage.LAB;
 
@@ -283,6 +285,14 @@ public class GameVariable
     {
         m_killerHiddenClass.put(player, hiddenclass);
     }
+    public void addPlayerVarible(Player player, PlayerVariable variable)
+    {
+        m_playerVariable.put(player, variable);
+    }
+    public HashMap<Player, PlayerVariable> getPlayerVariable()
+    {
+        return m_playerVariable;
+    }
 
     public void setMissionRotate()
     {
@@ -318,6 +328,12 @@ public class GameVariable
 
         m_killerPlayerList.clear();
         m_GamePlayerList.clear();
+        m_playerVariable.clear();
+
+        m_cellGameClassPlayer.clear();
+        m_defectiveGameClassPlayer.clear();
+        m_killerHiddenClass.clear();
+
 
         m_orignalKillerPlayer = null;
 

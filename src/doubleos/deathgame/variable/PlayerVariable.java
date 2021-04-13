@@ -17,6 +17,8 @@ public class PlayerVariable
 
     HumanType m_humanType;
 
+    boolean m_observer = false;
+
 
     public PlayerVariable(Player m_player)
     {
@@ -34,6 +36,15 @@ public class PlayerVariable
     public HumanType getHumanType()
     {
         return this.m_humanType;
+    }
+
+    public boolean getObserver()
+    {
+        return m_observer;
+    }
+    public void setObserver(boolean bool)
+    {
+        m_observer = bool;
     }
 
 

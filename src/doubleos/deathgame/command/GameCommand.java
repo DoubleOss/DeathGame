@@ -13,6 +13,7 @@ import doubleos.deathgame.variable.GameVariable;
 import doubleos.deathgame.variable.MissionManager;
 import doubleos.deathgame.variable.PlayerVariable;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -90,6 +91,26 @@ public class GameCommand implements CommandExecutor
                         resetGame();
                         sender.sendMessage("초기화 되었습니다");
                         return true;
+                    case "관전":
+                        if((strings[1].isEmpty())==false)
+                        {
+                            Player observer = Bukkit.getPlayer(strings[1]);
+                            if(GameVariable.Instance().getPlayerVariable().get(observer).getObserver()==false)
+                            {
+                                GameVariable.Instance().getPlayerVariable().get(observer).setObserver(true);
+                                observer.sendMessage("관전 설정 되었습니다.");
+                                observer.setGameMode(GameMode.SPECTATOR);
+                            }
+                            else
+                            {
+                                GameVariable.Instance().getPlayerVariable().get(observer).setObserver(false);
+                                observer.sendMessage("관전 설정이 해제되었습니다.");
+                                observer.setGameMode(GameMode.SURVIVAL);
+                            }
+
+                            return true;
+                        }
+
                     case "플레이어":
                         player.sendMessage("참가중인 플레이어: " + gamevariable.getGamePlayerList());
                         return true;

@@ -100,7 +100,6 @@ public class KillerCommon implements Listener
                 ItemStack stack2 = new ItemStack(Material.FEATHER);
                 if(event.getPlayer().getInventory().getItemInMainHand().equals(stack2))
                 {
-                    event.getPlayer().sendMessage("@@@");
                     if (m_skill2_Cooltime <= 0)
                     {
                         event.getPlayer().sendMessage("@@@@");

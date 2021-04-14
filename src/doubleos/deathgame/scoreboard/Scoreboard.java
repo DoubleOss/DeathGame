@@ -82,6 +82,7 @@ public class Scoreboard
                     {
                         this.cancel();
                         scoreboard.reset();
+                        scoreboard.update();
                     }
                 }
 

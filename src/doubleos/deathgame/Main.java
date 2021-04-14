@@ -2,6 +2,7 @@ package doubleos.deathgame;
 
 import doubleos.deathgame.ablilty.*;
 import doubleos.deathgame.command.GameCommand;
+import doubleos.deathgame.event.Join;
 import doubleos.deathgame.gui.CellularGame;
 import doubleos.deathgame.gui.DefectiveGame;
 import doubleos.deathgame.gui.MechanicalRepair;
@@ -33,9 +34,11 @@ public class Main extends JavaPlugin {
         instance = this;
 
         registercommand();
-        getServer().getMessenger().registerOutgoingPluginChannel((Plugin) this, "ExampleMod");
+
+        //getServer().getMessenger().registerOutgoingPluginChannel((Plugin) this, "ExampleMod");
 
         Bukkit.getPluginManager().registerEvents(new Death(), this);
+        Bukkit.getPluginManager().registerEvents(new Join(), this);
 
         Bukkit.getPluginManager().registerEvents(new KillerCommon(), this);
         Bukkit.getPluginManager().registerEvents(new KillerHidden1(), this);
@@ -49,6 +52,9 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new DefectiveGame(), this);
 
         Bukkit.getPluginManager().registerEvents(new MechanicalRepair(), this);
+
+
+
 
 
         PotionRecipe.Instance().initPotionRecipe();

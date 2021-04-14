@@ -1,4 +1,4 @@
-package doubleos.deathgame.ablilty;
+package doubleos.deathgame.sound;
 
 import doubleos.deathgame.Main;
 import doubleos.deathgame.variable.GameVariable;
@@ -24,10 +24,14 @@ public class KillerSound implements Listener
             {
                 for(Player p : GameVariable.Instance().getGamePlayerList())
                 {
-                    if(p.getLocation().distance(m_player.getLocation()) <= 50)
+                    if(!p.equals(m_player))
                     {
-                        p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_AMBIENT, SoundCategory.PLAYERS, 1, 1);
+                        if(p.getLocation().distance(m_player.getLocation()) <= 50)
+                        {
+                            p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_AMBIENT, SoundCategory.AMBIENT, 1, 1);
+                        }
                     }
+
                 }
                 if(GameVariable.Instance().getGameState().equals(GameVariable.GameState.END))
                 {
@@ -35,6 +39,7 @@ public class KillerSound implements Listener
                 }
 
             }
+
         }.runTaskTimer(Main.instance, 0l , 20l);
     }
 }

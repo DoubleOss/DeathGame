@@ -28,6 +28,11 @@ public class PlayerVariable
     }
 
 
+    public void resetPlayerVariable()
+    {
+        this.m_humanType = HumanType.HUMAN;
+    }
+
     public void setHumanType(HumanType type)
     {
         this.m_humanType = type;

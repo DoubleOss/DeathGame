@@ -9,6 +9,7 @@ import doubleos.deathgame.gui.DefectiveGame;
 import doubleos.deathgame.gui.MechanicalRepair;
 import doubleos.deathgame.gui.PotionMakeGui;
 import doubleos.deathgame.scoreboard.Scoreboard;
+import doubleos.deathgame.sound.KillerSound;
 import doubleos.deathgame.variable.GameVariable;
 import doubleos.deathgame.variable.MissionManager;
 import doubleos.deathgame.variable.PlayerVariable;
@@ -61,8 +62,7 @@ public class GameCommand implements CommandExecutor
                                     GameVariable.Instance().addKillerListName(gamevariable.getGamePlayerList().get(0));
                                     GameVariable.Instance().setOrignalKillerPlayer(gamevariable.getGamePlayerList().get(0));
                                     GameVariable.Instance().setCheckKiller(true);
-                                    KillerSound sound = new KillerSound();
-                                    sound.initSound((Player)sender);
+                                    playSound();
 
 
                                     gamevariable.getGamePlayerList().get(0).sendMessage("당신은 킬러가 되셨습니다.");
@@ -70,6 +70,7 @@ public class GameCommand implements CommandExecutor
                                 else
                                 {
                                     player.sendMessage("킬러가 이미 존재함으로 킬러 뽑기는 스킵됩니다.");
+                                    playSound();
                                 }
 
                                 player.sendMessage("테스트 " + gamevariable.getGamePlayerList());
@@ -213,7 +214,7 @@ public class GameCommand implements CommandExecutor
             if(Main.instance.adminList.isEmpty())
             {
                 GameVariable.Instance().addGamePlayerList(p);
-                PlayerVariable playerVariable = new PlayerVariable(p);
+                //PlayerVariable playerVariable = new PlayerVariable(p);
                 Scoreboard score = new Scoreboard(p);
             }
             else
@@ -224,7 +225,7 @@ public class GameCommand implements CommandExecutor
                     {
                         GameVariable.Instance().addGamePlayerList(p);
                         Scoreboard score = new Scoreboard(p);
-                        PlayerVariable playerVariable = new PlayerVariable(p);
+                        //PlayerVariable playerVariable = new PlayerVariable(p);
                     }
                 }
 
@@ -233,10 +234,18 @@ public class GameCommand implements CommandExecutor
         }
     }
 
+    void playSound()
+    {
+        KillerSound sound = new KillerSound();
+        sound.initSound(GameVariable.Instance().getGamePlayerList().get(0));
+    }
     void resetGame()
     {
+        for(Player p : Bukkit.getOnlinePlayers())
+        {
+            Main.instance.variablePlayer.get(p).resetPlayerVariable();
+        }
         GameVariable.Instance().getGamePlayerList().clear();
-        Main.instance.variablePlayer.clear();
         GameVariable.Instance().setCheckKiller(false);
         GameVariable.Instance().GameReset();
         MissionManager.Instance().setMission();
@@ -258,6 +267,8 @@ public class GameCommand implements CommandExecutor
         p.sendMessage("/죽술 변신 [번호] - 1번 연구소 2번 성당 3번 인형공장");
         p.sendMessage("/죽술 포션제작 - 살인마 변신 미션 기능");
         p.sendMessage("/죽술 미션완료 [번호] - 1번 = 1번미션 강제완료 2번 = 2번 강제완료");
+        p.sendMessage("/죽술 관전 - 관전모드로 전환, 해제 기능");
+        
 
 
     }

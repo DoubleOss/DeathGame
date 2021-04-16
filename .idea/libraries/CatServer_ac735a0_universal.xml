@@ -2,9 +2,9 @@
   <library name="CatServer-ac735a0-universal">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/../../마인크래프트 Api/CatServer-ac735a0-universal.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../마인크래프트 Api/EasyScoreboardLib.jar!/" />
       <root url="jar://$PROJECT_DIR$/../../마인크래프트 Api/guava-30.1.1-jre.jar!/" />
       <root url="jar://$PROJECT_DIR$/../../마인크래프트 Api/ActionBarAPI-1.5.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../마인크래프트 Api/GlowAPI_v1.4.6-SNAPSHOT.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

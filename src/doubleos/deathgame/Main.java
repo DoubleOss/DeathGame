@@ -3,10 +3,12 @@ package doubleos.deathgame;
 import doubleos.deathgame.ablilty.*;
 import doubleos.deathgame.command.GameCommand;
 import doubleos.deathgame.event.Join;
+import doubleos.deathgame.event.Kill;
 import doubleos.deathgame.gui.CellularGame;
 import doubleos.deathgame.gui.DefectiveGame;
 import doubleos.deathgame.gui.MechanicalRepair;
 import doubleos.deathgame.gui.PotionMakeGui;
+import doubleos.deathgame.variable.GameItem;
 import doubleos.deathgame.variable.PlayerVariable;
 import doubleos.deathgame.variable.PotionRecipe;
 import org.bukkit.Bukkit;
@@ -29,6 +31,7 @@ public class Main extends JavaPlugin {
     public static Main instance;
 
 
+
     public void onEnable()
     {
         instance = this;
@@ -39,6 +42,7 @@ public class Main extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new Death(), this);
         Bukkit.getPluginManager().registerEvents(new Join(), this);
+        Bukkit.getPluginManager().registerEvents(new Kill(), this);
 
         Bukkit.getPluginManager().registerEvents(new KillerCommon(), this);
         Bukkit.getPluginManager().registerEvents(new KillerHidden1(), this);
@@ -55,9 +59,9 @@ public class Main extends JavaPlugin {
 
 
 
-
-
         PotionRecipe.Instance().initPotionRecipe();
+
+        GameItem.Instance().initGameItem();
 
 
 

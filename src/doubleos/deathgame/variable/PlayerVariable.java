@@ -31,6 +31,7 @@ public class PlayerVariable
     public void resetPlayerVariable()
     {
         this.m_humanType = HumanType.HUMAN;
+        this.m_observer = false;
     }
 
     public void setHumanType(HumanType type)

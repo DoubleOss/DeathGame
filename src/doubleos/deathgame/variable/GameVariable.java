@@ -8,6 +8,7 @@ import doubleos.deathgame.gui.CellularGame;
 import doubleos.deathgame.gui.DefectiveGame;
 import javafx.scene.control.Cell;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -64,6 +65,7 @@ public class GameVariable
 
 
     KillerHidden2 m_KillerHidden2;
+    Player m_hidden2Target;
 
 
 
@@ -171,6 +173,10 @@ public class GameVariable
         }
         return null;
     }
+    public ArrayList<Player> getKillerPlayerList()
+    {
+        return m_killerPlayerList;
+    }
 
     public void setGameTimeMin(int min)
     {
@@ -210,6 +216,16 @@ public class GameVariable
     {
         return m_KillerHidden2;
     }
+
+    public void setHidden2Targer(Player player)
+    {
+        m_hidden2Target = player;
+    }
+    public Player getHidden2Target()
+    {
+        return m_hidden2Target;
+    }
+
 
     public boolean getIsKillerCheckTras()
     {
@@ -323,8 +339,14 @@ public class GameVariable
 
     public void GameReset()
     {
+
+        for(Player p : getGamePlayerList())
+        {
+            p.setGameMode(GameMode.SURVIVAL);
+        }
         m_GameTime_Min = 20;
         m_GameTime_Sec = 0;
+
 
         m_killerPlayerList.clear();
         m_GamePlayerList.clear();
@@ -336,6 +358,9 @@ public class GameVariable
 
 
         m_orignalKillerPlayer = null;
+
+        m_Checkkiller = false;
+        m_isKillerCheckTras = false;
 
         MissionManager.Instance().setActiveMission(MissionManager.ActiveMission.MISSION1);
 

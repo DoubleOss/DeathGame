@@ -1,6 +1,7 @@
 package doubleos.deathgame.ablilty;
 
 import doubleos.deathgame.Main;
+import doubleos.deathgame.variable.GameItem;
 import doubleos.deathgame.variable.GameVariable;
 import doubleos.deathgame.variable.MissionManager;
 import org.bukkit.Bukkit;
@@ -38,6 +39,10 @@ public class KillerHidden2 implements Listener , Hidden
         m_skill2Cooltime = 0;
         GameVariable.Instance().addKillerHiddenClass(this.m_killerName, this);
 
+        m_killerName.getInventory().addItem(GameItem.Instance().m_killerHidden2_Ability1_Item);
+        m_killerName.getInventory().addItem(GameItem.Instance().m_killerHidden2_Ability2_Item);
+
+
         ItemStack helmet = new ItemStack(Material.PUMPKIN);
         ItemStack air = new ItemStack(Material.AIR);
 
@@ -52,6 +57,9 @@ public class KillerHidden2 implements Listener , Hidden
                 {
                     m_killerName.getInventory().setHelmet(air);
                     m_killerName.sendMessage("변신이 풀렸습니다!");
+                    m_killerName.getInventory().remove(GameItem.Instance().m_killerHidden2_Ability1_Item);
+                    m_killerName.getInventory().remove(GameItem.Instance().m_killerHidden2_Ability2_Item);
+
                     GameVariable.Instance().setMissionRotateNumber(GameVariable.Instance().getMissionRotateNumber()+1);
                     GameVariable.Instance().setMissionRotate();
                     GameVariable.Instance().setIsKillerCheckTras(false);
@@ -76,8 +84,8 @@ public class KillerHidden2 implements Listener , Hidden
             {
                 if(event.getPlayer().equals(GameVariable.Instance().getOrignalKillerPlayer()))
                 {
-                    ItemStack stack1  = new ItemStack(Material.CLAY_BRICK);
-                    if(event.getPlayer().getInventory().getItemInMainHand().equals(stack1))
+                    ItemStack stack1  = GameItem.Instance().m_killerHidden2_Ability1_Item;
+                    if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack1.getType()))
                     {
                         if(mission.getMission1Success() == true && mission.getMission2Success() == true)
                         {
@@ -89,8 +97,8 @@ public class KillerHidden2 implements Listener , Hidden
 
                         }
                     }
-                    ItemStack stack2  = new ItemStack(Material.BOOK);
-                    if(event.getPlayer().getInventory().getItemInMainHand().equals(stack2))
+                    ItemStack stack2  = GameItem.Instance().m_killerHidden2_Ability2_Item;
+                    if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack2.getType()))
                     {
                         if(mission.getMission1Success() == true && mission.getMission2Success() == true)
                         {

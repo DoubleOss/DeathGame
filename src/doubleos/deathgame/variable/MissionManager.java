@@ -1,5 +1,8 @@
 package doubleos.deathgame.variable;
 
+import doubleos.deathgame.ablilty.KillerHidden1;
+import doubleos.deathgame.ablilty.KillerHidden2;
+import doubleos.deathgame.ablilty.KillerHidden3;
 import org.bukkit.Bukkit;
 
 import java.util.HashMap;
@@ -50,6 +53,7 @@ public class MissionManager
             {
                 m_missoin1_Title = "물약제조";
                 m_missoin2_Title = "해킹";
+
                 break;
             }
             case MISSION2:
@@ -70,6 +74,34 @@ public class MissionManager
                 m_missoin2_Title = "리스트 분류";
                 break;
             }
+        }
+    }
+
+
+    void killerHiddenChange()
+    {
+        if(m_mission1_Success && m_mission2_Success)
+        {
+            if(!GameVariable.Instance().getIsKillerCheckTras())
+            {
+                GameVariable.Instance().setIsKillerCheckTras(true);
+                switch(GameVariable.Instance().getGameStage())
+                {
+                    case LAB:
+                        KillerHidden1 hidden1 = new KillerHidden1();
+                        hidden1.initKillerHidden1();
+                        break;
+                    case CATHEDRAL:
+                        KillerHidden2 hidden2 = new KillerHidden2();
+                        hidden2.initKillerHidden2();
+
+                    case FACTORY:
+                        KillerHidden3 hidden3 = new KillerHidden3();
+                        hidden3.initKillerHidden3();
+                        break;
+                }
+            }
+
         }
     }
 
@@ -108,11 +140,13 @@ public class MissionManager
     public void setMission1Success(boolean bool)
     {
         m_mission1_Success = bool;
+        killerHiddenChange();
     }
 
     public void setMission2Success(boolean bool)
     {
         m_mission2_Success = bool;
+        killerHiddenChange();
     }
 
     public int getMission1PotionCount()

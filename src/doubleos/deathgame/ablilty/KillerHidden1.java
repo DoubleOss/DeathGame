@@ -2,6 +2,7 @@ package doubleos.deathgame.ablilty;
 
 import com.connorlinfoot.actionbarapi.ActionBarAPI;
 import doubleos.deathgame.Main;
+import doubleos.deathgame.variable.GameItem;
 import doubleos.deathgame.variable.GameVariable;
 import doubleos.deathgame.variable.MissionManager;
 import org.bukkit.*;
@@ -48,6 +49,9 @@ public class KillerHidden1 implements Listener, Hidden
         m_hiddenAbliltyTime = 120;
         m_skill1Cooltime = 0;
 
+        m_killerName.getInventory().addItem(GameItem.Instance().m_killerHidden1_Ability1_Item);
+        m_killerName.getInventory().addItem(GameItem.Instance().m_killerHidden1_Ability2_Item);
+
         GameVariable.Instance().addKillerHiddenClass(this.m_killerName, this);
 
         ItemStack helmet = new ItemStack(Material.PUMPKIN);
@@ -64,6 +68,9 @@ public class KillerHidden1 implements Listener, Hidden
                 {
                     m_killerName.getInventory().setHelmet(air);
                     m_killerName.sendMessage("변신이 풀렸습니다!");
+                    m_killerName.getInventory().remove(GameItem.Instance().m_killerHidden1_Ability1_Item);
+                    m_killerName.getInventory().remove(GameItem.Instance().m_killerHidden1_Ability2_Item);
+
                     m_hiddenAbliltyTime = 0;
                     GameVariable.Instance().setMissionRotateNumber(GameVariable.Instance().getMissionRotateNumber()+1);
                     GameVariable.Instance().setMissionRotate();
@@ -94,16 +101,16 @@ public class KillerHidden1 implements Listener, Hidden
             {
                 if(GameVariable.Instance().getIsKillerCheckTras() == true)
                 {
-                    ItemStack stack1 = new ItemStack(Material.STRING);
-                    if(event.getPlayer().getInventory().getItemInMainHand().equals(stack1))
+                    ItemStack stack1 = GameItem.Instance().m_killerHidden1_Ability1_Item;
+                    if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack1.getType()))
                     {
                         if(mission.getMission1Success() == true && mission.getMission2Success() == true)
                         {
                             randomLocation(event.getPlayer());
                         }
                     }
-                    ItemStack stack2  = new ItemStack(Material.CLAY_BALL);
-                    if(event.getPlayer().getInventory().getItemInMainHand().equals(stack2))
+                    ItemStack stack2  = GameItem.Instance().m_killerHidden1_Ability2_Item;
+                    if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack2.getType()))
                     {
                         if(mission.getMission1Success() == true && mission.getMission2Success() == true)
                         {
@@ -125,19 +132,21 @@ public class KillerHidden1 implements Listener, Hidden
     {
         if(event.getEntity().getShooter().equals(GameVariable.Instance().getOrignalKillerPlayer()))
         {
-            if(event.getEntity() instanceof Egg)
+            if(GameVariable.Instance().getGameStage().equals(GameVariable.GameStage.LAB))
             {
-                PotionEffect effect1 = new PotionEffect(PotionEffectType.POISON, 100, 0);
-                PotionEffect effect2 = new PotionEffect(PotionEffectType.CONFUSION, 100, 0);
-                if(event.getHitEntity() instanceof Player)
+                if(event.getEntity() instanceof Egg)
                 {
-                    ((Player) event.getHitEntity()).getPlayer().damage(4);
-                    ((Player) event.getHitEntity()).addPotionEffect(effect1, true);
-                    ((Player) event.getHitEntity()).addPotionEffect(effect2, true);
-                    ((Player) event.getHitEntity()).getPlayer().sendMessage("당신은 실험체의 위산 분비 공격에 당해 독과 멀미에 걸립니다.");
+                    PotionEffect effect1 = new PotionEffect(PotionEffectType.POISON, 100, 0);
+                    PotionEffect effect2 = new PotionEffect(PotionEffectType.CONFUSION, 100, 0);
+                    if(event.getHitEntity() instanceof Player)
+                    {
+                        ((Player) event.getHitEntity()).getPlayer().damage(4);
+                        ((Player) event.getHitEntity()).addPotionEffect(effect1, true);
+                        ((Player) event.getHitEntity()).addPotionEffect(effect2, true);
+                        ((Player) event.getHitEntity()).getPlayer().sendMessage("당신은 실험체의 위산 분비 공격에 당해 독과 멀미에 걸립니다.");
+                    }
                 }
             }
-
 
         }
     }

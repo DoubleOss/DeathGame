@@ -103,9 +103,9 @@ public class Hidden2Gui implements Listener
         if(event.getInventory().getTitle().equalsIgnoreCase("기도 지정"))
         {
             m_target = Bukkit.getServer().getPlayer(event.getCurrentItem().getItemMeta().getDisplayName().replace("§f", ""));
-            Bukkit.broadcastMessage(m_target.getName());
             Player p = (Player) event.getWhoClicked();
             p.sendMessage(ChatColor.WHITE + m_target.getName() + " 님을 전도 대상으로 고르셨습니다.");
+            GameVariable.Instance().setHidden2Targer(m_target);
             GameVariable.Instance().getKillerHidden2().m_skill2Cooltime = 120;
 
             BukkitTask task = new BukkitRunnable()
@@ -114,6 +114,11 @@ public class Hidden2Gui implements Listener
                 public void run()
                 {
                     if(GameVariable.Instance().getKillerHidden2().m_skill2Cooltime <= 0)
+                    {
+                        GameVariable.Instance().setHidden2Targer(null);
+                        this.cancel();
+                    }
+                    else if(GameVariable.Instance().getHidden2Target() == null)
                     {
                         this.cancel();
                     }

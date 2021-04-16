@@ -1,13 +1,10 @@
 package doubleos.deathgame.ablilty;
-
 import com.connorlinfoot.actionbarapi.ActionBarAPI;
 import doubleos.deathgame.Main;
+import doubleos.deathgame.variable.GameItem;
 import doubleos.deathgame.variable.GameVariable;
 
-import org.bukkit.Chunk;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -15,14 +12,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.MetadataValue;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.inventivetalent.glow.GlowAPI;
+
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,6 +49,13 @@ public class KillerCommon implements Listener
     }
 
 
+    public void initCommon(Player player)
+    {
+        player.getInventory().addItem(GameItem.Instance().m_killerCom_Ability1_Item);
+        player.getInventory().addItem(GameItem.Instance().m_killerCom_Ability2_Item);
+
+
+    }
     @EventHandler
     void onMoveEvent(PlayerMoveEvent event)
     {
@@ -82,10 +88,9 @@ public class KillerCommon implements Listener
             {
 
                 Player player = event.getPlayer();
-                ItemStack stack1 = new ItemStack(Material.FLINT);
-                if(event.getPlayer().getInventory().getItemInMainHand().equals(stack1))
+                ItemStack stack1 = GameItem.Instance().m_killerCom_Ability1_Item;
+                if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack1.getType()))
                 {
-
                     player.getInventory().remove(stack1);
                     m_skill1_pos.add(event.getClickedBlock().getLocation());
                     Block block = event.getClickedBlock();
@@ -97,13 +102,13 @@ public class KillerCommon implements Listener
             if(event.getAction().equals(Action.RIGHT_CLICK_AIR))
             {
                 //능력2번째
-                ItemStack stack2 = new ItemStack(Material.FEATHER);
-                if(event.getPlayer().getInventory().getItemInMainHand().equals(stack2))
+                ItemStack stack2 = GameItem.Instance().m_killerCom_Ability2_Item;
+                if(event.getPlayer().getInventory().getItemInMainHand().getType().equals((stack2.getType())))
                 {
                     if (m_skill2_Cooltime <= 0)
                     {
-                        event.getPlayer().sendMessage("@@@@");
-                        initGlowing();
+                        initGlowing(event.getPlayer());
+                        event.getPlayer().sendMessage("능력을 사용하셨습니다.");
                         m_skill2_Cooltime = 20;
                         StartSkill2Cooltime();
                     }
@@ -114,29 +119,48 @@ public class KillerCommon implements Listener
         }
     }
 
-    void initGlowing()
+    void initGlowing(Player viewer)
     {
         for (Player p : GameVariable.Instance().getGamePlayerList())
         {
-            if(GameVariable.Instance().getKillerListName(p).equals(null))
+            if(GameVariable.Instance().getKillerListName(p) == null)
             {
-
-                PotionEffect effect = new PotionEffect(PotionEffectType.GLOWING, 60, 0);
-                p.addPotionEffect(effect, true);
+                GlowAPI.setGlowing(p, GlowAPI.Color.WHITE, viewer);
 
             }
-
         }
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () ->
+        {
+            for(Player p : GameVariable.Instance().getGamePlayerList())
+            {
+                GlowAPI.setGlowing(p, false, viewer);
+            }
+        }, 60l);
 
     }
     void setSkill1Effect(Player p)
     {
-        PotionEffect effect1 = new PotionEffect(PotionEffectType.GLOWING, 60, 0);
-        p.addPotionEffect(effect1, true);
-
         PotionEffect effect2 = new PotionEffect(PotionEffectType.SLOW, 100, 100);
         p.addPotionEffect(effect2, true);
         ActionBarAPI.sendActionBar(p, "당신은 덫을 밟으셨습니다.");
+
+        for (Player k : GameVariable.Instance().getKillerPlayerList())
+        {
+            if(GameVariable.Instance().getKillerListName(p) == null)
+            {
+                GlowAPI.setGlowing(p, GlowAPI.Color.WHITE, k);
+
+            }
+        }
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () ->
+        {
+            for(Player k : GameVariable.Instance().getKillerPlayerList())
+            {
+                GlowAPI.setGlowing(p, false, k);
+            }
+        }, 100l);
+
+
     }
 
     void StartSkill2Cooltime()
@@ -158,6 +182,8 @@ public class KillerCommon implements Listener
         }.runTaskTimer(Main.instance, 0l, 20l);
 
     }
+
+
 
 
 }

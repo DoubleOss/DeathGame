@@ -19,6 +19,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.inventivetalent.glow.GlowAPI;
 
 import java.util.Collections;
 
@@ -176,6 +177,50 @@ public class GameCommand implements CommandExecutor
                         }
                     case "살인마보기":
                         sender.sendMessage(GameVariable.Instance().getOrignalKillerPlayer().getName());
+                        return true;
+                    case "실패효과":
+                        for(Player p : GameVariable.Instance().getKillerPlayerList())
+                        {
+                            GlowAPI.setGlowing((Player)sender, GlowAPI.Color.WHITE, p);
+                        }
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () ->
+                        {
+                            for(Player p : GameVariable.Instance().getKillerPlayerList())
+                            {
+                                GlowAPI.setGlowing((Player)sender, false, p);
+                            }
+                        }, 100l);
+                        return true;
+                    case "미니게임온":
+                        if((strings[1].isEmpty())==false || strings[1] != null)
+                        {
+                            //죽슬 미니게임온 닉네임
+                            Player p = Bukkit.getPlayer(strings[1]);
+                            p.sendPluginMessage(Main.instance, "DeathGame", String.format("MiniGame" + "_" + "true").getBytes());
+
+                        }
+                        return true;
+                    case "미니게임오프":
+                        if((strings[1].isEmpty())==false || strings[1] != null)
+                        {
+                            Player p = Bukkit.getPlayer(strings[1]);;
+                            p.sendPluginMessage(Main.instance, "DeathGame", String.format("LoadingBar" + "_" + "false").getBytes());
+                        }
+                        return true;
+                    case "로딩활성화":
+                        if((strings[1].isEmpty())==false || strings[1] != null)
+                        {
+                            Player p = Bukkit.getPlayer(strings[1]);
+                            //죽슬 로딩활성화 닉네임 10 = 10초짜리 로딩바 활성화
+                            p.sendPluginMessage(Main.instance, "DeathGame", String.format("LoadingBar" + "_" + "true" + "_" + "%s", strings[2]).getBytes());
+                        }
+                        return true;
+                    case "로딩비활성화":
+                        if((strings[1].isEmpty())==false || strings[1] != null)
+                        {
+                            Player p = Bukkit.getPlayer(strings[1]);;
+                            p.sendPluginMessage(Main.instance, "DeathGame", String.format("LoadingBar" + "_" + "false").getBytes());
+                        }
                         return true;
                     case "변신":
                         if((strings[1].isEmpty())==false || strings[1] != null)

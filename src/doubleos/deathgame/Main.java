@@ -38,7 +38,7 @@ public class Main extends JavaPlugin {
 
         registercommand();
 
-        //getServer().getMessenger().registerOutgoingPluginChannel((Plugin) this, "ExampleMod");
+        getServer().getMessenger().registerOutgoingPluginChannel( this, "DeathGame");
 
         Bukkit.getPluginManager().registerEvents(new Death(), this);
         Bukkit.getPluginManager().registerEvents(new Join(), this);

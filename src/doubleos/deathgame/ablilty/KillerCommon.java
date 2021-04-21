@@ -20,6 +20,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.Vector;
 import org.inventivetalent.glow.GlowAPI;
 
 
@@ -65,8 +66,8 @@ public class KillerCommon implements Listener
             {
                 for(int i = 0; i<m_skill1_pos.size(); i++)
                 {
-                    //event.getPlayer().sendMessage(String.format("%f",event.getFrom().distance(m_skill1_pos.get(i))));
-                    if(event.getFrom().distance(m_skill1_pos.get(i)) <= 1.5)
+                    event.getPlayer().sendMessage(String.format("%f",event.getFrom().distance(m_skill1_pos.get(i))));
+                    if(event.getFrom().distance(m_skill1_pos.get(i)) <= 0.5)
                     {
                         m_skill1_pos.remove(i);
                         setSkill1Effect(event.getPlayer());
@@ -92,9 +93,9 @@ public class KillerCommon implements Listener
                 if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack1.getType()))
                 {
                     player.getInventory().remove(stack1);
-                    m_skill1_pos.add(event.getClickedBlock().getLocation());
-                    Block block = event.getClickedBlock();
-                    block.setType(Material.DIAMOND_BLOCK);
+                    Location blockpos = event.getClickedBlock().getLocation().add( new Vector(0, 1, 0));
+                    m_skill1_pos.add(blockpos);
+                    blockpos.getBlock().setType(Material.CARPET);
 
 
                 }

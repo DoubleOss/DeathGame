@@ -63,9 +63,9 @@ public class GameCommand implements CommandExecutor
                                     {
 
                                         KillerCommon common = new KillerCommon();
-                                        common.initCommon((Player) sender);
                                         Main.instance.variablePlayer.get(gamevariable.getGamePlayerList().get(0)).setHumanType(PlayerVariable.HumanType.KILLER);
                                         sender.sendMessage(gamevariable.getGamePlayerList().get(0).getName());
+                                        common.initCommon(gamevariable.getGamePlayerList().get(0));
                                         GameVariable.Instance().addKillerListName(gamevariable.getGamePlayerList().get(0));
                                         GameVariable.Instance().setOrignalKillerPlayer(gamevariable.getGamePlayerList().get(0));
                                         GameVariable.Instance().setCheckKiller(true);

@@ -23,6 +23,8 @@ public class GameItem
     }
 
     public ItemStack m_killerCom_Ability1_Item;
+    public ItemStack m_killerCom_Ability1_Block;
+
     public ItemStack m_killerCom_Ability2_Item;
 
     public ItemStack m_killerHidden1_Ability1_Item;
@@ -40,6 +42,8 @@ public class GameItem
     public void initGameItem()
     {
         m_killerCom_Ability1_Item = createItem(Material.FLINT, "덫", "", 3);
+        m_killerCom_Ability1_Block = createItem(Material.CARPET, "덫", "", 1);
+
         m_killerCom_Ability2_Item = createItem(Material.FEATHER, "탐지", "");
 
         m_killerHidden1_Ability1_Item = createItem(Material.STICK, "랜덤텔포", "");

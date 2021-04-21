@@ -69,6 +69,7 @@ public class KillerHidden3 implements Listener , Hidden
                     GameVariable.Instance().setMissionRotate();
                     GameVariable.Instance().setIsKillerCheckTras(false);
                     GameVariable.Instance().getKillerHiddenClass().remove(m_killerName);
+                    removeInvisible(m_killerName);
                     this.cancel();
                 }
                 if(!GameVariable.Instance().getGameState().equals(GameVariable.GameState.PAUSE))
@@ -200,10 +201,6 @@ public class KillerHidden3 implements Listener , Hidden
         m_skill1Active = true;
         PotionEffect effect = new PotionEffect(PotionEffectType.INVISIBILITY, 9999999, 0);
         p.addPotionEffect(effect, true);
-        p.hidePlayer(Main.instance, p);
-
-
-
         BukkitTask task = new BukkitRunnable()
         {
             @Override

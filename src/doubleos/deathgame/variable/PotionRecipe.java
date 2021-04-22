@@ -62,7 +62,7 @@ public class PotionRecipe
 
     void setGreenPotionRecipe()
     {
-        m_greenPotionMaterial.add(addPotionRecipeMaterial(Material.MAGMA_CREAM, 2));
+        m_greenPotionMaterial.add(addPotionRecipeMaterial(Material.MAGMA_CREAM, 1));
         m_greenPotionMaterial.add(addPotionRecipeMaterial(Material.SULPHUR, 1));
         m_greenPotionMaterial.add(addPotionRecipeMaterial(Material.FERMENTED_SPIDER_EYE, 1));
     }
@@ -70,15 +70,15 @@ public class PotionRecipe
     void setPinkPotionRecipe()
     {
         m_pinkPotionMaterial.add(addPotionRecipeMaterial(Material.MAGMA_CREAM, 1));
-        m_pinkPotionMaterial.add(addPotionRecipeMaterial(Material.BLAZE_POWDER, 2));
+        m_pinkPotionMaterial.add(addPotionRecipeMaterial(Material.BLAZE_POWDER, 1));
         m_pinkPotionMaterial.add(addPotionRecipeMaterial(Material.FERMENTED_SPIDER_EYE, 1));
     }
 
     void setOrangePotionRecipe()
     {
         m_orangePotionMaterial.add(addPotionRecipeMaterial(Material.MAGMA_CREAM, 1));
-        m_orangePotionMaterial.add(addPotionRecipeMaterial(Material.BLAZE_POWDER, 2));
-        m_orangePotionMaterial.add(addPotionRecipeMaterial(Material.GLOWSTONE_DUST, 2));
+        m_orangePotionMaterial.add(addPotionRecipeMaterial(Material.BLAZE_POWDER, 1));
+        m_orangePotionMaterial.add(addPotionRecipeMaterial(Material.GLOWSTONE_DUST, 1));
     }
 
 

@@ -5,6 +5,7 @@ import doubleos.deathgame.Main;
 import doubleos.deathgame.variable.GameItem;
 import doubleos.deathgame.variable.GameVariable;
 import doubleos.deathgame.variable.MissionManager;
+import doubleos.deathgame.variable.PlayerVariable;
 import org.bukkit.*;
 import org.bukkit.block.PistonMoveReaction;
 import org.bukkit.entity.*;
@@ -58,6 +59,13 @@ public class KillerHidden1 implements Listener, Hidden
         ItemStack air = new ItemStack(Material.AIR);
 
         m_killerName.getInventory().setHelmet(helmet);
+        for(Player p :Bukkit.getOnlinePlayers())
+        {
+            if(p.isOp())
+            {
+                p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ m_killerName.getName() + ChatColor.WHITE+ " 님이 변신 하였습니다.");
+            }
+        }
 
         BukkitTask task = new BukkitRunnable()
         {
@@ -67,7 +75,7 @@ public class KillerHidden1 implements Listener, Hidden
                 if(m_hiddenAbliltyTime <= 0)
                 {
                     m_killerName.getInventory().setHelmet(air);
-                    m_killerName.sendMessage("변신이 풀렸습니다!");
+                    m_killerName.sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE +": 변신이 풀렸습니다!");
                     m_killerName.getInventory().remove(GameItem.Instance().m_killerHidden1_Ability1_Item);
                     m_killerName.getInventory().remove(GameItem.Instance().m_killerHidden1_Ability2_Item);
 
@@ -76,11 +84,19 @@ public class KillerHidden1 implements Listener, Hidden
                     GameVariable.Instance().setMissionRotate();
                     GameVariable.Instance().setIsKillerCheckTras(false);
                     GameVariable.Instance().getKillerHiddenClass().remove(m_killerName);
+                    for(Player p :Bukkit.getOnlinePlayers())
+                    {
+                        if(p.isOp())
+                        {
+                            p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ m_killerName.getName() + ChatColor.WHITE+ " 님이 변신이 풀렸습니다.");
+                        }
+                    }
                     this.cancel();
                 }
                 else
                 {
-                    if(!GameVariable.Instance().getGameState().equals(GameVariable.GameState.PAUSE))
+                    if(!GameVariable.Instance().getGameState().equals(GameVariable.GameState.PAUSE) &&
+                            !Main.instance.variablePlayer.get(m_killerName).getKillerType().equals(PlayerVariable.KillerType.BERSERKER))
                     {
                         m_hiddenAbliltyTime--;
                     }
@@ -143,7 +159,14 @@ public class KillerHidden1 implements Listener, Hidden
                         ((Player) event.getHitEntity()).getPlayer().damage(4);
                         ((Player) event.getHitEntity()).addPotionEffect(effect1, true);
                         ((Player) event.getHitEntity()).addPotionEffect(effect2, true);
-                        ((Player) event.getHitEntity()).getPlayer().sendMessage("당신은 실험체의 위산 분비 공격에 당해 독과 멀미에 걸립니다.");
+                        ((Player) event.getHitEntity()).getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + "당신은 실험체의 위산 분비 공격에 당해 독과 멀미에 걸립니다.");
+                        for(Player p :Bukkit.getOnlinePlayers())
+                        {
+                            if(p.isOp())
+                            {
+                                p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ ((Player) event.getHitEntity()).getPlayer().getName() + ChatColor.WHITE+ " 위산 분비 공격에 당해 독과 멀미에 걸립니다.");
+                            }
+                        }
                     }
                 }
             }

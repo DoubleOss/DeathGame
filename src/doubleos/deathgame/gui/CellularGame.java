@@ -134,9 +134,16 @@ public class CellularGame implements Listener
                                     {
                                         MissionManager.Instance().setMission2Success(true);
                                         cell.m_gameStart = false;
-                                        event.getWhoClicked().sendMessage("미션을 클리어 하셨습니다.");
+                                        event.getWhoClicked().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE + "세포찾기 미션을 클리어 하셨습니다.");
                                         event.getWhoClicked().closeInventory();
                                         cell.m_prizeCount = 0;
+                                        for(Player p :Bukkit.getOnlinePlayers())
+                                        {
+                                            if(p.isOp())
+                                            {
+                                                p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.WHITE + "살인마가 세포찾기 미션을 클리어 하셨습니다.");
+                                            }
+                                        }
                                     }
                                 }, 60l);
                             }

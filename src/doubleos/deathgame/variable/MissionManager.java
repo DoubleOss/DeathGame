@@ -4,7 +4,10 @@ import doubleos.deathgame.ablilty.KillerHidden1;
 import doubleos.deathgame.ablilty.KillerHidden2;
 import doubleos.deathgame.ablilty.KillerHidden3;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MissionManager
@@ -29,6 +32,8 @@ public class MissionManager
         }
         return _instance;
     }
+
+    ArrayList<Block> m_repairBlock = new ArrayList<>();
 
     ActiveMission m_activeMissoion = ActiveMission.MISSION1;
 
@@ -105,7 +110,22 @@ public class MissionManager
         }
     }
 
+    public void initRepairBoxList()
+    {
+        if(GameVariable.Instance().getGameState().equals(GameVariable.GameStage.LAB))
+        {
+            Location location1 = new Location(Bukkit.getWorld("World"), 1, 1, 1);
+            Block block1 = Bukkit.getWorld("world").getBlockAt(location1);
+            m_repairBlock.add(block1);
+        }
 
+    }
+
+
+    public ArrayList<Block> getRepairBoxList()
+    {
+        return m_repairBlock;
+    }
 
 
     public void setActiveMission(ActiveMission mission)
@@ -166,10 +186,10 @@ public class MissionManager
     public void setMissionPotionCount(int number)
     {
         m_Mission1_PotionCount = number;
-        if(m_Mission1_PotionCount ==3)
+        if(m_Mission1_PotionCount ==1)
         {
             m_mission1_Success = true;
-            Bukkit.broadcastMessage("살인마 변신미션1 완료");
+
         }
     }
 

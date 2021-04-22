@@ -14,6 +14,7 @@ import doubleos.deathgame.variable.GameVariable;
 import doubleos.deathgame.variable.MissionManager;
 import doubleos.deathgame.variable.PlayerVariable;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -50,8 +51,10 @@ public class GameCommand implements CommandExecutor
                         {
                             gamevariable.setGameState(GameVariable.GameState.PLAY);
                             numberToSetStage(Integer.parseInt(strings[1]));
-                            Bukkit.broadcastMessage("잠시후 랜덤으로 킬러가 설정됩니다.");
+                            //이부분 타이틀로
+                            Bukkit.broadcastMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +"잠시후 랜덤으로 킬러가 설정됩니다.");
                             setPlayerVariable();
+                            MissionManager.Instance().initRepairBoxList();
                             Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable()
                             {
                                 @Override
@@ -72,6 +75,7 @@ public class GameCommand implements CommandExecutor
                                         playSound();
 
 
+                                        //타이틀로
                                         gamevariable.getGamePlayerList().get(0).sendMessage("당신은 킬러가 되셨습니다.");
                                     }
                                     else
@@ -131,6 +135,7 @@ public class GameCommand implements CommandExecutor
                             GameVariable.Instance().addKillerListName(Bukkit.getPlayer(strings[1]));
                             GameVariable.Instance().setOrignalKillerPlayer(Bukkit.getPlayer(strings[1]));
 
+                            //액션바
                             Bukkit.getPlayer(strings[1]).sendMessage("당신이 살인마로 지정되었습니다.");
                             return true;
                         }

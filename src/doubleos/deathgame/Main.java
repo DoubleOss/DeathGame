@@ -2,8 +2,10 @@ package doubleos.deathgame;
 
 import doubleos.deathgame.ablilty.*;
 import doubleos.deathgame.command.GameCommand;
+import doubleos.deathgame.event.Damage;
 import doubleos.deathgame.event.Join;
 import doubleos.deathgame.event.Kill;
+import doubleos.deathgame.event.RepairBoxClick;
 import doubleos.deathgame.gui.CellularGame;
 import doubleos.deathgame.gui.DefectiveGame;
 import doubleos.deathgame.gui.MechanicalRepair;
@@ -11,6 +13,7 @@ import doubleos.deathgame.gui.PotionMakeGui;
 import doubleos.deathgame.variable.GameItem;
 import doubleos.deathgame.variable.PlayerVariable;
 import doubleos.deathgame.variable.PotionRecipe;
+import doubleos.deathgame.variable.RepairBox;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -39,10 +42,11 @@ public class Main extends JavaPlugin {
         registercommand();
 
         getServer().getMessenger().registerOutgoingPluginChannel( this, "DeathGame");
-
-        Bukkit.getPluginManager().registerEvents(new Death(), this);
+        
         Bukkit.getPluginManager().registerEvents(new Join(), this);
         Bukkit.getPluginManager().registerEvents(new Kill(), this);
+        Bukkit.getPluginManager().registerEvents(new Damage(), this);
+
 
         Bukkit.getPluginManager().registerEvents(new KillerCommon(), this);
         Bukkit.getPluginManager().registerEvents(new KillerHidden1(), this);
@@ -56,6 +60,10 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new DefectiveGame(), this);
 
         Bukkit.getPluginManager().registerEvents(new MechanicalRepair(), this);
+
+        Bukkit.getPluginManager().registerEvents(new RepairBoxClick(), this);
+
+
 
 
 

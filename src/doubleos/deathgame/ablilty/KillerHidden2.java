@@ -4,7 +4,9 @@ import doubleos.deathgame.Main;
 import doubleos.deathgame.variable.GameItem;
 import doubleos.deathgame.variable.GameVariable;
 import doubleos.deathgame.variable.MissionManager;
+import doubleos.deathgame.variable.PlayerVariable;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -47,7 +49,13 @@ public class KillerHidden2 implements Listener , Hidden
         ItemStack air = new ItemStack(Material.AIR);
 
         m_killerName.getInventory().setHelmet(helmet);
-
+        for(Player p :Bukkit.getOnlinePlayers())
+        {
+            if(p.isOp())
+            {
+                p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ m_killerName.getName() + ChatColor.WHITE+ " 님이 변신 하였습니다.");
+            }
+        }
         BukkitTask task = new BukkitRunnable()
         {
             @Override
@@ -56,7 +64,7 @@ public class KillerHidden2 implements Listener , Hidden
                 if(m_hiddenAbliltyTime <= 0)
                 {
                     m_killerName.getInventory().setHelmet(air);
-                    m_killerName.sendMessage("변신이 풀렸습니다!");
+                    m_killerName.sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +": 변신이 풀렸습니다!");
                     m_killerName.getInventory().remove(GameItem.Instance().m_killerHidden2_Ability1_Item);
                     m_killerName.getInventory().remove(GameItem.Instance().m_killerHidden2_Ability2_Item);
 
@@ -64,9 +72,17 @@ public class KillerHidden2 implements Listener , Hidden
                     GameVariable.Instance().setMissionRotate();
                     GameVariable.Instance().setIsKillerCheckTras(false);
                     GameVariable.Instance().getKillerHiddenClass().remove(m_killerName);
+                    for(Player p :Bukkit.getOnlinePlayers())
+                    {
+                        if(p.isOp())
+                        {
+                            p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ m_killerName.getName() + ChatColor.WHITE+ " 님이 변신이 풀렸습니다.");
+                        }
+                    }
                     this.cancel();
                 }
-                if(!GameVariable.Instance().getGameState().equals(GameVariable.GameState.PAUSE))
+                if(!GameVariable.Instance().getGameState().equals(GameVariable.GameState.PAUSE)&&
+                        !Main.instance.variablePlayer.get(m_killerName).getKillerType().equals(PlayerVariable.KillerType.BERSERKER))
                 {
                     m_hiddenAbliltyTime--;
                 }

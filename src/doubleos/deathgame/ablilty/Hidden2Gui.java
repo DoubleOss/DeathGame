@@ -104,9 +104,16 @@ public class Hidden2Gui implements Listener
         {
             m_target = Bukkit.getServer().getPlayer(event.getCurrentItem().getItemMeta().getDisplayName().replace("§f", ""));
             Player p = (Player) event.getWhoClicked();
-            p.sendMessage(ChatColor.WHITE + m_target.getName() + " 님을 전도 대상으로 고르셨습니다.");
+            p.sendMessage(ChatColor.RED + "[죽음의 술래잡기]"+ ChatColor.WHITE + ":" + ChatColor.RED + m_target.getName() + ChatColor.WHITE +" 님을 전도 대상으로 고르셨습니다.");
             GameVariable.Instance().setHidden2Targer(m_target);
             GameVariable.Instance().getKillerHidden2().m_skill2Cooltime = 120;
+            for(Player player :Bukkit.getOnlinePlayers())
+            {
+                if(player.isOp())
+                {
+                    player.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.WHITE + "살인마가 " + ChatColor.RED +m_target.getPlayer()+ ChatColor.WHITE + " 님을 전도 대상으로 고르셨습니다.");
+                }
+            }
 
             BukkitTask task = new BukkitRunnable()
             {

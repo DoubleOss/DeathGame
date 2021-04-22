@@ -4,6 +4,7 @@ import doubleos.deathgame.Main;
 import doubleos.deathgame.variable.GameItem;
 import doubleos.deathgame.variable.GameVariable;
 
+import doubleos.deathgame.variable.PlayerVariable;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
@@ -102,16 +103,23 @@ public class KillerCommon implements Listener
             }
             if(event.getAction().equals(Action.RIGHT_CLICK_AIR))
             {
-                //능력2번째
+                //탐지능력
                 ItemStack stack2 = GameItem.Instance().m_killerCom_Ability2_Item;
                 if(event.getPlayer().getInventory().getItemInMainHand().getType().equals((stack2.getType())))
                 {
                     if (m_skill2_Cooltime <= 0)
                     {
                         initGlowing(event.getPlayer());
-                        event.getPlayer().sendMessage("능력을 사용하셨습니다.");
+                        event.getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +":탐지 능력을 사용하셨습니다.");
                         m_skill2_Cooltime = 20;
                         StartSkill2Cooltime();
+                        for(Player p :Bukkit.getOnlinePlayers())
+                        {
+                            if(p.isOp())
+                            {
+                                p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.WHITE + "살인마가 탐지능력을 사용 하셨습니다.");
+                            }
+                        }
                     }
                 }
             }
@@ -139,11 +147,25 @@ public class KillerCommon implements Listener
         }, 60l);
 
     }
+
+    void setBerserker(Player player)
+    {
+        Main.instance.variablePlayer.get(player).setKillerType(PlayerVariable.KillerType.BERSERKER);
+        PotionEffect effect = new PotionEffect(PotionEffectType.SPEED, 120, 0);
+        player.addPotionEffect(effect, true);
+    }
     void setSkill1Effect(Player p)
     {
         PotionEffect effect2 = new PotionEffect(PotionEffectType.SLOW, 100, 100);
         p.addPotionEffect(effect2, true);
-        ActionBarAPI.sendActionBar(p, "당신은 덫을 밟으셨습니다.");
+        ActionBarAPI.sendActionBar(p, "[" + ChatColor.RED + "!" + ChatColor.WHITE + "]" + ChatColor.WHITE + "당신은 덫을 밟으셨습니다.");
+        for(Player player :Bukkit.getOnlinePlayers())
+        {
+            if(player.isOp())
+            {
+                player.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED + p.getName() + ChatColor.WHITE +"님이 덫을 밟으셨습니다.");
+            }
+        }
 
         for (Player k : GameVariable.Instance().getKillerPlayerList())
         {

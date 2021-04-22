@@ -192,15 +192,21 @@ public class PotionMakeGui implements Listener
                     event.getWhoClicked().getInventory().removeItem(new ItemStack[]{ new ItemStack(itemlist.get(2).getType(), itemlist.get(2).getAmount())});
                     MissionManager mission = MissionManager.Instance();
                     mission.setMissionPotionCount(mission.getMission1PotionCount() + 1);
-                    event.getWhoClicked().sendMessage("포션을 1개 만드셨습니다 " + mission.getMission1PotionCount() + " | 3");
+                    event.getWhoClicked().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE + ": 포션 제작 미션을 완료 하셨습니다.");
                     ItemStack item = new ItemStack(Material.AIR);
                     event.getInventory().setItem(30, item);
                     event.getInventory().setItem(31, item);
                     event.getInventory().setItem(32, item);
-
-                    if(mission.getMission1PotionCount() == 3)
+                    if(mission.getMission1PotionCount() == 1)
                     {
                         event.getWhoClicked().closeInventory();
+                    }
+                    for(Player p :Bukkit.getOnlinePlayers())
+                    {
+                        if(p.isOp())
+                        {
+                            p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.WHITE + "살인마가 포션 제작 미션을 클리어 하셨습니다.");
+                        }
                     }
                 }
 

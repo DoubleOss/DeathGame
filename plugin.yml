@@ -5,4 +5,7 @@ commands:
   죽술:
     aliases: [ deathgame ]
     description:
+  공지:
+    aliases: [ deathgame ]
+    description:
 description: HalfTeamPlugin

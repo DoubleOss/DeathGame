@@ -32,6 +32,7 @@ public class MissionManager
         }
         return _instance;
     }
+    HashMap<Block, RepairBox> m_repairBoxClassMap = new HashMap<>();
 
     ArrayList<Block> m_repairBlock = new ArrayList<>();
 
@@ -117,10 +118,15 @@ public class MissionManager
             Location location1 = new Location(Bukkit.getWorld("World"), 1, 1, 1);
             Block block1 = Bukkit.getWorld("world").getBlockAt(location1);
             m_repairBlock.add(block1);
+            m_repairBoxClassMap.put(block1, new RepairBox());
         }
 
     }
 
+    public HashMap<Block, RepairBox> getRepairBoxClassMap()
+    {
+        return m_repairBoxClassMap;
+    }
 
     public ArrayList<Block> getRepairBoxList()
     {

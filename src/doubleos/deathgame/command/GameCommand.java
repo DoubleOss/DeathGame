@@ -10,6 +10,7 @@ import doubleos.deathgame.gui.MechanicalRepair;
 import doubleos.deathgame.gui.PotionMakeGui;
 import doubleos.deathgame.scoreboard.Scoreboard;
 import doubleos.deathgame.sound.KillerSound;
+import doubleos.deathgame.util.Utils;
 import doubleos.deathgame.variable.GameVariable;
 import doubleos.deathgame.variable.MissionManager;
 import doubleos.deathgame.variable.PlayerVariable;
@@ -37,6 +38,14 @@ public class GameCommand implements CommandExecutor
         {
             GameVariable gamevariable = GameVariable.Instance();
             Player player = (Player)sender;
+            if(s.equalsIgnoreCase("공지"))
+            {
+                if(!s.isEmpty())
+                {
+                    Utils.Instance().broadcastTitle(" [!]", strings.toString(), 1, 20, 1, ChatColor.WHITE);
+                    return true;
+                }
+            }
             if(s.equalsIgnoreCase("죽술"))
             {
                 if(strings.length <1)
@@ -52,6 +61,7 @@ public class GameCommand implements CommandExecutor
                             gamevariable.setGameState(GameVariable.GameState.PLAY);
                             numberToSetStage(Integer.parseInt(strings[1]));
                             //이부분 타이틀로
+                            Utils.Instance().broadcastTitle(" [!]", "타이틀로 3초후 랜덤으로 살인마가 설정됩니다. ", 1, 40, 1, ChatColor.WHITE);
                             Bukkit.broadcastMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +"잠시후 랜덤으로 킬러가 설정됩니다.");
                             setPlayerVariable();
                             MissionManager.Instance().initRepairBoxList();

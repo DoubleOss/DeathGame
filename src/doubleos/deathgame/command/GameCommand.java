@@ -60,10 +60,12 @@ public class GameCommand implements CommandExecutor
                         {
                             gamevariable.setGameState(GameVariable.GameState.PLAY);
                             numberToSetStage(Integer.parseInt(strings[1]));
-                            //이부분 타이틀로
-                            Utils.Instance().broadcastTitle(" [!]", "타이틀로 3초후 랜덤으로 살인마가 설정됩니다. ", 1, 40, 1, ChatColor.WHITE);
-                            Bukkit.broadcastMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +"잠시후 랜덤으로 킬러가 설정됩니다.");
-                            setPlayerVariable();
+
+                            Utils.Instance().broadcastTitle("[!]", String.format(ChatColor.GREEN+"3초후 랜덤으로 살인마가 설정됩니다. "), 1, 40, 1, ChatColor.WHITE);
+                            //Bukkit.broadcastMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +"잠시후 랜덤으로 킬러가 설정됩니다.");
+                            addGamePlayerVariable();
+                            Utils.Instance().randomAllTeleport();
+                            GameVariable.Instance().setTeleporting(true);
                             MissionManager.Instance().initRepairBoxList();
                             Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable()
                             {
@@ -84,9 +86,8 @@ public class GameCommand implements CommandExecutor
                                         GameVariable.Instance().setCheckKiller(true);
                                         playSound();
 
-
                                         //타이틀로
-                                        gamevariable.getGamePlayerList().get(0).sendMessage("당신은 킬러가 되셨습니다.");
+                                        gamevariable.getGamePlayerList().get(0).sendTitle("[!]", "당신은 살인마로 선정되셨습니다.", 0, 20, 0);
                                     }
                                     else
                                     {
@@ -98,6 +99,7 @@ public class GameCommand implements CommandExecutor
                                     player.sendMessage("테스트2 " + Main.instance.variablePlayer.get(gamevariable.getGamePlayerList().get(0)).getHumanType());
 
                                     GameVariable.Instance().setTimeStart(true);
+                                    GameVariable.Instance().setTeleporting(false);
 
                                 }
                             }, 40l);
@@ -227,7 +229,7 @@ public class GameCommand implements CommandExecutor
                         {
                             Player p = Bukkit.getPlayer(strings[1]);
                             //죽슬 로딩활성화 닉네임 10 = 10초짜리 로딩바 활성화
-                            p.sendPluginMessage(Main.instance, "DeathGame", String.format("LoadingBar" + "_" + "true" + "_" + "%s", strings[2]).getBytes());
+                            p.sendPluginMessage(Main.instance, "DeathGame", String.format("LoadingBar" + "_" + "true" + "_" + "%s" + "_" +"%s", strings[2], strings[3]).getBytes());
                         }
                         return true;
                     case "로딩비활성화":
@@ -283,7 +285,7 @@ public class GameCommand implements CommandExecutor
         return false;
     }
 
-    void setPlayerVariable()
+    void addGamePlayerVariable()
     {
         MissionManager.Instance().setMission();
         for(Player p : Bukkit.getOnlinePlayers())
@@ -337,14 +339,7 @@ public class GameCommand implements CommandExecutor
     }
     void resetGame()
     {
-        for(Player p : Bukkit.getOnlinePlayers())
-        {
-            Main.instance.variablePlayer.get(p).resetPlayerVariable();
-        }
         GameVariable.Instance().GameReset();
-        MissionManager.Instance().setMission();
-
-
     }
     void help(Player p)
     {

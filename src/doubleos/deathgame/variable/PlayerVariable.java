@@ -10,14 +10,15 @@ public class PlayerVariable
     public enum HumanType
     {
         HUMAN,
-        KILLER;
+        KILLER,
     }
 
     public enum KillerType
     {
         COMMON,
         HIDDEN,
-        BERSERKER;
+        BERSERKER,
+        NONE;
     }
 
     Player m_player;
@@ -27,6 +28,7 @@ public class PlayerVariable
     boolean m_observer = false;
     boolean m_repair = false;
 
+
     KillerType m_killerType;
 
 
@@ -34,7 +36,7 @@ public class PlayerVariable
     {
         this.m_player = m_player;
         this.m_humanType = HumanType.HUMAN;
-        this.m_killerType = KillerType.HIDDEN;
+        this.m_killerType = KillerType.NONE;
         Main.instance.variablePlayer.put(m_player, this);
     }
 
@@ -42,7 +44,9 @@ public class PlayerVariable
     public void resetPlayerVariable()
     {
         this.m_humanType = HumanType.HUMAN;
+        this.m_killerType = KillerType.NONE;
         this.m_observer = false;
+        this.m_repair = false;
     }
 
 

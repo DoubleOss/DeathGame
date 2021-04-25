@@ -2,6 +2,7 @@ package doubleos.deathgame.ablilty;
 
 import com.connorlinfoot.actionbarapi.ActionBarAPI;
 import doubleos.deathgame.Main;
+import doubleos.deathgame.util.Utils;
 import doubleos.deathgame.variable.GameItem;
 import doubleos.deathgame.variable.GameVariable;
 import doubleos.deathgame.variable.MissionManager;
@@ -204,22 +205,7 @@ public class KillerHidden1 implements Listener, Hidden
     void randomLocation(Player p)
     {
         m_skill1Cooltime = 120;
-        if(MissionManager.Instance().getActiveMission().equals(MissionManager.ActiveMission.MISSION1))
-        {
-
-        }
-        else if (MissionManager.Instance().getActiveMission().equals(MissionManager.ActiveMission.MISSION2))
-        {
-
-        }
-        else if (MissionManager.Instance().getActiveMission().equals(MissionManager.ActiveMission.MISSION3))
-        {
-
-        }
-        else if (MissionManager.Instance().getActiveMission().equals(MissionManager.ActiveMission.MISSION4))
-        {
-
-        }
+        Utils.Instance().randomTeleport(p);
 
         BukkitTask task = new BukkitRunnable()
         {

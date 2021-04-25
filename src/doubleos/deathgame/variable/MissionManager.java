@@ -3,9 +3,12 @@ package doubleos.deathgame.variable;
 import doubleos.deathgame.ablilty.KillerHidden1;
 import doubleos.deathgame.ablilty.KillerHidden2;
 import doubleos.deathgame.ablilty.KillerHidden3;
+import doubleos.deathgame.util.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -83,6 +86,22 @@ public class MissionManager
         }
     }
 
+
+    public void resetMission()
+    {
+
+        m_activeMissoion = ActiveMission.MISSION1;
+
+        m_mission1_Success = false;
+        m_mission2_Success = false;
+
+        m_Mission1_PotionCount = 0;
+        m_BoxRepair = 0;
+
+        m_repairBoxClassMap.clear();
+        m_repairBlock.clear();
+
+    }
 
     void killerHiddenChange()
     {
@@ -182,11 +201,19 @@ public class MissionManager
 
     public int getBoxRepair()
     {
+
         return m_BoxRepair;
     }
     public void setBoxRepair(int number)
     {
         m_BoxRepair = number;
+        if(m_BoxRepair == 8)
+        {
+            for(Player p : GameVariable.Instance().getGamePlayerList())
+            {
+                p.sendTitle("[!]", ChatColor.GREEN+ "배전박스가 전부 수리되어 탈출구가 열렸습니다.", 1, 30, 1);
+            }
+        }
     }
 
     public void setMissionPotionCount(int number)

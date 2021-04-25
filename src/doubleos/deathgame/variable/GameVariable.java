@@ -82,6 +82,8 @@ public class GameVariable
 
     boolean m_Checkkiller = false;
 
+    boolean m_teleporting = false;
+
 
 
 
@@ -310,6 +312,16 @@ public class GameVariable
         return m_playerVariable;
     }
 
+    public void setTeleporting(boolean bool)
+    {
+        m_teleporting = bool;
+    }
+    public boolean getTeleporting()
+    {
+        return m_teleporting;
+    }
+
+
     public void setMissionRotate()
     {
         if(m_MissionRotateNumber == 2)
@@ -343,6 +355,7 @@ public class GameVariable
         for(Player p : getGamePlayerList())
         {
             p.setGameMode(GameMode.SURVIVAL);
+            Main.instance.variablePlayer.get(p).resetPlayerVariable();
         }
         m_GameTime_Min = 20;
         m_GameTime_Sec = 0;
@@ -356,13 +369,17 @@ public class GameVariable
         m_defectiveGameClassPlayer.clear();
         m_killerHiddenClass.clear();
 
+        m_teleporting = false;
+
 
         m_orignalKillerPlayer = null;
 
         m_Checkkiller = false;
         m_isKillerCheckTras = false;
 
-        MissionManager.Instance().setActiveMission(MissionManager.ActiveMission.MISSION1);
+        m_GameState = GameState.END;
+
+        MissionManager.Instance().resetMission();
 
         setTimeStart(false);
     }

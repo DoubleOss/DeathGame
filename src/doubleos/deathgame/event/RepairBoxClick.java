@@ -40,7 +40,9 @@ public class RepairBoxClick implements Listener
                         {
                             if(!Main.instance.variablePlayer.get(event.getPlayer()).getRepair() && !mission.getRepairBoxClassMap().get(event.getClickedBlock()).getRepair())
                             {
+                                float boxHealth = mission.getRepairBoxClassMap().get(event.getClickedBlock()).gethealth();
                                 Main.instance.variablePlayer.get(event.getPlayer()).setRepair(true);
+                                event.getPlayer().sendPluginMessage(Main.instance, "DeathGame", String.format("LoadingBar" + "_" + "true" + "_" + "30" +"_"+ "%f",boxHealth).getBytes());
                                 event.getPlayer().sendTitle("[!]", ChatColor.GREEN+ "배전박스를 수리합니다" +ChatColor.RED+" 움직일 시 수리가 중단됩니다.", 1, 30, 1);
                                 BukkitTask task = new BukkitRunnable()
                                 {
@@ -50,6 +52,7 @@ public class RepairBoxClick implements Listener
                                         if(event.getPlayer().getLocation().distance(event.getClickedBlock().getLocation()) > 1)
                                         {
                                             Main.instance.variablePlayer.get(event.getPlayer()).setRepair(false);
+                                            event.getPlayer().sendPluginMessage(Main.instance, "DeathGame", String.format("LoadingBar" + "_" + "false").getBytes());
                                             this.cancel();
 
                                         }
@@ -58,6 +61,7 @@ public class RepairBoxClick implements Listener
                                             Main.instance.variablePlayer.get(event.getPlayer()).setRepair(false);
                                             mission.setBoxRepair(MissionManager.Instance().getBoxRepair()+1);
                                             mission.getRepairBoxClassMap().get(event.getClickedBlock()).setRepair(true);
+                                            event.getPlayer().sendTitle("[!]", ChatColor.GREEN+ "수리가 완료되었습니다.", 1, 30, 1);
                                             this.cancel();
                                         }
                                         else if (map.get(event.getClickedBlock()).gethealth() < 30)
@@ -71,6 +75,7 @@ public class RepairBoxClick implements Listener
                             else
                             {
                                 Main.instance.variablePlayer.get(event.getPlayer()).setRepair(false);
+                                event.getPlayer().sendPluginMessage(Main.instance, "DeathGame", String.format("LoadingBar" + "_" + "false").getBytes());
                                 Utils.Instance().sendTitle(event.getPlayer(), "[!]", "수리가 중단 되었습니다", 1, 30, 1, ChatColor.RED);
                             }
                         }

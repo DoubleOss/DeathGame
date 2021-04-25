@@ -3,6 +3,7 @@ package doubleos.deathgame.sound;
 import doubleos.deathgame.Main;
 import doubleos.deathgame.variable.GameVariable;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
@@ -28,18 +29,53 @@ public class KillerSound implements Listener
                     {
                         if(p.getLocation().distance(m_player.getLocation()) <= 50)
                         {
-                            p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_AMBIENT, SoundCategory.AMBIENT, 1, 1);
+                            int soundSpeed = getDistanceSoundSpeed(p.getLocation().distance(m_player.getLocation()));
+                            p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "true" + "_" + "%d",soundSpeed).getBytes());
+
                         }
+
                     }
 
                 }
                 if(GameVariable.Instance().getGameState().equals(GameVariable.GameState.END))
                 {
+                    for(Player p : GameVariable.Instance().getGamePlayerList())
+                    {
+                        p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
+                    }
                     this.cancel();
                 }
 
             }
 
         }.runTaskTimer(Main.instance, 0l , 20l);
+    }
+
+    int getDistanceSoundSpeed(double distance)
+    {
+        if(distance <= 5)
+        {
+            return 450;
+        }
+        else if (distance <= 10)
+        {
+            return 500;
+        }
+        else if (distance <= 20)
+        {
+            return  600;
+        }
+        else if (distance <= 30)
+        {
+            return  700;
+        }
+        else if (distance <= 40)
+        {
+            return  800;
+        }
+        else
+        {
+            return  900;
+        }
     }
 }

@@ -10,6 +10,7 @@ import doubleos.deathgame.gui.CellularGame;
 import doubleos.deathgame.gui.DefectiveGame;
 import doubleos.deathgame.gui.MechanicalRepair;
 import doubleos.deathgame.gui.PotionMakeGui;
+import doubleos.deathgame.util.Utils;
 import doubleos.deathgame.variable.GameItem;
 import doubleos.deathgame.variable.PlayerVariable;
 import doubleos.deathgame.variable.PotionRecipe;
@@ -70,6 +71,7 @@ public class Main extends JavaPlugin {
         PotionRecipe.Instance().initPotionRecipe();
 
         GameItem.Instance().initGameItem();
+        Utils.Instance().initTeleportLocation();
 
 
 

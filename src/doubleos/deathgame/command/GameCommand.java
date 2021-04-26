@@ -87,7 +87,7 @@ public class GameCommand implements CommandExecutor
                                         playSound();
 
                                         //타이틀로
-                                        gamevariable.getGamePlayerList().get(0).sendTitle("[!]", "당신은 살인마로 선정되셨습니다.", 0, 20, 0);
+                                        gamevariable.getGamePlayerList().get(0).sendTitle("[!]", "당신은 살인마로 선정되셨습니다.", 0, 40, 0);
                                     }
                                     else
                                     {
@@ -103,6 +103,7 @@ public class GameCommand implements CommandExecutor
 
                                 }
                             }, 40l);
+                            allPlayerScoreBoard();
                         }
                         return true;
                     case "중지":
@@ -237,8 +238,25 @@ public class GameCommand implements CommandExecutor
                         {
                             Player p = Bukkit.getPlayer(strings[1]);;
                             p.sendPluginMessage(Main.instance, "DeathGame", String.format("LoadingBar" + "_" + "false").getBytes());
+                            return true;
                         }
                         return true;
+                    case "소리테스트":
+                        if((strings[1].isEmpty())==false || strings[1] != null)
+                        {
+                            if (strings[1].equalsIgnoreCase("true"))
+                            {
+                                ((Player) sender).sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "true" + "_" + "%s",strings[2]).getBytes());
+                                return true;
+                            }
+                            else
+                            {
+                                ((Player) sender).sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
+                                return true;
+                            }
+
+
+                        }
                     case "변신":
                         if((strings[1].isEmpty())==false || strings[1] != null)
                         {
@@ -284,6 +302,13 @@ public class GameCommand implements CommandExecutor
         }
         return false;
     }
+    void allPlayerScoreBoard()
+    {
+        for(Player p : GameVariable.Instance().getGamePlayerList())
+        {
+            Scoreboard scoreboard = new Scoreboard(p);
+        }
+    }
 
     void addGamePlayerVariable()
     {
@@ -295,7 +320,7 @@ public class GameCommand implements CommandExecutor
                 GameVariable.Instance().addGamePlayerList(p);
                 GameVariable.Instance().addPlayerVarible(p, Main.instance.variablePlayer.get(p));
                 //PlayerVariable playerVariable = new PlayerVariable(p);
-                Scoreboard score = new Scoreboard(p);
+
 
             }
             else
@@ -306,7 +331,7 @@ public class GameCommand implements CommandExecutor
                     {
                         GameVariable.Instance().addGamePlayerList(p);
                         GameVariable.Instance().addPlayerVarible(p, Main.instance.variablePlayer.get(p));
-                        Scoreboard score = new Scoreboard(p);
+
                         //PlayerVariable playerVariable = new PlayerVariable(p);
                     }
                 }

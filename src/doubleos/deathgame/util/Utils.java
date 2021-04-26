@@ -32,7 +32,7 @@ public class Utils
 
 
 
-    public HashMap<GameVariable.GameStage, ArrayList<Location>> m_stageTeleportLoc;
+    public HashMap<GameVariable.GameStage, ArrayList<Location>> m_stageTeleportLoc = new HashMap<>();
 
     public void randomAllTeleport()
     {

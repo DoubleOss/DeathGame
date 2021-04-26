@@ -41,10 +41,20 @@ public class Scoreboard
                     GameVariable gamevariable = GameVariable.Instance();
                     SimpleScoreboard scoreboard = new SimpleScoreboard(ChatColor.RED + "[죽음의 술래잡기]");
                     if(Main.instance.variablePlayer.get(player).getObserver() || player.isOp())
-                        scoreboard.add("현재 살인마" + gamevariable.getKillerPlayerList().get(0) + "외 " + gamevariable.getKillerPlayerList().size() + "인", 12);
+                    {
+                        if(gamevariable.getKillerPlayerList().size() <= 1)
+                        {
+                            scoreboard.add("현재 살인마 " + gamevariable.getKillerPlayerList().get(0).getPlayer().getName(), 12);
+                        }
+                        else
+                        {
+                            scoreboard.add("현재 살인마 " + gamevariable.getKillerPlayerList().get(0).getPlayer().getName() + " 외 " + gamevariable.getKillerPlayerList().size() + "인", 12);
+                        }
+                    }
+
                     scoreboard.add("&f", 11);
-                    scoreboard.add("남은 시간: " + gamevariable.getGameTimeMin() + ChatColor.DARK_GREEN +" 분" +" : " +
-                            gamevariable.getGameTimeSec() +ChatColor.DARK_GREEN + " 초", 10);
+                    scoreboard.add("남은 시간: " + gamevariable.getGameTimeMin() + ChatColor.DARK_GREEN +" 분" + ChatColor.WHITE+" : " +
+                            gamevariable.getGameTimeSec() +ChatColor.DARK_GREEN +ChatColor.WHITE + " 초", 10);
                     scoreboard.add("", 9);
                     if(player.equals(GameVariable.Instance().getOrignalKillerPlayer()) || player.isOp() || Main.instance.variablePlayer.get(player).getObserver())
                     {
@@ -78,11 +88,11 @@ public class Scoreboard
                     }
                     else if (player.isOp() || Main.instance.variablePlayer.get(player).getObserver())
                     {
-                        scoreboard.add("켜진 배전박스 " + GameVariable.Instance().getRepairBoxCount() + "/" + MissionManager.Instance().getBoxRepair() +ChatColor.DARK_GREEN+ " 개", 8);
+                        scoreboard.add("켜진 배전박스 " + GameVariable.Instance().getRepairBoxCount() + "/" + 8+ChatColor.DARK_GREEN+ " 개", 8);
                     }
                     else
                     {
-                        scoreboard.add("켜진 배전박스 " + GameVariable.Instance().getRepairBoxCount() + "/" + MissionManager.Instance().getBoxRepair() +ChatColor.DARK_GREEN+ " 개", 8);
+                        scoreboard.add("켜진 배전박스 " + GameVariable.Instance().getRepairBoxCount() + "/" + 8+ChatColor.DARK_GREEN+ " 개", 8);
                     }
                     scoreboard.send(player);
                     scoreboard.update();

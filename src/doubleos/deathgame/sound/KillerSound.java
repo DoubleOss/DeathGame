@@ -18,6 +18,8 @@ public class KillerSound implements Listener
     public void initSound(Player player)
     {
         m_player = player;
+
+        final int[] m_soundSpeed = {2000};
         BukkitTask task = new BukkitRunnable()
         {
             @Override
@@ -25,12 +27,44 @@ public class KillerSound implements Listener
             {
                 for(Player p : GameVariable.Instance().getGamePlayerList())
                 {
+                    m_player.sendMessage("@");
                     if(!p.equals(m_player))
                     {
+                        m_player.sendMessage("@@");
                         if(p.getLocation().distance(m_player.getLocation()) <= 50)
                         {
-                            int soundSpeed = getDistanceSoundSpeed(p.getLocation().distance(m_player.getLocation()));
-                            p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "true" + "_" + "%d",soundSpeed).getBytes());
+                            m_player.sendMessage(String.format("%d",m_soundSpeed[0]));
+                            if(m_soundSpeed[0] != getDistanceSoundSpeed(p.getLocation().distance(m_player.getLocation())))
+                            {
+                                m_soundSpeed[0] = getDistanceSoundSpeed(p.getLocation().distance(m_player.getLocation()));
+                                m_player.sendMessage("@@@@");
+                                if(Main.instance.variablePlayer.get(p).getSoundPlaying())
+                                {
+                                    m_player.sendMessage("@@@@@");
+
+                                    p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
+                                    Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable()
+                                    {
+                                        @Override
+                                        public void run()
+                                        {
+                                            m_player.sendMessage("@@@@@@");
+                                            p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "true" + "_" + "%d", m_soundSpeed[0]).getBytes());
+                                        }
+                                    }, 10l);
+                                }
+                                else
+                                {
+                                    m_player.sendMessage("@@@@@@@");
+                                    Main.instance.variablePlayer.get(p).setSoundPlaying(true);
+                                    p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "true" + "_" + "%d", m_soundSpeed[0]).getBytes());
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Main.instance.variablePlayer.get(p).setSoundPlaying(false);
+                            p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
 
                         }
 

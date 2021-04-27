@@ -62,7 +62,7 @@ public class Kill implements Listener
                     else
                     {
                         event.getEntity().getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + ": 당신은 살인마에 의해 살해 당하였습니다.");
-                        GameVariable.Instance().getPlayerVariable().get(event.getEntity().getPlayer()).setObserver(true);
+                        GameVariable.Instance().getPlayerVariable().get(event.getEntity().getPlayer().getName()).setObserver(true);
                         GameVariable.Instance().setHidden2Targer(null);
                         GameVariable.Instance().getOrignalKillerPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + ": 전도에 실패 하셨습니다.");
 
@@ -107,8 +107,9 @@ public class Kill implements Listener
 
     boolean checkPlayingGamePlayer(Player player)
     {
-        for(Player p : GameVariable.Instance().getGamePlayerList())
+        for(String stringPlayer : GameVariable.Instance().getGamePlayerList())
         {
+            Player p = Bukkit.getPlayer(stringPlayer);
             if(p.getPlayer().equals(player))
             {
                 return true;

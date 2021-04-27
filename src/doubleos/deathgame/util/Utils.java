@@ -36,12 +36,13 @@ public class Utils
 
     public void randomAllTeleport()
     {
-        ArrayList<Player> players = new ArrayList<>(GameVariable.Instance().getGamePlayerList());
+        ArrayList<String> stringPlayers = new ArrayList<String>(GameVariable.Instance().getGamePlayerList());
 
-        Collections.shuffle(players);
+        Collections.shuffle(stringPlayers);
         int i = 0;
-        for(Player p : players)
+        for(String stringPlayer : stringPlayers)
         {
+            Player p = Bukkit.getPlayer(stringPlayer);
             p.teleport(m_stageTeleportLoc.get(GameVariable.Instance().getGameStage()).get(i));
             i++;
         }

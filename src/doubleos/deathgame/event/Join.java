@@ -1,8 +1,10 @@
 package doubleos.deathgame.event;
 
+import doubleos.deathgame.Main;
 import doubleos.deathgame.scoreboard.Scoreboard;
 import doubleos.deathgame.variable.GameVariable;
 import doubleos.deathgame.variable.PlayerVariable;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,11 +26,13 @@ public class Join implements Listener
     {
         if(GameVariable.Instance().getGameState().equals(GameVariable.GameState.PLAY))
         {
-            for(Player p : GameVariable.Instance().getGamePlayerList())
+            for(String stringPlayer : GameVariable.Instance().getGamePlayerList())
             {
+                Player p = Bukkit.getPlayer(stringPlayer);
                 if(event.getPlayer().equals(p))
                 {
                     Scoreboard scoreboard = new Scoreboard(event.getPlayer());
+
                 }
             }
 

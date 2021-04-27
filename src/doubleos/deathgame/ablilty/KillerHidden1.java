@@ -37,7 +37,7 @@ import java.util.UUID;
 public class KillerHidden1 implements Listener, Hidden
 {
 
-    Player m_killerName;
+    String m_killerName;
 
     int m_skill1Cooltime = 0;
     int m_skill2Cooltime = 0;
@@ -47,24 +47,25 @@ public class KillerHidden1 implements Listener, Hidden
 
     public void initKillerHidden1()
     {
-        this.m_killerName = GameVariable.Instance().getOrignalKillerPlayer();
+        this.m_killerName = GameVariable.Instance().getOrignalKillerPlayer().getName();
+        Player killer = Bukkit.getPlayer(m_killerName);
         m_hiddenAbliltyTime = 120;
         m_skill1Cooltime = 0;
 
-        m_killerName.getInventory().addItem(GameItem.Instance().m_killerHidden1_Ability1_Item);
-        m_killerName.getInventory().addItem(GameItem.Instance().m_killerHidden1_Ability2_Item);
+        killer.getInventory().addItem(GameItem.Instance().m_killerHidden1_Ability1_Item);
+        killer.getInventory().addItem(GameItem.Instance().m_killerHidden1_Ability2_Item);
 
-        GameVariable.Instance().addKillerHiddenClass(this.m_killerName, this);
+        GameVariable.Instance().addKillerHiddenClass(killer, this);
 
         ItemStack helmet = new ItemStack(Material.PUMPKIN);
         ItemStack air = new ItemStack(Material.AIR);
 
-        m_killerName.getInventory().setHelmet(helmet);
+        killer.getInventory().setHelmet(helmet);
         for(Player p :Bukkit.getOnlinePlayers())
         {
             if(p.isOp())
             {
-                p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ m_killerName.getName() + ChatColor.WHITE+ " 님이 변신 하였습니다.");
+                p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ killer.getName() + ChatColor.WHITE+ " 님이 변신 하였습니다.");
             }
         }
 
@@ -75,21 +76,21 @@ public class KillerHidden1 implements Listener, Hidden
             {
                 if(m_hiddenAbliltyTime <= 0)
                 {
-                    m_killerName.getInventory().setHelmet(air);
-                    m_killerName.sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE +": 변신이 풀렸습니다!");
-                    m_killerName.getInventory().remove(GameItem.Instance().m_killerHidden1_Ability1_Item);
-                    m_killerName.getInventory().remove(GameItem.Instance().m_killerHidden1_Ability2_Item);
+                    killer.getInventory().setHelmet(air);
+                    killer.sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE +": 변신이 풀렸습니다!");
+                    killer.getInventory().remove(GameItem.Instance().m_killerHidden1_Ability1_Item);
+                    killer.getInventory().remove(GameItem.Instance().m_killerHidden1_Ability2_Item);
 
                     m_hiddenAbliltyTime = 0;
                     GameVariable.Instance().setMissionRotateNumber(GameVariable.Instance().getMissionRotateNumber()+1);
                     GameVariable.Instance().setMissionRotate();
                     GameVariable.Instance().setIsKillerCheckTras(false);
-                    GameVariable.Instance().getKillerHiddenClass().remove(m_killerName);
+                    GameVariable.Instance().getKillerHiddenClass().remove(killer.getName());
                     for(Player p :Bukkit.getOnlinePlayers())
                     {
                         if(p.isOp())
                         {
-                            p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ m_killerName.getName() + ChatColor.WHITE+ " 님이 변신이 풀렸습니다.");
+                            p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ killer.getName() + ChatColor.WHITE+ " 님이 변신이 풀렸습니다.");
                         }
                     }
                     this.cancel();
@@ -97,7 +98,7 @@ public class KillerHidden1 implements Listener, Hidden
                 else
                 {
                     if(!GameVariable.Instance().getGameState().equals(GameVariable.GameState.PAUSE) &&
-                            !Main.instance.variablePlayer.get(m_killerName).getKillerType().equals(PlayerVariable.KillerType.BERSERKER))
+                            !GameVariable.Instance().getPlayerVariableMap().get(killer.getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER))
                     {
                         m_hiddenAbliltyTime--;
                     }
@@ -114,7 +115,7 @@ public class KillerHidden1 implements Listener, Hidden
         MissionManager mission = MissionManager.Instance();
         if(event.getAction().equals(Action.RIGHT_CLICK_AIR))
         {
-            if(event.getPlayer().equals(GameVariable.Instance().getOrignalKillerPlayer()))
+            if(event.getPlayer().getName().equals(GameVariable.Instance().getOrignalKillerPlayer()))
             {
                 if(GameVariable.Instance().getIsKillerCheckTras() == true)
                 {

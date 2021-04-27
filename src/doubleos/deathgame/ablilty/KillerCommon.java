@@ -37,7 +37,7 @@ public class KillerCommon implements Listener
         NORMAL,
         MAD;
     }
-    Player m_killer;
+    String m_killer;
 
 
     int m_skill2_Cooltime = 0;
@@ -61,15 +61,17 @@ public class KillerCommon implements Listener
     @EventHandler
     void onMoveEvent(PlayerMoveEvent event)
     {
-        if(GameVariable.Instance().getGameState().equals(GameVariable.GameState.PLAY))
+        GameVariable gameVariable = GameVariable.Instance();
+        if(gameVariable.getGameState().equals(GameVariable.GameState.PLAY))
         {
-            if(event.getPlayer().equals(GameVariable.Instance().getKillerListName(event.getPlayer())) == false)
+            if(!event.getPlayer().getName().equalsIgnoreCase(gameVariable.getKillerListName(event.getPlayer())))
             {
                 for(int i = 0; i<m_skill1_pos.size(); i++)
                 {
                     event.getPlayer().sendMessage(String.format("%f",event.getFrom().distance(m_skill1_pos.get(i))));
-                    if(event.getFrom().distance(m_skill1_pos.get(i)) <= 0.5)
+                    if(event.getFrom().distance(m_skill1_pos.get(i)) <= 0.8)
                     {
+                        Bukkit.getWorld("world").getBlockAt(m_skill1_pos.get(i)).setType(Material.AIR);
                         m_skill1_pos.remove(i);
                         setSkill1Effect(event.getPlayer());
                     }
@@ -84,16 +86,18 @@ public class KillerCommon implements Listener
     @EventHandler
     void onRightClickEvent(PlayerInteractEvent event)
     {
-        if(event.getPlayer().equals(GameVariable.Instance().getKillerListName(event.getPlayer())))
+        event.getPlayer().sendMessage("@");
+        Player killer = Bukkit.getPlayer(GameVariable.Instance().getKillerListName(event.getPlayer()));
+        if(event.getPlayer().equals(killer))
         {
+            event.getPlayer().sendMessage("@@");
             if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
             {
-
-                Player player = event.getPlayer();
                 ItemStack stack1 = GameItem.Instance().m_killerCom_Ability1_Item;
+                stack1.setAmount(1);
                 if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack1.getType()))
                 {
-                    player.getInventory().remove(stack1);
+                    event.getPlayer().getInventory().removeItem(stack1);
                     Location blockpos = event.getClickedBlock().getLocation().add( new Vector(0, 1, 0));
                     m_skill1_pos.add(blockpos);
                     blockpos.getBlock().setType(Material.CARPET);
@@ -130,8 +134,9 @@ public class KillerCommon implements Listener
 
     void initGlowing(Player viewer)
     {
-        for (Player p : GameVariable.Instance().getGamePlayerList())
+        for (String stringPlayer : GameVariable.Instance().getGamePlayerList())
         {
+            Player p = Bukkit.getPlayer(stringPlayer);
             if(GameVariable.Instance().getKillerListName(p) == null)
             {
                 GlowAPI.setGlowing(p, GlowAPI.Color.WHITE, viewer);
@@ -140,8 +145,9 @@ public class KillerCommon implements Listener
         }
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () ->
         {
-            for(Player p : GameVariable.Instance().getGamePlayerList())
+            for(String stringPlayer : GameVariable.Instance().getGamePlayerList())
             {
+                Player p = Bukkit.getPlayer(stringPlayer);
                 GlowAPI.setGlowing(p, false, viewer);
             }
         }, 60l);
@@ -150,7 +156,7 @@ public class KillerCommon implements Listener
 
     void setBerserker(Player player)
     {
-        Main.instance.variablePlayer.get(player).setKillerType(PlayerVariable.KillerType.BERSERKER);
+        GameVariable.Instance().getPlayerVariableMap().get(player.getName()).setKillerType(PlayerVariable.KillerType.BERSERKER);
         PotionEffect effect = new PotionEffect(PotionEffectType.SPEED, 120, 0);
         player.addPotionEffect(effect, true);
     }
@@ -167,18 +173,20 @@ public class KillerCommon implements Listener
             }
         }
 
-        for (Player k : GameVariable.Instance().getKillerPlayerList())
+        for (String String_killer : GameVariable.Instance().getKillerPlayerList())
         {
             if(GameVariable.Instance().getKillerListName(p) == null)
             {
+                Player k = Bukkit.getPlayer(String_killer);
                 GlowAPI.setGlowing(p, GlowAPI.Color.WHITE, k);
 
             }
         }
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () ->
         {
-            for(Player k : GameVariable.Instance().getKillerPlayerList())
+            for(String stringKiller : GameVariable.Instance().getKillerPlayerList())
             {
+                Player k = Bukkit.getPlayer(stringKiller);
                 GlowAPI.setGlowing(p, false, k);
             }
         }, 100l);

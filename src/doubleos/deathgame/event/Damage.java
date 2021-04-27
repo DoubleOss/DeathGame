@@ -3,6 +3,7 @@ package doubleos.deathgame.event;
 import doubleos.deathgame.Main;
 import doubleos.deathgame.variable.GameVariable;
 import doubleos.deathgame.variable.PlayerVariable;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,18 +15,20 @@ public class Damage implements Listener
     @EventHandler
     void onDamage(EntityDamageByEntityEvent event)
     {
+        GameVariable gameVariable = GameVariable.Instance();
         if(event.getDamager() instanceof Player && event.getEntity() instanceof Player)
         {
-            if(GameVariable.Instance().getGameState().equals(GameVariable.GameState.PLAY))
+            if(gameVariable.getGameState().equals(GameVariable.GameState.PLAY))
             {
-                for(Player p : GameVariable.Instance().getGamePlayerList())
+                for(String stringPlayer : gameVariable.getGamePlayerList())
                 {
-                    if(event.getEntity().equals(GameVariable.Instance().getGamePlayerList()))
+                    if(event.getEntity().equals(Bukkit.getPlayer(stringPlayer)))
                     {
+
                         double damage = 0;
-                        if(Main.instance.variablePlayer.get(event.getEntity()).getKillerType().equals(PlayerVariable.KillerType.COMMON))
+                        if(gameVariable.getPlayerVariableMap().get(event.getEntity()).getKillerType().equals(PlayerVariable.KillerType.COMMON))
                             damage = 2;
-                        else if (Main.instance.variablePlayer.get(event.getEntity()).getKillerType().equals(PlayerVariable.KillerType.HIDDEN))
+                        else if (gameVariable.getPlayerVariableMap().get(event.getEntity()).getKillerType().equals(PlayerVariable.KillerType.HIDDEN))
                             damage = 4;
                         else
                             damage = 5;

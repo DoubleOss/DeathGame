@@ -35,9 +35,9 @@ public class MissionManager
         }
         return _instance;
     }
-    HashMap<Block, RepairBox> m_repairBoxClassMap = new HashMap<>();
+    HashMap<Location, RepairBox> m_repairBoxClassMap = new HashMap<>();
 
-    ArrayList<Block> m_repairBlock = new ArrayList<>();
+    ArrayList<Location> m_repairBlock = new ArrayList<>();
 
     ActiveMission m_activeMissoion = ActiveMission.MISSION1;
 
@@ -136,18 +136,18 @@ public class MissionManager
         {
             Location location1 = new Location(Bukkit.getWorld("World"), 1, 1, 1);
             Block block1 = Bukkit.getWorld("world").getBlockAt(location1);
-            m_repairBlock.add(block1);
-            m_repairBoxClassMap.put(block1, new RepairBox());
+            m_repairBlock.add(location1);
+            m_repairBoxClassMap.put(location1, new RepairBox());
         }
 
     }
 
-    public HashMap<Block, RepairBox> getRepairBoxClassMap()
+    public HashMap<Location, RepairBox> getRepairBoxClassMap()
     {
         return m_repairBoxClassMap;
     }
 
-    public ArrayList<Block> getRepairBoxList()
+    public ArrayList<Location> getRepairBoxList()
     {
         return m_repairBlock;
     }
@@ -209,8 +209,9 @@ public class MissionManager
         m_BoxRepair = number;
         if(m_BoxRepair == 8)
         {
-            for(Player p : GameVariable.Instance().getGamePlayerList())
+            for(String stringPlayer : GameVariable.Instance().getGamePlayerList())
             {
+                Player p  = Bukkit.getPlayer(stringPlayer);
                 p.sendTitle("[!]", ChatColor.GREEN+ "배전박스가 전부 수리되어 탈출구가 열렸습니다.", 1, 30, 1);
             }
         }

@@ -9,6 +9,7 @@ import doubleos.deathgame.ablilty.KillerHidden3;
 import doubleos.deathgame.util.SimpleScoreboard;
 import doubleos.deathgame.variable.GameVariable;
 import doubleos.deathgame.variable.MissionManager;
+import doubleos.deathgame.variable.PlayerVariable;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -32,23 +33,24 @@ public class Scoreboard
     {
         BukkitTask task = new BukkitRunnable()
         {
-
             @Override
             public void run()
             {
                 if(!GameVariable.Instance().getGameState().equals(GameVariable.GameState.PAUSE))
                 {
                     GameVariable gamevariable = GameVariable.Instance();
+                    HashMap<String, PlayerVariable> variableMap = gamevariable.getPlayerVariableMap();
+
                     SimpleScoreboard scoreboard = new SimpleScoreboard(ChatColor.RED + "[죽음의 술래잡기]");
-                    if(Main.instance.variablePlayer.get(player).getObserver() || player.isOp())
+                    if(gamevariable.getPlayerVariableMap().get(player.getName()).getObserver() || player.isOp())
                     {
                         if(gamevariable.getKillerPlayerList().size() <= 1)
                         {
-                            scoreboard.add("현재 살인마 " + gamevariable.getKillerPlayerList().get(0).getPlayer().getName(), 12);
+                            scoreboard.add("현재 살인마 " + gamevariable.getKillerPlayerList().get(0), 12);
                         }
                         else
                         {
-                            scoreboard.add("현재 살인마 " + gamevariable.getKillerPlayerList().get(0).getPlayer().getName() + " 외 " + gamevariable.getKillerPlayerList().size() + "인", 12);
+                            scoreboard.add("현재 살인마 " + gamevariable.getKillerPlayerList().get(0) + " 외 " + gamevariable.getKillerPlayerList().size() + "인", 12);
                         }
                     }
 
@@ -56,7 +58,7 @@ public class Scoreboard
                     scoreboard.add("남은 시간: " + gamevariable.getGameTimeMin() + ChatColor.DARK_GREEN +" 분" + ChatColor.WHITE+" : " +
                             gamevariable.getGameTimeSec() +ChatColor.DARK_GREEN +ChatColor.WHITE + " 초", 10);
                     scoreboard.add("", 9);
-                    if(player.equals(GameVariable.Instance().getOrignalKillerPlayer()) || player.isOp() || Main.instance.variablePlayer.get(player).getObserver())
+                    if(player.equals(gamevariable.getOrignalKillerPlayer()) || player.isOp() || variableMap.get(player.getName()).getObserver())
                     {
                         MissionManager mission = MissionManager.Instance();
                         String mission1_Suc = (mission.getMission1Success() ? "완료" : "미수행");
@@ -65,7 +67,7 @@ public class Scoreboard
                         scoreboard.add(mission.getMission1Title() + ": " + mission1_Suc, 8);
                         scoreboard.add(mission.getMission2Title() + ": " + mission2_Suc, 7);
 
-                        HashMap<Player, Hidden> hiddenclass = GameVariable.Instance().getKillerHiddenClass();
+                        HashMap<String, Hidden> hiddenclass = GameVariable.Instance().getKillerHiddenClass();
                         if(hiddenclass.isEmpty() == false)
                         {
                             String hidden_Time = "        ";
@@ -86,17 +88,17 @@ public class Scoreboard
                         }
 
                     }
-                    else if (player.isOp() || Main.instance.variablePlayer.get(player).getObserver())
+                    else if (player.isOp() || variableMap.get(player.getName()).getObserver())
                     {
-                        scoreboard.add("켜진 배전박스 " + GameVariable.Instance().getRepairBoxCount() + "/" + 8+ChatColor.DARK_GREEN+ " 개", 8);
+                        scoreboard.add("켜진 배전박스 " + gamevariable.getRepairBoxCount() + "/" + 8+ChatColor.DARK_GREEN+ " 개", 8);
                     }
                     else
                     {
-                        scoreboard.add("켜진 배전박스 " + GameVariable.Instance().getRepairBoxCount() + "/" + 8+ChatColor.DARK_GREEN+ " 개", 8);
+                        scoreboard.add("켜진 배전박스 " + gamevariable.getRepairBoxCount() + "/" + 8+ChatColor.DARK_GREEN+ " 개", 8);
                     }
                     scoreboard.send(player);
                     scoreboard.update();
-                    if(GameVariable.Instance().getGameState() == GameVariable.GameState.END)
+                    if(gamevariable.getGameState() == GameVariable.GameState.END)
                     {
                         this.cancel();
                         scoreboard.reset();

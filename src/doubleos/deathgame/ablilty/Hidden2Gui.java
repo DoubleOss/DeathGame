@@ -41,8 +41,9 @@ public class Hidden2Gui implements Listener
         int[] slot = new int[]{11, 13, 15, 28, 30, 32, 34};
 
         int loopnumber = 0;
-        for(Player p : GameVariable.Instance().getGamePlayerList())
+        for(String stringPlayer : GameVariable.Instance().getGamePlayerList())
         {
+            Player p = Bukkit.getPlayer(stringPlayer);
             m_inv.setItem(slot[loopnumber],createGuiItem(Material.RED_ROSE, String.format(ChatColor.WHITE + p.getName()), null));
         }
 

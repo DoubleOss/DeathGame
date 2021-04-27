@@ -46,14 +46,18 @@ public class GameVariable
         return _instance;
     }
 
-    ArrayList<Player> m_GamePlayerList = new ArrayList<>();
-    ArrayList<Player> m_killerPlayerList = new ArrayList<>();
+    public ArrayList<String> adminList = new ArrayList<>();
 
-    HashMap<Player, CellularGame> m_cellGameClassPlayer = new HashMap<>();
-    HashMap<Player, DefectiveGame> m_defectiveGameClassPlayer = new HashMap<>();
-    HashMap<Player, Hidden> m_killerHiddenClass = new HashMap<>();
+    ArrayList<String> m_GamePlayerList = new ArrayList<>();
+    ArrayList<String> m_killerPlayerList = new ArrayList<>();
 
-    HashMap<Player, PlayerVariable> m_playerVariable = new HashMap<>();
+    HashMap<String, CellularGame> m_cellGameClassPlayer = new HashMap<>();
+    HashMap<String, DefectiveGame> m_defectiveGameClassPlayer = new HashMap<>();
+    HashMap<String, Hidden> m_killerHiddenClass = new HashMap<>();
+
+    HashMap<String, PlayerVariable> m_playerVariableMap = new HashMap<>();
+
+    HashMap<String, PlayerVariable> m_playerVariable = new HashMap<>();
 
 
     GameStage m_GameStage = GameStage.LAB;
@@ -61,11 +65,12 @@ public class GameVariable
     GameState m_GameState = GameState.END;
 
 
-    Player m_orignalKillerPlayer;
+    String m_orignalKillerPlayer;
 
 
     KillerHidden2 m_KillerHidden2;
-    Player m_hidden2Target;
+
+    String m_hidden2Target;
 
 
 
@@ -161,21 +166,21 @@ public class GameVariable
 
     public void addKillerListName(Player killer)
     {
-        m_killerPlayerList.add(killer);
+        m_killerPlayerList.add(killer.getName());
 
     }
-    public Player getKillerListName(Player killer)
+    public String getKillerListName(Player killer)
     {
         for(int i = 0; i<m_killerPlayerList.size(); i++)
         {
-            if(m_killerPlayerList.get(i).equals(killer))
+            if(m_killerPlayerList.get(i).equalsIgnoreCase(killer.getName()))
             {
                 return m_killerPlayerList.get(i);
             }
         }
         return null;
     }
-    public ArrayList<Player> getKillerPlayerList()
+    public ArrayList<String> getKillerPlayerList()
     {
         return m_killerPlayerList;
     }
@@ -200,14 +205,14 @@ public class GameVariable
     }
 
 
-    public ArrayList<Player> getGamePlayerList()
+    public ArrayList<String> getGamePlayerList()
     {
         return m_GamePlayerList;
     }
 
     public void addGamePlayerList(Player player)
     {
-        m_GamePlayerList.add(player);
+        m_GamePlayerList.add(player.getName());
     }
 
     public void setKillerHidden2(KillerHidden2 hidden2)
@@ -221,11 +226,13 @@ public class GameVariable
 
     public void setHidden2Targer(Player player)
     {
-        m_hidden2Target = player;
+        m_hidden2Target = player.getName();
     }
+
     public Player getHidden2Target()
     {
-        return m_hidden2Target;
+        Player player = Bukkit.getPlayer(m_hidden2Target);
+        return player;
     }
 
 
@@ -240,11 +247,12 @@ public class GameVariable
 
     public Player getOrignalKillerPlayer()
     {
-        return m_orignalKillerPlayer;
+        Player player = Bukkit.getPlayer(m_orignalKillerPlayer);
+        return player;
     }
     public void setOrignalKillerPlayer(Player killer)
     {
-        m_orignalKillerPlayer = killer;
+        m_orignalKillerPlayer = killer.getName();
     }
 
 
@@ -274,9 +282,9 @@ public class GameVariable
     }
     public void addCellGameClassGetPlayer(CellularGame cellclass, Player player)
     {
-        m_cellGameClassPlayer.put(player, cellclass);
+        m_cellGameClassPlayer.put(player.getName(), cellclass);
     }
-    public HashMap<Player, CellularGame> getcellClassHash()
+    public HashMap<String, CellularGame> getcellClassHash()
     {
         return m_cellGameClassPlayer;
     }
@@ -289,25 +297,25 @@ public class GameVariable
 
     public void addDefectiveClassGetPlayer(DefectiveGame defclass, Player player)
     {
-        m_defectiveGameClassPlayer.put(player, defclass);
+        m_defectiveGameClassPlayer.put(player.getName(), defclass);
     }
-    public HashMap<Player, DefectiveGame> getdefectiveClassHash()
+    public HashMap<String, DefectiveGame> getdefectiveClassHash()
     {
         return m_defectiveGameClassPlayer;
     }
-    public HashMap<Player, Hidden> getKillerHiddenClass()
+    public HashMap<String, Hidden> getKillerHiddenClass()
     {
         return m_killerHiddenClass;
     }
     public void addKillerHiddenClass(Player player, Hidden hiddenclass)
     {
-        m_killerHiddenClass.put(player, hiddenclass);
+        m_killerHiddenClass.put(player.getName(), hiddenclass);
     }
     public void addPlayerVarible(Player player, PlayerVariable variable)
     {
-        m_playerVariable.put(player, variable);
+        m_playerVariable.put(player.getName(), variable);
     }
-    public HashMap<Player, PlayerVariable> getPlayerVariable()
+    public HashMap<String, PlayerVariable> getPlayerVariable()
     {
         return m_playerVariable;
     }
@@ -321,6 +329,10 @@ public class GameVariable
         return m_teleporting;
     }
 
+    public HashMap<String, PlayerVariable> getPlayerVariableMap()
+    {
+        return m_playerVariableMap;
+    }
 
     public void setMissionRotate()
     {
@@ -352,10 +364,11 @@ public class GameVariable
     public void GameReset()
     {
 
-        for(Player p : getGamePlayerList())
+        for(String stringPlayer : getGamePlayerList())
         {
+            Player p = Bukkit.getPlayer(stringPlayer);
             p.setGameMode(GameMode.SURVIVAL);
-            Main.instance.variablePlayer.get(p).resetPlayerVariable();
+            getPlayerVariableMap().get(p).resetPlayerVariable();
         }
         m_GameTime_Min = 20;
         m_GameTime_Sec = 0;

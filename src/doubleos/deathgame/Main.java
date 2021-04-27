@@ -16,6 +16,7 @@ import doubleos.deathgame.variable.PlayerVariable;
 import doubleos.deathgame.variable.PotionRecipe;
 import doubleos.deathgame.variable.RepairBox;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -24,12 +25,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class Main extends JavaPlugin {
+public class Main extends JavaPlugin
+{
 
 
-    public ArrayList<Player> adminList = new ArrayList<>();
 
-    public HashMap<Player, PlayerVariable> variablePlayer = new HashMap<>();
+
+    //public HashMap<Player, PlayerVariable> variablePlayer = new HashMap<>();
 
 
     public static Main instance;
@@ -39,6 +41,7 @@ public class Main extends JavaPlugin {
     public void onEnable()
     {
         instance = this;
+
 
         registercommand();
 

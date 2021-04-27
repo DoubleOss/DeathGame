@@ -2,6 +2,7 @@ package doubleos.deathgame.variable;
 
 import doubleos.deathgame.Main;
 import doubleos.deathgame.event.Kill;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 public class PlayerVariable
@@ -21,7 +22,7 @@ public class PlayerVariable
         NONE;
     }
 
-    Player m_player;
+    String m_player;
 
     HumanType m_humanType;
 
@@ -29,16 +30,19 @@ public class PlayerVariable
     boolean m_repair = false;
     boolean m_soundPlaying = false;
 
+    FileConfiguration config;
+
 
     KillerType m_killerType;
 
 
     public PlayerVariable(Player m_player)
     {
-        this.m_player = m_player;
+        this.m_player = m_player.getName();
         this.m_humanType = HumanType.HUMAN;
         this.m_killerType = KillerType.NONE;
-        Main.instance.variablePlayer.put(m_player, this);
+        //Main.instance.variablePlayer.put(m_player, this);
+        GameVariable.Instance().getPlayerVariableMap().put(m_player.getName(), this);
     }
 
 
@@ -50,6 +54,12 @@ public class PlayerVariable
         this.m_repair = false;
         this.m_soundPlaying = false;
     }
+
+    public void saveConfig()
+    {
+
+    }
+
 
 
     public void setRepair(boolean repair)

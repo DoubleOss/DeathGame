@@ -89,11 +89,18 @@ public class Utils
         factory_locations.add(new Location(Bukkit.getWorld("world"), -507, 62, 72));
 
 
-        cathedral_locations.add(new Location(Bukkit.getWorld("world"), -507, 62, 72));
+        cathedral_locations.add(new Location(Bukkit.getWorld("world"), -424, 62, 79));
+        cathedral_locations.add(new Location(Bukkit.getWorld("world"), -361, 62, 81));
+        cathedral_locations.add(new Location(Bukkit.getWorld("world"), -414, 62, 89));
+        cathedral_locations.add(new Location(Bukkit.getWorld("world"), -404, 74, 157));
+        cathedral_locations.add(new Location(Bukkit.getWorld("world"), -366, 74, 114));
+        cathedral_locations.add(new Location(Bukkit.getWorld("world"), -401, 62, 140));
+        cathedral_locations.add(new Location(Bukkit.getWorld("world"), -374, 62, 71));
+
 
         m_stageTeleportLoc.put(GameVariable.GameStage.LAB, lab_locations);
         m_stageTeleportLoc.put(GameVariable.GameStage.FACTORY, factory_locations);
-        m_stageTeleportLoc.put(GameVariable.GameStage.FACTORY, cathedral_locations);
+        m_stageTeleportLoc.put(GameVariable.GameStage.CATHEDRAL, cathedral_locations);
 
 
     }

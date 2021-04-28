@@ -119,7 +119,7 @@ public class MissionManager
                     case CATHEDRAL:
                         KillerHidden2 hidden2 = new KillerHidden2();
                         hidden2.initKillerHidden2();
-
+                        break;
                     case FACTORY:
                         KillerHidden3 hidden3 = new KillerHidden3();
                         hidden3.initKillerHidden3();

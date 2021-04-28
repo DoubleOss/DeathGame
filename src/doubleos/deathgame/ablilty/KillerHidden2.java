@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -66,7 +67,7 @@ public class KillerHidden2 implements Listener , Hidden
                 if(m_hiddenAbliltyTime <= 0)
                 {
                     killer.getInventory().setHelmet(air);
-                    killer.sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +": 변신이 풀렸습니다!");
+                    killer.sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +" 변신이 풀렸습니다!");
                     killer.getInventory().remove(GameItem.Instance().m_killerHidden2_Ability1_Item);
                     killer.getInventory().remove(GameItem.Instance().m_killerHidden2_Ability2_Item);
 
@@ -99,6 +100,10 @@ public class KillerHidden2 implements Listener , Hidden
         GameVariable gamevariable = GameVariable.Instance();
         if(event.getAction().equals(Action.RIGHT_CLICK_AIR))
         {
+            if (event.getHand() != EquipmentSlot.HAND)
+            {
+                return;
+            }
             if(gamevariable.getIsKillerCheckTras() == true)
             {
                 if(event.getPlayer().equals(gamevariable.getOrignalKillerPlayer()))

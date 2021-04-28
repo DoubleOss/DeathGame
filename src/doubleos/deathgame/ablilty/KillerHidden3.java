@@ -17,6 +17,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -109,7 +110,7 @@ public class KillerHidden3 implements Listener , Hidden
                 if(m_skill1Active == true)
                 {
                     event.setCancelled(true);
-                    event.getDamager().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +": 은신 상태에서는 데미지를 줄 수 없습니다.");
+                    event.getDamager().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +" 은신 상태에서는 데미지를 줄 수 없습니다.");
                 }
             }
         }
@@ -120,6 +121,10 @@ public class KillerHidden3 implements Listener , Hidden
         MissionManager mission = MissionManager.Instance();
         if(event.getAction().equals(Action.RIGHT_CLICK_AIR))
         {
+            if (event.getHand() != EquipmentSlot.HAND)
+            {
+                return;
+            }
             if(event.getPlayer().equals(GameVariable.Instance().getOrignalKillerPlayer()))
             {
                 if(GameVariable.Instance().getIsKillerCheckTras() == true)
@@ -155,7 +160,7 @@ public class KillerHidden3 implements Listener , Hidden
                             }
                             else
                             {
-                                event.getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE + "아직 스킬을 사용할 수 없습니다.");
+                                event.getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE + " 아직 스킬을 사용할 수 없습니다.");
 
                             }
 
@@ -263,7 +268,7 @@ public class KillerHidden3 implements Listener , Hidden
         {
             if(player.isOp())
             {
-                player.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.WHITE + "살인마가 " + ChatColor.RED +p.getPlayer()+ ChatColor.WHITE + " 님이 은신을 해제 하셨습니다.");
+                player.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.WHITE + "살인마가 " + ChatColor.RED +p.getPlayer().getName()+ ChatColor.WHITE + " 님이 은신을 해제 하셨습니다.");
             }
         }
     }

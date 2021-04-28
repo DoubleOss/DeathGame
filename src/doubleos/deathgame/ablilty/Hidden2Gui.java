@@ -10,6 +10,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
@@ -76,6 +77,10 @@ public class Hidden2Gui implements Listener
         {
 
             event.setCancelled(true);
+            if(!event.getClick().equals(ClickType.LEFT))
+            {
+                return;
+            }
             Bukkit.broadcastMessage(event.getCurrentItem().toString());
             if(event.getCurrentItem().getType() != Material.AIR)
             {
@@ -105,14 +110,14 @@ public class Hidden2Gui implements Listener
         {
             m_target = Bukkit.getServer().getPlayer(event.getCurrentItem().getItemMeta().getDisplayName().replace("§f", ""));
             Player p = (Player) event.getWhoClicked();
-            p.sendMessage(ChatColor.RED + "[죽음의 술래잡기]"+ ChatColor.WHITE + ":" + ChatColor.RED + m_target.getName() + ChatColor.WHITE +" 님을 전도 대상으로 고르셨습니다.");
+            p.sendMessage(ChatColor.RED + "[죽음의 술래잡기]"+ ChatColor.WHITE + " " + ChatColor.RED + m_target.getName() + ChatColor.WHITE +" 님을 전도 대상으로 고르셨습니다.");
             GameVariable.Instance().setHidden2Targer(m_target);
             GameVariable.Instance().getKillerHidden2().m_skill2Cooltime = 120;
             for(Player player :Bukkit.getOnlinePlayers())
             {
                 if(player.isOp())
                 {
-                    player.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.WHITE + "살인마가 " + ChatColor.RED +m_target.getPlayer()+ ChatColor.WHITE + " 님을 전도 대상으로 고르셨습니다.");
+                    player.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.WHITE + "살인마가 " + ChatColor.RED +m_target.getPlayer().getName()+ ChatColor.WHITE + " 님을 전도 대상으로 고르셨습니다.");
                 }
             }
 
@@ -121,6 +126,7 @@ public class Hidden2Gui implements Listener
                 @Override
                 public void run()
                 {
+
                     if(GameVariable.Instance().getKillerHidden2().m_skill2Cooltime <= 0)
                     {
                         GameVariable.Instance().setHidden2Targer(null);

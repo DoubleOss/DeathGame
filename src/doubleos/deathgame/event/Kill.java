@@ -29,31 +29,33 @@ public class Kill implements Listener
                     if(p.isOp())
                     {
                         p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.WHITE + "살인마 " + ChatColor.RED + event.getEntity().getKiller().getName() + ChatColor.WHITE + "님이 "
-                                +ChatColor.GOLD+ event.getEntity().getPlayer().toString() +ChatColor.WHITE + " 님을 살해 하셨습니다." );
+                                +ChatColor.GOLD+ event.getEntity().getPlayer().getName() +ChatColor.WHITE + " 님을 살해 하셨습니다." );
                     }
                 }
                 if(GameVariable.Instance().getGameStage().equals(GameVariable.GameStage.CATHEDRAL))
                 {
-                    if(GameVariable.Instance().getHidden2Target().equals(event.getEntity().getPlayer()))
+                    if(GameVariable.Instance().getHidden2Target().equals(event.getEntity().getPlayer().getName()))
                     {
 
                         KillerCommon common = new KillerCommon();
                         common.initCommon(event.getEntity());
-                        event.getEntity().getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + ": 당신은 전도를 받아 살인마로 다시 부활합니다.");
+                        event.getEntity().getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + " 당신은 전도를 받아 살인마로 다시 부활합니다.");
                         GameVariable.Instance().addKillerListName(event.getEntity());
                         GameVariable.Instance().setHidden2Targer(null);
-                        for(Player p : Bukkit.getOnlinePlayers())
+                        for(Player p1 : Bukkit.getOnlinePlayers())
                         {
-                            if(p.isOp())
+                            if(p1.isOp())
                             {
-                                p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.WHITE + "살인마의 전도가 성공하여 " + ChatColor.RED + event.getEntity().getPlayer().toString() + ChatColor.WHITE + " 님이 살인마로 다시 부활 하셨습니다.");
+                                p1.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.WHITE + "살인마의 전도가 성공하여 " + ChatColor.RED + event.getEntity().getPlayer().getName() + ChatColor.WHITE + " 님이 살인마로 다시 부활 하셨습니다.");
                             }
                         }
                         if(GameVariable.Instance().getGamePlayerList().size() == GameVariable.Instance().getKillerPlayerList().size())
                         {
-                            for(Player p : Bukkit.getOnlinePlayers())
+                            for(Player p2 : Bukkit.getOnlinePlayers())
                             {
-                                p.sendTitle("[!]", ChatColor.GREEN+ "모든 기자들이 살인마로 변하여 게임이 종료됩니다.", 1, 30, 1);
+                                p2.sendTitle("[!]", ChatColor.GREEN+ "모든 기자들이 살인마로 변하여 게임이 종료됩니다.", 1, 30, 1);
+                                p2.sendMessage( ChatColor.GREEN+ "모든 기자들이 살인마로 변하여 게임이 종료됩니다.");
+                                GameVariable.Instance().GameReset();
                             }
 
                         }
@@ -95,7 +97,7 @@ public class Kill implements Listener
     {
         if(checkPlayingGamePlayer(event.getPlayer()))
         {
-            if(GameVariable.Instance().getPlayerVariable().get(event.getPlayer()).getObserver())
+            if(GameVariable.Instance().getPlayerVariable().get(event.getPlayer().getName()).getObserver())
             {
                 event.getPlayer().setGameMode(GameMode.SPECTATOR);
             }

@@ -26,9 +26,9 @@ public class Damage implements Listener
                     {
 
                         double damage = 0;
-                        if(gameVariable.getPlayerVariableMap().get(event.getEntity()).getKillerType().equals(PlayerVariable.KillerType.COMMON))
+                        if(gameVariable.getPlayerVariableMap().get(event.getEntity().getName()).getKillerType().equals(PlayerVariable.KillerType.COMMON))
                             damage = 2;
-                        else if (gameVariable.getPlayerVariableMap().get(event.getEntity()).getKillerType().equals(PlayerVariable.KillerType.HIDDEN))
+                        else if (gameVariable.getPlayerVariableMap().get(event.getEntity().getName()).getKillerType().equals(PlayerVariable.KillerType.HIDDEN))
                             damage = 4;
                         else
                             damage = 5;

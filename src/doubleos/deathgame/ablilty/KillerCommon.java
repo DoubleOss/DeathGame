@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -91,6 +92,10 @@ public class KillerCommon implements Listener
         if(event.getPlayer().equals(killer))
         {
             event.getPlayer().sendMessage("@@");
+            if (event.getHand() != EquipmentSlot.HAND)
+            {
+                return;
+            }
             if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
             {
                 ItemStack stack1 = GameItem.Instance().m_killerCom_Ability1_Item;
@@ -100,7 +105,7 @@ public class KillerCommon implements Listener
                     event.getPlayer().getInventory().removeItem(stack1);
                     Location blockpos = event.getClickedBlock().getLocation().add( new Vector(0, 1, 0));
                     m_skill1_pos.add(blockpos);
-                    blockpos.getBlock().setType(Material.CARPET);
+                    blockpos.getBlock().setType(Material.RAILS);
 
 
                 }
@@ -114,14 +119,14 @@ public class KillerCommon implements Listener
                     if (m_skill2_Cooltime <= 0)
                     {
                         initGlowing(event.getPlayer());
-                        event.getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +":탐지 능력을 사용하셨습니다.");
+                        event.getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +" 탐지 능력을 사용하셨습니다.");
                         m_skill2_Cooltime = 20;
                         StartSkill2Cooltime();
                         for(Player p :Bukkit.getOnlinePlayers())
                         {
                             if(p.isOp())
                             {
-                                p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.WHITE + "살인마가 탐지능력을 사용 하셨습니다.");
+                                p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.WHITE + " 살인마가 탐지능력을 사용 하셨습니다.");
                             }
                         }
                     }
@@ -164,12 +169,12 @@ public class KillerCommon implements Listener
     {
         PotionEffect effect2 = new PotionEffect(PotionEffectType.SLOW, 100, 100);
         p.addPotionEffect(effect2, true);
-        ActionBarAPI.sendActionBar(p, "[" + ChatColor.RED + "!" + ChatColor.WHITE + "]" + ChatColor.WHITE + "당신은 덫을 밟으셨습니다.");
+        ActionBarAPI.sendActionBar(p, "[" + ChatColor.RED + "!" + ChatColor.WHITE + "]" + ChatColor.WHITE + " 당신은 덫을 밟으셨습니다.");
         for(Player player :Bukkit.getOnlinePlayers())
         {
             if(player.isOp())
             {
-                player.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED + p.getName() + ChatColor.WHITE +"님이 덫을 밟으셨습니다.");
+                player.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED + p.getName() + ChatColor.WHITE +" 님이 덫을 밟으셨습니다.");
             }
         }
 

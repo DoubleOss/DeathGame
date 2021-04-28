@@ -226,13 +226,20 @@ public class GameVariable
 
     public void setHidden2Targer(Player player)
     {
-        m_hidden2Target = player.getName();
+        if(player == null)
+        {
+            m_hidden2Target = null;
+        }
+        else
+        {
+            m_hidden2Target = player.getName();
+        }
+
     }
 
-    public Player getHidden2Target()
+    public String getHidden2Target()
     {
-        Player player = Bukkit.getPlayer(m_hidden2Target);
-        return player;
+        return m_hidden2Target;
     }
 
 
@@ -368,8 +375,10 @@ public class GameVariable
         {
             Player p = Bukkit.getPlayer(stringPlayer);
             p.setGameMode(GameMode.SURVIVAL);
-            getPlayerVariableMap().get(p).resetPlayerVariable();
+            getPlayerVariableMap().get(p.getName()).resetPlayerVariable();
+            p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
         }
+
         m_GameTime_Min = 20;
         m_GameTime_Sec = 0;
 

@@ -36,12 +36,18 @@ public class Scoreboard
             @Override
             public void run()
             {
-                if(!GameVariable.Instance().getGameState().equals(GameVariable.GameState.PAUSE))
+                if(!GameVariable.Instance().getGameState().equals(GameVariable.GameState.PAUSE) || GameVariable.Instance().getGameState().equals(GameVariable.GameState.END))
                 {
                     GameVariable gamevariable = GameVariable.Instance();
                     HashMap<String, PlayerVariable> variableMap = gamevariable.getPlayerVariableMap();
 
                     SimpleScoreboard scoreboard = new SimpleScoreboard(ChatColor.RED + "[죽음의 술래잡기]");
+                    if(gamevariable.getGameState() == GameVariable.GameState.END)
+                    {
+                        this.cancel();
+                        scoreboard.reset();
+                        scoreboard.update();
+                    }
                     if(gamevariable.getPlayerVariableMap().get(player.getName()).getObserver() || player.isOp())
                     {
                         if(gamevariable.getKillerPlayerList().size() <= 1)
@@ -71,26 +77,27 @@ public class Scoreboard
                         if(hiddenclass.isEmpty() == false)
                         {
                             String hidden_Time = "        ";
-                            if((hiddenclass.get(player)) instanceof KillerHidden1)
+                            if((hiddenclass.get(player.getName())) instanceof KillerHidden1)
                             {
-                                hidden_Time = String.format("%d "+ChatColor.DARK_GREEN+ " 초", ((KillerHidden1)(hiddenclass.get(player))).m_hiddenAbliltyTime);
+                                hidden_Time = String.format("%d "+ChatColor.DARK_GREEN+ " 초", ((KillerHidden1)(hiddenclass.get(player.getName()))).m_hiddenAbliltyTime);
                             }
-                            else if ((hiddenclass.get(player)) instanceof KillerHidden2)
+                            else if ((hiddenclass.get(player.getName())) instanceof KillerHidden2)
                             {
-                                hidden_Time = String.format("%d"+ChatColor.DARK_GREEN+  " 초", ((KillerHidden2)(hiddenclass.get(player))).m_hiddenAbliltyTime);
+                                hidden_Time = String.format("%d"+ChatColor.DARK_GREEN+  " 초", ((KillerHidden2)(hiddenclass.get(player.getName()))).m_hiddenAbliltyTime);
                             }
-                            else if((hiddenclass.get(player)) instanceof KillerHidden3)
+                            else if((hiddenclass.get(player.getName())) instanceof KillerHidden3)
                             {
-                                hidden_Time = String.format("%d"+ChatColor.DARK_GREEN+ " 초", ((KillerHidden3)(hiddenclass.get(player))).m_hiddenAbliltyTime);
+                                hidden_Time = String.format("%d"+ChatColor.DARK_GREEN+ " 초", ((KillerHidden3)(hiddenclass.get(player.getName()))).m_hiddenAbliltyTime);
                             }
                             scoreboard.add("     ", 6);
                             scoreboard.add( "변신시간: " + hidden_Time, 5);
                         }
 
                     }
-                    else if (player.isOp() || variableMap.get(player.getName()).getObserver())
+                    if (player.isOp() || variableMap.get(player.getName()).getObserver())
                     {
-                        scoreboard.add("켜진 배전박스 " + gamevariable.getRepairBoxCount() + "/" + 8+ChatColor.DARK_GREEN+ " 개", 8);
+                        scoreboard.add("       ", 4);
+                        scoreboard.add("켜진 배전박스 " + gamevariable.getRepairBoxCount() + "/" + 8+ChatColor.DARK_GREEN+ " 개", 3);
                     }
                     else
                     {
@@ -98,12 +105,11 @@ public class Scoreboard
                     }
                     scoreboard.send(player);
                     scoreboard.update();
-                    if(gamevariable.getGameState() == GameVariable.GameState.END)
-                    {
-                        this.cancel();
-                        scoreboard.reset();
-                        scoreboard.update();
-                    }
+
+                }
+                else
+                {
+                    this.cancel();
                 }
 
 

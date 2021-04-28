@@ -17,6 +17,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.permissions.Permission;
@@ -30,9 +31,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class KillerHidden1 implements Listener, Hidden
 {
@@ -77,7 +76,7 @@ public class KillerHidden1 implements Listener, Hidden
                 if(m_hiddenAbliltyTime <= 0)
                 {
                     killer.getInventory().setHelmet(air);
-                    killer.sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE +": 변신이 풀렸습니다!");
+                    killer.sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE +" 변신이 풀렸습니다!");
                     killer.getInventory().remove(GameItem.Instance().m_killerHidden1_Ability1_Item);
                     killer.getInventory().remove(GameItem.Instance().m_killerHidden1_Ability2_Item);
 
@@ -90,7 +89,7 @@ public class KillerHidden1 implements Listener, Hidden
                     {
                         if(p.isOp())
                         {
-                            p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ killer.getName() + ChatColor.WHITE+ " 님이 변신이 풀렸습니다.");
+                            p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ killer.getName() + ChatColor.WHITE+ " 님의 변신이 풀렸습니다.");
                         }
                     }
                     this.cancel();
@@ -115,7 +114,11 @@ public class KillerHidden1 implements Listener, Hidden
         MissionManager mission = MissionManager.Instance();
         if(event.getAction().equals(Action.RIGHT_CLICK_AIR))
         {
-            if(event.getPlayer().getName().equals(GameVariable.Instance().getOrignalKillerPlayer()))
+            if (event.getHand() != EquipmentSlot.HAND)
+            {
+                return;
+            }
+            if(event.getPlayer().equals(GameVariable.Instance().getOrignalKillerPlayer()))
             {
                 if(GameVariable.Instance().getIsKillerCheckTras() == true)
                 {
@@ -161,12 +164,12 @@ public class KillerHidden1 implements Listener, Hidden
                         ((Player) event.getHitEntity()).getPlayer().damage(4);
                         ((Player) event.getHitEntity()).addPotionEffect(effect1, true);
                         ((Player) event.getHitEntity()).addPotionEffect(effect2, true);
-                        ((Player) event.getHitEntity()).getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + "당신은 실험체의 위산 분비 공격에 당해 독과 멀미에 걸립니다.");
+                        ((Player) event.getHitEntity()).getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + " 당신은 실험체의 위산 분비 공격에 당해 독과 멀미에 걸립니다.");
                         for(Player p :Bukkit.getOnlinePlayers())
                         {
                             if(p.isOp())
                             {
-                                p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ ((Player) event.getHitEntity()).getPlayer().getName() + ChatColor.WHITE+ " 위산 분비 공격에 당해 독과 멀미에 걸립니다.");
+                                p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ ((Player) event.getHitEntity()).getPlayer().getName() + ChatColor.WHITE+ " 님이 위산 분비 공격에 당해 독과 멀미에 걸립니다.");
                             }
                         }
                     }
@@ -206,7 +209,7 @@ public class KillerHidden1 implements Listener, Hidden
     void randomLocation(Player p)
     {
         m_skill1Cooltime = 120;
-        Utils.Instance().randomTeleport(p);
+        radnomTeleport(p);
 
         BukkitTask task = new BukkitRunnable()
         {
@@ -223,6 +226,24 @@ public class KillerHidden1 implements Listener, Hidden
                 }
             }
         }.runTaskTimer(Main.instance, 0l, 20l);
+    }
+
+    void radnomTeleport(Player p)
+    {
+
+        ArrayList<Location> teleportloc = new ArrayList<>();
+
+        teleportloc.add(new Location(Bukkit.getWorld("world"), -338, 62, 10));
+        teleportloc.add(new Location(Bukkit.getWorld("world"), -361, 71, -34));
+        teleportloc.add(new Location(Bukkit.getWorld("world"), -319, 71, 23));
+        teleportloc.add(new Location(Bukkit.getWorld("world"), -323, 79, -15));
+        teleportloc.add(new Location(Bukkit.getWorld("world"), -362, 79, -28));
+        teleportloc.add(new Location(Bukkit.getWorld("world"), -339, 62, -28));
+        teleportloc.add(new Location(Bukkit.getWorld("world"), -357, 71, -10));
+
+        int random = new Random().nextInt((6-1)+1);
+        p.teleport(teleportloc.get(random));
+
     }
 
 }

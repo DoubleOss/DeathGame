@@ -24,6 +24,7 @@ public class KillerSound implements Listener
         HashMap<String, PlayerVariable> variableMap = GameVariable.Instance().getPlayerVariableMap();
         Player killer = Bukkit.getPlayer(m_player);
         final int[] m_soundSpeed = {2000};
+        /*
         BukkitTask task = new BukkitRunnable()
         {
             @Override
@@ -32,48 +33,53 @@ public class KillerSound implements Listener
                 for(String stringPlayer : GameVariable.Instance().getGamePlayerList())
                 {
                     Player p = Bukkit.getPlayer(stringPlayer);
-                    if(!p.getName().equals(killer.getName()))
+                    if(p.getName() != null)
                     {
-                        if(p.getLocation().distance(killer.getLocation()) <= 50)
+                        if(!p.getName().equals(killer.getName()))
                         {
-                            if(!variableMap.get(p.getName()).getHumanType().equals(PlayerVariable.HumanType.KILLER))
+                            if(p.getLocation().distance(killer.getLocation()) <= 50)
                             {
-                                if(m_soundSpeed[0] != getDistanceSoundSpeed(p.getLocation().distance(killer.getLocation())))
+                                if(!variableMap.get(p.getName()).getHumanType().equals(PlayerVariable.HumanType.KILLER))
                                 {
-                                    m_soundSpeed[0] = getDistanceSoundSpeed(p.getLocation().distance(killer.getLocation()));
-                                    if(variableMap.get(p.getName()).getSoundPlaying())
+                                    if(m_soundSpeed[0] != getDistanceSoundSpeed(p.getLocation().distance(killer.getLocation())))
                                     {
-                                        p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
-                                        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable()
+                                        m_soundSpeed[0] = getDistanceSoundSpeed(p.getLocation().distance(killer.getLocation()));
+                                        if(variableMap.get(p.getName()).getSoundPlaying())
                                         {
-                                            @Override
-                                            public void run()
+                                            p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
+                                            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable()
                                             {
-                                                p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "true" + "_" + "%d", m_soundSpeed[0]).getBytes());
-                                            }
-                                        }, 20l);
+                                                @Override
+                                                public void run()
+                                                {
+
+                                                    p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "true" + "_" + "%d", m_soundSpeed[0]).getBytes());
+                                                }
+                                            }, 20l);
+                                        }
+                                        else
+                                        {
+                                            variableMap.get(p.getName()).setSoundPlaying(true);
+                                            //p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "true" + "_" + "%d", m_soundSpeed[0]).getBytes());
+                                        }
                                     }
-                                    else
-                                    {
-                                        variableMap.get(p.getName()).setSoundPlaying(true);
-                                        //p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "true" + "_" + "%d", m_soundSpeed[0]).getBytes());
-                                    }
+                                }
+                                else
+                                {
+                                    variableMap.get(p.getName()).setSoundPlaying(false);
+                                    p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
                                 }
                             }
                             else
                             {
                                 variableMap.get(p.getName()).setSoundPlaying(false);
                                 p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
+
                             }
-                        }
-                        else
-                        {
-                            variableMap.get(p.getName()).setSoundPlaying(false);
-                            p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
 
                         }
-
                     }
+
 
                 }
                 if(GameVariable.Instance().getGameState().equals(GameVariable.GameState.END))
@@ -90,6 +96,8 @@ public class KillerSound implements Listener
             }
 
         }.runTaskTimer(Main.instance, 0l , 20l);
+
+         */
     }
 
     int getDistanceSoundSpeed(double distance)

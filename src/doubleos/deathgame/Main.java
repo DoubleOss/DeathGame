@@ -3,23 +3,11 @@ package doubleos.deathgame;
 import doubleos.deathgame.ablilty.*;
 import doubleos.deathgame.command.GameCommand;
 import doubleos.deathgame.event.*;
-import doubleos.deathgame.gui.CellularGame;
-import doubleos.deathgame.gui.DefectiveGame;
-import doubleos.deathgame.gui.MechanicalRepair;
-import doubleos.deathgame.gui.PotionMakeGui;
+import doubleos.deathgame.gui.*;
 import doubleos.deathgame.util.Utils;
-import doubleos.deathgame.variable.GameItem;
-import doubleos.deathgame.variable.PlayerVariable;
-import doubleos.deathgame.variable.PotionRecipe;
-import doubleos.deathgame.variable.RepairBox;
+import doubleos.deathgame.variable.*;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 
 public class Main extends JavaPlugin
@@ -48,6 +36,14 @@ public class Main extends JavaPlugin
         Bukkit.getPluginManager().registerEvents(new Kill(), this);
         Bukkit.getPluginManager().registerEvents(new Damage(), this);
         Bukkit.getPluginManager().registerEvents(new Quit(), this);
+        Bukkit.getPluginManager().registerEvents(new HealthRegen(), this);
+
+        Bukkit.getPluginManager().registerEvents(new PlayerMove(), this);
+        Bukkit.getPluginManager().registerEvents(new MissionBoxClick(), this);
+        Bukkit.getPluginManager().registerEvents(new FactoryHidden(), this);
+        Bukkit.getPluginManager().registerEvents(new OpenShulkerBox(), this);
+        Bukkit.getPluginManager().registerEvents(new RepairBoxClick(), this);
+
 
 
 
@@ -64,16 +60,16 @@ public class Main extends JavaPlugin
 
         Bukkit.getPluginManager().registerEvents(new MechanicalRepair(), this);
 
-        Bukkit.getPluginManager().registerEvents(new RepairBoxClick(), this);
-
-
-
+        Bukkit.getPluginManager().registerEvents(new Mission_clean(), this);
+        Bukkit.getPluginManager().registerEvents(new MissionBoxGui(), this);
 
 
         PotionRecipe.Instance().initPotionRecipe();
 
         GameItem.Instance().initGameItem();
         Utils.Instance().initTeleportLocation();
+
+        MissionManager.Instance().initFactoryHiddenLoc();
 
 
 

@@ -39,7 +39,7 @@ public class Scoreboard
                 if(!GameVariable.Instance().getGameState().equals(GameVariable.GameState.PAUSE) || GameVariable.Instance().getGameState().equals(GameVariable.GameState.END))
                 {
                     GameVariable gamevariable = GameVariable.Instance();
-                    HashMap<String, PlayerVariable> variableMap = gamevariable.getPlayerVariableMap();
+                    HashMap<String, PlayerVariable> variableMap = gamevariable.getPlayerListVariableMap();
 
                     SimpleScoreboard scoreboard = new SimpleScoreboard(ChatColor.RED + "[죽음의 술래잡기]");
                     if(gamevariable.getGameState() == GameVariable.GameState.END)
@@ -48,7 +48,7 @@ public class Scoreboard
                         scoreboard.reset();
                         scoreboard.update();
                     }
-                    if(gamevariable.getPlayerVariableMap().get(player.getName()).getObserver() || player.isOp())
+                    if(variableMap.get(player.getName()).getObserver() || player.isOp())
                     {
                         if(gamevariable.getKillerPlayerList().size() <= 1)
                         {

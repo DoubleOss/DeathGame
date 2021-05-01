@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.inventivetalent.glow.GlowAPI;
 
 public class Join implements Listener
 {
@@ -24,6 +25,10 @@ public class Join implements Listener
     @EventHandler
     public void Join(PlayerJoinEvent event)
     {
+        for(Player p : Bukkit.getOnlinePlayers())
+        {
+            GlowAPI.setGlowing(event.getPlayer(), false, p);
+        }
         if(GameVariable.Instance().getGameState().equals(GameVariable.GameState.PLAY))
         {
             for(String stringPlayer : GameVariable.Instance().getGamePlayerList())

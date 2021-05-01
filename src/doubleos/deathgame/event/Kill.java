@@ -39,6 +39,7 @@ public class Kill implements Listener
 
                         KillerCommon common = new KillerCommon();
                         common.initCommon(event.getEntity());
+                        event.getEntity().performCommand("살인자연구소시작아이템 설정");
                         event.getEntity().getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + " 당신은 전도를 받아 살인마로 다시 부활합니다.");
                         GameVariable.Instance().addKillerListName(event.getEntity());
                         GameVariable.Instance().setHidden2Targer(null);
@@ -111,8 +112,7 @@ public class Kill implements Listener
     {
         for(String stringPlayer : GameVariable.Instance().getGamePlayerList())
         {
-            Player p = Bukkit.getPlayer(stringPlayer);
-            if(p.getPlayer().equals(player))
+            if(stringPlayer.equals(player.getName()))
             {
                 return true;
             }

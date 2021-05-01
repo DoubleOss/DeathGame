@@ -90,7 +90,7 @@ public class MechanicalRepair implements Listener
     {
         if(event.getInventory().getTitle().equalsIgnoreCase("기계 수리"))
         {
-            if(MissionManager.Instance().getMission1Success() == false)
+            if(MissionManager.Instance().getMission2Success() == false)
             {
                 event.setCancelled(true);
                 if(event.getCurrentItem().getType().equals(Material.GOLD_NUGGET))
@@ -111,7 +111,7 @@ public class MechanicalRepair implements Listener
     {
         if(event.getInventory().getTitle().equalsIgnoreCase("기계 수리"))
         {
-            if(MissionManager.Instance().getMission1Success() == false)
+            if(MissionManager.Instance().getMission2Success() == false)
             {
                 event.setCancelled(true);
                 if(event.getRawSlot() == 16)
@@ -135,7 +135,7 @@ public class MechanicalRepair implements Listener
 
     public void openInventory(final HumanEntity ent)
     {
-        if(MissionManager.Instance().getMission1Success() == false)
+        if(MissionManager.Instance().getMission2Success() == false)
             ent.openInventory(m_inv);
     }
 
@@ -146,7 +146,9 @@ public class MechanicalRepair implements Listener
         if(event.getInventory().getItem(10) != null && event.getInventory().getItem(12) != null && event.getInventory().getItem(14) != null)
         {
             event.getWhoClicked().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE + ": 기계를 재작동 시키셨습니다.");
-            MissionManager.Instance().setMission1Success(true);
+            //event.getWhoClicked().getInventory().remove(Material.GOLD_NUGGET);
+            event.getWhoClicked().getInventory().removeItem(new ItemStack[]{ new ItemStack(Material.GOLD_NUGGET, 3)});
+            MissionManager.Instance().setMission2Success(true);
             event.getWhoClicked().closeInventory();
             for(Player p :Bukkit.getOnlinePlayers())
             {

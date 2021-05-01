@@ -48,6 +48,11 @@ public class Utils
         }
     }
 
+    public void inventoryClear(Player player)
+    {
+        player.getInventory().clear();
+        player.getEquipment().clear();
+    }
     public void randomTeleport(Player player)
     {
         ArrayList<Location> locations = m_stageTeleportLoc.get(GameVariable.Instance().getGameStage());
@@ -80,22 +85,21 @@ public class Utils
         lab_locations.add(new Location(Bukkit.getWorld("world"), -313, 62, 19));
         lab_locations.add(new Location(Bukkit.getWorld("world"), -325, 62, -28));
 
-        factory_locations.add(new Location(Bukkit.getWorld("world"), -513, 62, 100));
-        factory_locations.add(new Location(Bukkit.getWorld("world"), -515, 62, 48));
-        factory_locations.add(new Location(Bukkit.getWorld("world"), -524, 69, 27));
-        factory_locations.add(new Location(Bukkit.getWorld("world"), -552, 62, 48));
-        factory_locations.add(new Location(Bukkit.getWorld("world"), -575, 69, 85));
-        factory_locations.add(new Location(Bukkit.getWorld("world"), -540, 62, 64));
-        factory_locations.add(new Location(Bukkit.getWorld("world"), -507, 62, 72));
+        cathedral_locations.add(new Location(Bukkit.getWorld("world"), -513, 62, 100));
+        cathedral_locations.add(new Location(Bukkit.getWorld("world"), -515, 62, 48));
+        cathedral_locations.add(new Location(Bukkit.getWorld("world"), -524, 69, 27));
+        cathedral_locations.add(new Location(Bukkit.getWorld("world"), -552, 62, 48));
+        cathedral_locations.add(new Location(Bukkit.getWorld("world"), -575, 69, 85));
+        cathedral_locations.add(new Location(Bukkit.getWorld("world"), -540, 62, 64));
+        cathedral_locations.add(new Location(Bukkit.getWorld("world"), -507, 62, 72));
 
-
-        cathedral_locations.add(new Location(Bukkit.getWorld("world"), -424, 62, 79));
-        cathedral_locations.add(new Location(Bukkit.getWorld("world"), -361, 62, 81));
-        cathedral_locations.add(new Location(Bukkit.getWorld("world"), -414, 62, 89));
-        cathedral_locations.add(new Location(Bukkit.getWorld("world"), -404, 74, 157));
-        cathedral_locations.add(new Location(Bukkit.getWorld("world"), -366, 74, 114));
-        cathedral_locations.add(new Location(Bukkit.getWorld("world"), -401, 62, 140));
-        cathedral_locations.add(new Location(Bukkit.getWorld("world"), -374, 62, 71));
+        factory_locations.add(new Location(Bukkit.getWorld("world"), -424, 62, 79));
+        factory_locations.add(new Location(Bukkit.getWorld("world"), -361, 62, 81));
+        factory_locations.add(new Location(Bukkit.getWorld("world"), -414, 62, 89));
+        factory_locations.add(new Location(Bukkit.getWorld("world"), -404, 74, 157));
+        factory_locations.add(new Location(Bukkit.getWorld("world"), -366, 74, 114));
+        factory_locations.add(new Location(Bukkit.getWorld("world"), -401, 62, 140));
+        factory_locations.add(new Location(Bukkit.getWorld("world"), -374, 62, 71));
 
 
         m_stageTeleportLoc.put(GameVariable.GameStage.LAB, lab_locations);

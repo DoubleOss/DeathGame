@@ -36,23 +36,28 @@ public class PlayerVariable
     KillerType m_killerType;
 
 
-    public PlayerVariable(Player m_player)
+    public PlayerVariable(Player player)
     {
-        this.m_player = m_player.getName();
-        this.m_humanType = HumanType.HUMAN;
-        this.m_killerType = KillerType.NONE;
+        m_player = player.getName();
+        m_humanType = HumanType.HUMAN;
+        m_killerType = KillerType.NONE;
         //Main.instance.variablePlayer.put(m_player, this);
-        GameVariable.Instance().getPlayerVariableMap().put(m_player.getName(), this);
+        GameVariable.Instance().getPlayerListVariableMap().put(player.getName(), this);
     }
 
 
+    public void addGameVariable()
+    {
+        GameVariable.Instance().getPlayerVariableMap().put(this.m_player, this);
+    }
+
     public void resetPlayerVariable()
     {
-        this.m_humanType = HumanType.HUMAN;
-        this.m_killerType = KillerType.NONE;
-        this.m_observer = false;
-        this.m_repair = false;
-        this.m_soundPlaying = false;
+        m_humanType = HumanType.HUMAN;
+        m_killerType = KillerType.NONE;
+        m_observer = false;
+        m_repair = false;
+        m_soundPlaying = false;
     }
 
     public void saveConfig()
@@ -74,12 +79,12 @@ public class PlayerVariable
 
     public void setHumanType(HumanType type)
     {
-        this.m_humanType = type;
+        m_humanType = type;
     }
 
     public HumanType getHumanType()
     {
-        return this.m_humanType;
+        return m_humanType;
     }
 
     public boolean getObserver()

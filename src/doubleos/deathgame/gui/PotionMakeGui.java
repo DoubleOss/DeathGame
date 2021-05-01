@@ -183,7 +183,6 @@ public class PotionMakeGui implements Listener
                 boolean item_check1 = event.getWhoClicked().getInventory().containsAtLeast(PotionRecipe.Instance().getPotionMatrial().get(m_potion).get(0), PotionRecipe.Instance().getPotionMatrial().get(m_potion).get(0).getAmount());
                 boolean item_check2 = event.getWhoClicked().getInventory().containsAtLeast(PotionRecipe.Instance().getPotionMatrial().get(m_potion).get(1), PotionRecipe.Instance().getPotionMatrial().get(m_potion).get(1).getAmount());
                 boolean item_check3 = event.getWhoClicked().getInventory().containsAtLeast(PotionRecipe.Instance().getPotionMatrial().get(m_potion).get(2), PotionRecipe.Instance().getPotionMatrial().get(m_potion).get(2).getAmount());
-                event.getWhoClicked().sendMessage(Boolean.toString(item_check1)+" " + Boolean.toString(item_check2) +" " + Boolean.toString(item_check3));
                 if(item_check1 && item_check2 && item_check3)
                 {
                     ArrayList<ItemStack> itemlist= PotionRecipe.Instance().getPotionMatrial().get(m_potion);
@@ -197,6 +196,7 @@ public class PotionMakeGui implements Listener
                     event.getInventory().setItem(30, item);
                     event.getInventory().setItem(31, item);
                     event.getInventory().setItem(32, item);
+                    MissionManager.Instance().successMissionbox();
                     if(mission.getMission1PotionCount() == 1)
                     {
                         event.getWhoClicked().closeInventory();

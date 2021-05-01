@@ -75,8 +75,7 @@ public class DefectiveGame implements Listener
         }
         m_inv.setItem(22,createGuiItem(Material.REDSTONE_BLOCK, ChatColor.WHITE+"게임시작", ""));
 
-        GameVariable.Instance().addDefectiveClassGetPlayer(this, m_player);
-        Bukkit.broadcastMessage(Integer.toString(m_value.size()));
+        GameVariable.Instance().addDefectiveClassGetPlayer(this, m_player.getName());
 
     }
 
@@ -94,8 +93,8 @@ public class DefectiveGame implements Listener
                     if(event.getCurrentItem().getType() == Material.REDSTONE_BLOCK)
                     {
                         playGame((Player) event.getWhoClicked(), event);
-                        GameVariable.Instance().getDefectiveGameClassPlayer((Player)event.getWhoClicked()).m_gameStart = true;
-                        GameVariable.Instance().getDefectiveGameClassPlayer((Player)event.getWhoClicked()).m_shuffling = true;
+                        GameVariable.Instance().getDefectiveGameClassPlayer(event.getWhoClicked().getName()).m_gameStart = true;
+                        GameVariable.Instance().getDefectiveGameClassPlayer(event.getWhoClicked().getName()).m_shuffling = true;
 
                     }
                 }
@@ -109,7 +108,7 @@ public class DefectiveGame implements Listener
     {
         if(event.getInventory().getTitle().equalsIgnoreCase("불량품 게임"))
         {
-            DefectiveGame cell = GameVariable.Instance().getDefectiveGameClassPlayer((Player)event.getWhoClicked());
+            DefectiveGame cell = GameVariable.Instance().getDefectiveGameClassPlayer(event.getWhoClicked().getName());
             event.setCancelled(true);
             if(event.getCurrentItem() != null)
             {
@@ -132,7 +131,8 @@ public class DefectiveGame implements Listener
                                     @Override
                                     public void run()
                                     {
-                                        MissionManager.Instance().setMission1Success(true);
+                                        MissionManager.Instance().setMission2Success(true);
+                                        MissionManager.Instance().successMissionbox();
                                         cell.m_gameStart = false;
                                         event.getWhoClicked().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE + "불량품 찾기 미션을 클리어 하셨습니다.");
                                         event.getWhoClicked().closeInventory();
@@ -145,7 +145,7 @@ public class DefectiveGame implements Listener
                                             }
                                         }
                                     }
-                                }, 60l);
+                                }, 20l);
                             }
                         }
                     }
@@ -158,7 +158,7 @@ public class DefectiveGame implements Listener
     {
         if(event.getInventory().getTitle().equalsIgnoreCase("불량품 게임"))
         {
-            DefectiveGame cell = GameVariable.Instance().getDefectiveGameClassPlayer((Player)event.getPlayer());
+            DefectiveGame cell = GameVariable.Instance().getDefectiveGameClassPlayer(event.getPlayer().getName());
             GameVariable.Instance().getdefectiveClassHash().remove(m_player);
             cell.m_prizeCount = 0;
             cell.m_guiAnimationCount = 0;
@@ -204,8 +204,8 @@ public class DefectiveGame implements Listener
         BukkitTask task = new BukkitRunnable()
         {
 
-            ArrayList<String> arr = GameVariable.Instance().getDefectiveGameClassPlayer(player).getResultArray();
-            DefectiveGame cell = GameVariable.Instance().getDefectiveGameClassPlayer(player);
+            ArrayList<String> arr = GameVariable.Instance().getDefectiveGameClassPlayer(player.getName()).getResultArray();
+            DefectiveGame cell = GameVariable.Instance().getDefectiveGameClassPlayer(player.getName());
             @Override
             public void run()
             {
@@ -232,7 +232,7 @@ public class DefectiveGame implements Listener
                     if(event.getInventory().getItem(cell.m_guiAnimationCount-2).getType().equals(Material.STAINED_GLASS_PANE))
                     {
                         event.getInventory().setItem(53, createGuiGlassItem(Material.STAINED_GLASS_PANE, (short)7, "", ""));
-                        GameVariable.Instance().getDefectiveGameClassPlayer(player).m_shuffling = false;
+                        GameVariable.Instance().getDefectiveGameClassPlayer(player.getName()).m_shuffling = false;
                         cell.m_guiAnimationCount = 0;
                         this.cancel();
                     }

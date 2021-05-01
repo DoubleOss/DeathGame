@@ -70,6 +70,8 @@ public class KillerHidden3 implements Listener , Hidden
             @Override
             public void run()
             {
+                if(GameVariable.Instance().getGameState().equals(GameVariable.GameState.END))
+                    this.cancel();
                 if(m_hiddenAbliltyTime <= 0)
                 {
                     killer.getInventory().setHelmet(air);
@@ -81,6 +83,8 @@ public class KillerHidden3 implements Listener , Hidden
                     gamevariable.setMissionRotate();
                     gamevariable.setIsKillerCheckTras(false);
                     gamevariable.getKillerHiddenClass().remove(killer.getName());
+                    m_skill1Active = false;
+                    MissionManager.Instance().resetMissionBox();
                     removeInvisible(killer);
                     for(Player p :Bukkit.getOnlinePlayers())
                     {
@@ -119,57 +123,66 @@ public class KillerHidden3 implements Listener , Hidden
     void hidden3RightClickEvent(PlayerInteractEvent event)
     {
         MissionManager mission = MissionManager.Instance();
-        if(event.getAction().equals(Action.RIGHT_CLICK_AIR))
+        GameVariable gameVariable = GameVariable.Instance();
+        if(gameVariable.getGameState().equals(GameVariable.GameState.PLAY))
         {
-            if (event.getHand() != EquipmentSlot.HAND)
-            {
+            if(gameVariable.getPlayerListVariableMap().get(event.getPlayer().getName()).getObserver())
                 return;
-            }
-            if(event.getPlayer().equals(GameVariable.Instance().getOrignalKillerPlayer()))
+            if(event.getAction().equals(Action.RIGHT_CLICK_AIR))
             {
-                if(GameVariable.Instance().getIsKillerCheckTras() == true)
+                if (event.getHand() != EquipmentSlot.HAND)
                 {
-                    ItemStack stack1  = GameItem.Instance().m_killerHidden3_Ability1_Item;
-                    if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack1.getType()))
+                    return;
+                }
+                if(event.getPlayer().equals(GameVariable.Instance().getOrignalKillerPlayer()))
+                {
+                    if(gameVariable.getIsKillerCheckTras() == true)
                     {
-                        if(mission.getMission1Success() == true && mission.getMission2Success() == true)
+                        ItemStack stack1  = GameItem.Instance().m_killerHidden3_Ability1_Item;
+                        if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack1.getType()))
                         {
-                            if(m_skill1Active == false)
+                            if(gameVariable.getPlayerVariable().get(event.getPlayer().getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER)
+                                    ||(mission.getMission1Success() == true && mission.getMission2Success() == true))
                             {
-                                if(m_skill1Cooltime <= 0)
+                                if(m_skill1Active == false)
                                 {
-                                    m_skill1Cooltime = 20;
-                                    setInvisible(event.getPlayer());
+                                    if(m_skill1Cooltime <= 0)
+                                    {
+                                        m_skill1Cooltime = 20;
+                                        setInvisible(event.getPlayer());
+                                    }
                                 }
-                            }
-                            else if(m_skill1Active == true)
-                            {
-                                removeInvisible(event.getPlayer());
-                            }
+                                else if(m_skill1Active == true)
+                                {
+                                    removeInvisible(event.getPlayer());
+                                }
 
+                            }
                         }
-                    }
-                    ItemStack stack2  = GameItem.Instance().m_killerHidden3_Ability2_Item;
-                    if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack2.getType()))
-                    {
-                        if(mission.getMission1Success() == true && mission.getMission2Success() == true)
+                        ItemStack stack2  = GameItem.Instance().m_killerHidden3_Ability2_Item;
+                        if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack2.getType()))
                         {
-                            if(m_skill2Cooltime <= 0)
+                            if(gameVariable.getPlayerVariable().get(event.getPlayer().getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER)
+                                    ||(mission.getMission1Success() == true && mission.getMission2Success() == true))
                             {
-                                shootSnowBall(event.getPlayer());
-                            }
-                            else
-                            {
-                                event.getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE + " 아직 스킬을 사용할 수 없습니다.");
+                                if(m_skill2Cooltime <= 0)
+                                {
+                                    shootSnowBall(event.getPlayer());
+                                }
+                                else
+                                {
+                                    event.getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +" 쿨타임이 " + m_skill2Cooltime+ "초 남으셨습니다.");
+
+                                }
 
                             }
-
                         }
-                    }
 
+                    }
                 }
             }
         }
+
     }
 
     @EventHandler
@@ -181,7 +194,7 @@ public class KillerHidden3 implements Listener , Hidden
             {
                 if(event.getEntity() instanceof Snowball)
                 {
-                    PotionEffect effect1 = new PotionEffect(PotionEffectType.SLOW, 40, 0);
+                    PotionEffect effect1 = new PotionEffect(PotionEffectType.SLOW, 40, 2);
                     if(event.getHitEntity() instanceof Player)
                     {
                         ((Player) event.getHitEntity()).addPotionEffect(effect1, true);
@@ -190,7 +203,8 @@ public class KillerHidden3 implements Listener , Hidden
                         {
                             if(p.isOp())
                             {
-                                p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ ((Player) event.getHitEntity()).getPlayer().getName() + ChatColor.WHITE+ " 위산 분비 공격에 당해 독과 멀미에 걸립니다.");
+                                p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ ((Player) event.getHitEntity()).getPlayer().getName() +
+                                        ChatColor.WHITE+ " 인형의 눈알에 맞아 잠시 구속에 걸립니다.");
                             }
                         }
                     }
@@ -236,7 +250,7 @@ public class KillerHidden3 implements Listener , Hidden
         {
             if(player.isOp())
             {
-                player.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.WHITE + "살인마가 " + ChatColor.RED +p.getPlayer()+ ChatColor.WHITE + " 님이 은신을 사용하셨습니다.");
+                player.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.WHITE + "살인마가 " + ChatColor.RED +p.getPlayer().getName()+ ChatColor.WHITE + " 님이 은신을 사용하셨습니다.");
             }
         }
         BukkitTask task = new BukkitRunnable()

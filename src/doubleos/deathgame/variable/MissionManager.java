@@ -3,13 +3,12 @@ package doubleos.deathgame.variable;
 import doubleos.deathgame.ablilty.KillerHidden1;
 import doubleos.deathgame.ablilty.KillerHidden2;
 import doubleos.deathgame.ablilty.KillerHidden3;
-import doubleos.deathgame.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -20,8 +19,7 @@ public class MissionManager
     {
         MISSION1,
         MISSION2,
-        MISSION3,
-        MISSION4;
+        MISSION3;
     }
 
     //싱글톤
@@ -36,8 +34,12 @@ public class MissionManager
         return _instance;
     }
     HashMap<Location, RepairBox> m_repairBoxClassMap = new HashMap<>();
-
     ArrayList<Location> m_repairBlock = new ArrayList<>();
+
+    ArrayList<Location> m_missionBoxList = new ArrayList<>();
+    HashMap<Location, MissionBox> m_missionBoxMap = new HashMap<>();
+
+    ArrayList<Location> m_FactoryLoc = new ArrayList<>();
 
     ActiveMission m_activeMissoion = ActiveMission.MISSION1;
 
@@ -50,6 +52,10 @@ public class MissionManager
     int m_Mission1_PotionCount = 0;
 
     int m_BoxRepair = 0;
+
+    int m_FactoryHiddenCount = 0;
+
+    public Location m_MissionBoxUseLocation;
 
 
     public void setMission()
@@ -68,19 +74,13 @@ public class MissionManager
             case MISSION2:
             {
                 m_missoin1_Title = "소독";
-                m_missoin2_Title = "위치 조사";
+                m_missoin2_Title = "기계 수리";
                 break;
             }
             case MISSION3:
             {
-                m_missoin1_Title = "기계 수리";
-                m_missoin2_Title = "세포 찾기";
-                break;
-            }
-            case MISSION4:
-            {
-                m_missoin1_Title = "불량품 찾기";
-                m_missoin2_Title = "리스트 분류";
+                m_missoin1_Title = "세포 찾기";
+                m_missoin2_Title = "불량품 찾기";
                 break;
             }
         }
@@ -100,6 +100,9 @@ public class MissionManager
 
         m_repairBoxClassMap.clear();
         m_repairBlock.clear();
+        m_missionBoxMap.clear();
+        m_missionBoxList.clear();
+
 
     }
 
@@ -132,15 +135,125 @@ public class MissionManager
 
     public void initRepairBoxList()
     {
-        if(GameVariable.Instance().getGameState().equals(GameVariable.GameStage.LAB))
+        if(GameVariable.Instance().getGameStage().equals(GameVariable.GameStage.LAB))
         {
-            Location location1 = new Location(Bukkit.getWorld("World"), 1, 1, 1);
-            Block block1 = Bukkit.getWorld("world").getBlockAt(location1);
-            m_repairBlock.add(location1);
-            m_repairBoxClassMap.put(location1, new RepairBox());
+
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -314, 63, 19));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -311, 63, -48));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -368, 63, -11));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -315, 72, -6));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -357, 72, -39));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -349, 72, 45));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -349, 80, -29));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -334, 80, 26));
+
+        }
+        else if(GameVariable.Instance().getGameStage().equals(GameVariable.GameStage.CATHEDRAL))
+        {
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -559, 63, 77));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -543, 63, 54));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -501, 63, 70));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -507, 64, 85));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -488, 71, 84));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -555, 63, 46));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -532, 70, 61));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -537, 63, 59));
+
+        }
+        else if(GameVariable.Instance().getGameStage().equals(GameVariable.GameStage.FACTORY))
+        {
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -418, 63, 98));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -397, 63, 77));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -384, 63, 99));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -408, 63, 92));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -360, 63, 88));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -420, 63, 144));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -371, 63, 146));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -423, 75, 156));
+
+        }
+        for(int i = 0; i<m_repairBlock.size(); i++)
+        {
+            m_repairBoxClassMap.put(m_repairBlock.get(i), new RepairBox());
+
         }
 
     }
+
+    public void initMissionBox()
+    {
+        if(GameVariable.Instance().getGameStage().equals(GameVariable.GameStage.LAB))
+        {
+            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -367, 71, -50));
+            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -334, 71, 45));
+            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -319, 79, -50));
+            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -319, 62, -48));
+
+        }
+        else if(GameVariable.Instance().getGameStage().equals(GameVariable.GameStage.CATHEDRAL))
+        {
+            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -512, 62, 41));
+            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -568, 70, 56));
+            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -498, 63, 69));
+            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -523, 62, 75));
+
+        }
+        else if(GameVariable.Instance().getGameStage().equals(GameVariable.GameStage.FACTORY))
+        {
+            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -374, 69, 144));
+            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -441, 62, 132));
+            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -398, 62, 163));
+            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -393, 62, 75));
+            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -391, 62, 92));
+
+        }
+        for(int i = 0; i<m_missionBoxList.size(); i++)
+        {
+            m_missionBoxMap.put(m_missionBoxList.get(i), new MissionBox());
+        }
+    }
+
+
+    public void initFactoryHiddenLoc()
+    {
+        m_FactoryLoc.add(new Location(Bukkit.getWorld("world"), -415, 62, 72));
+        m_FactoryLoc.add(new Location(Bukkit.getWorld("world"), -417, 62, 72));
+        m_FactoryLoc.add(new Location(Bukkit.getWorld("world"), -419, 62, 72));
+        m_FactoryLoc.add(new Location(Bukkit.getWorld("world"), -415, 62, 75));
+        m_FactoryLoc.add(new Location(Bukkit.getWorld("world"), -417, 62, 75));
+        m_FactoryLoc.add(new Location(Bukkit.getWorld("world"), -419, 62, 75));
+
+    }
+
+    public HashMap<Location, MissionBox> getMissionBoxMap()
+    {
+        return m_missionBoxMap;
+    }
+    public ArrayList<Location> getMissionBoxList()
+    {
+        return m_missionBoxList;
+    }
+
+    public ArrayList<Location> getFactoryLoc()
+    {
+        return m_FactoryLoc;
+    }
+
+    public void resetMissionBox()
+    {
+        for(int i = 0; i<m_missionBoxList.size(); i++)
+        {
+            m_missionBoxMap.get(m_missionBoxList.get(i)).setBoxUse(false);
+        }
+    }
+    public void successMissionbox()
+    {
+        m_missionBoxMap.get(m_MissionBoxUseLocation).setBoxUse(true);
+        m_MissionBoxUseLocation = null;
+    }
+
+
+
 
     public HashMap<Location, RepairBox> getRepairBoxClassMap()
     {
@@ -207,13 +320,14 @@ public class MissionManager
     public void setBoxRepair(int number)
     {
         m_BoxRepair = number;
-        if(m_BoxRepair == 8)
+        if(m_BoxRepair >= 8)
         {
             for(String stringPlayer : GameVariable.Instance().getGamePlayerList())
             {
                 Player p  = Bukkit.getPlayer(stringPlayer);
                 p.sendTitle("[!]", ChatColor.GREEN+ "배전박스가 전부 수리되어 탈출구가 열렸습니다.", 1, 30, 1);
             }
+            Bukkit.broadcastMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE +" 배전박스가 전부 수리되어 탈출구가 열렸습니다.");
         }
     }
 
@@ -222,9 +336,18 @@ public class MissionManager
         m_Mission1_PotionCount = number;
         if(m_Mission1_PotionCount ==1)
         {
-            m_mission1_Success = true;
+            setMission1Success(true);
 
         }
+    }
+
+    public int getFactoryHiddenCount()
+    {
+        return m_FactoryHiddenCount;
+    }
+    public void setFactoryHiddenCount(int count)
+    {
+        m_FactoryHiddenCount = count;
     }
 
 }

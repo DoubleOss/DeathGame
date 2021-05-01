@@ -73,18 +73,20 @@ public class KillerHidden1 implements Listener, Hidden
             @Override
             public void run()
             {
+                if(GameVariable.Instance().getGameState().equals(GameVariable.GameState.END))
+                    this.cancel();
                 if(m_hiddenAbliltyTime <= 0)
                 {
                     killer.getInventory().setHelmet(air);
                     killer.sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE +" 변신이 풀렸습니다!");
                     killer.getInventory().remove(GameItem.Instance().m_killerHidden1_Ability1_Item);
                     killer.getInventory().remove(GameItem.Instance().m_killerHidden1_Ability2_Item);
-
                     m_hiddenAbliltyTime = 0;
                     GameVariable.Instance().setMissionRotateNumber(GameVariable.Instance().getMissionRotateNumber()+1);
                     GameVariable.Instance().setMissionRotate();
                     GameVariable.Instance().setIsKillerCheckTras(false);
                     GameVariable.Instance().getKillerHiddenClass().remove(killer.getName());
+                    MissionManager.Instance().resetMissionBox();
                     for(Player p :Bukkit.getOnlinePlayers())
                     {
                         if(p.isOp())
@@ -112,40 +114,56 @@ public class KillerHidden1 implements Listener, Hidden
     void hidden1RightClickEvent(PlayerInteractEvent event)
     {
         MissionManager mission = MissionManager.Instance();
-        if(event.getAction().equals(Action.RIGHT_CLICK_AIR))
+        GameVariable gameVariable = GameVariable.Instance();
+        if(gameVariable.getGameState().equals(GameVariable.GameState.PLAY))
         {
-            if (event.getHand() != EquipmentSlot.HAND)
-            {
+            if(gameVariable.getPlayerListVariableMap().get(event.getPlayer().getName()).getObserver())
                 return;
-            }
-            if(event.getPlayer().equals(GameVariable.Instance().getOrignalKillerPlayer()))
+            if(event.getAction().equals(Action.RIGHT_CLICK_AIR))
             {
-                if(GameVariable.Instance().getIsKillerCheckTras() == true)
+                if (event.getHand() != EquipmentSlot.HAND)
                 {
-                    ItemStack stack1 = GameItem.Instance().m_killerHidden1_Ability1_Item;
-                    if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack1.getType()))
+                    return;
+                }
+                if(event.getPlayer().equals(gameVariable.getOrignalKillerPlayer()))
+                {
+                    if(gameVariable.getIsKillerCheckTras() == true)
                     {
-                        if(mission.getMission1Success() == true && mission.getMission2Success() == true)
+                        ItemStack stack1 = GameItem.Instance().m_killerHidden1_Ability1_Item;
+                        if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack1.getType()))
                         {
-                            randomLocation(event.getPlayer());
-                        }
-                    }
-                    ItemStack stack2  = GameItem.Instance().m_killerHidden1_Ability2_Item;
-                    if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack2.getType()))
-                    {
-                        if(mission.getMission1Success() == true && mission.getMission2Success() == true)
-                        {
-
-                            if(m_skill2Cooltime <= 0)
+                            if(gameVariable.getPlayerVariable().get(event.getPlayer().getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER)
+                                    ||(mission.getMission1Success() == true && mission.getMission2Success() == true))
                             {
-                                shootEgg(event.getPlayer());
+                                if(m_skill1Cooltime <= 0)
+                                    randomLocation(event.getPlayer());
+                                else
+                                {
+                                    event.getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +" 쿨타임이 " + m_skill1Cooltime+ "초 남으셨습니다.");
+                                }
                             }
+                        }
+                        ItemStack stack2  = GameItem.Instance().m_killerHidden1_Ability2_Item;
+                        if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack2.getType()))
+                        {
+                            if(gameVariable.getPlayerVariable().get(event.getPlayer().getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER)
+                                    ||(mission.getMission1Success() == true && mission.getMission2Success() == true))
+                            {
 
+                                if(m_skill2Cooltime <= 0)
+                                {
+                                    shootEgg(event.getPlayer());
+                                }
+                                else
+                                    event.getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +" 쿨타임이 " + m_skill2Cooltime+ "초 남으셨습니다.");
+
+                            }
                         }
                     }
                 }
             }
         }
+
     }
 
     @EventHandler
@@ -208,7 +226,7 @@ public class KillerHidden1 implements Listener, Hidden
 
     void randomLocation(Player p)
     {
-        m_skill1Cooltime = 120;
+        m_skill1Cooltime = 60;
         radnomTeleport(p);
 
         BukkitTask task = new BukkitRunnable()

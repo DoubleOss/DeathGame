@@ -1,15 +1,16 @@
 package doubleos.deathgame.variable;
 
 import doubleos.deathgame.Main;
-import doubleos.deathgame.ablilty.Hidden;
-import doubleos.deathgame.ablilty.KillerCommon;
-import doubleos.deathgame.ablilty.KillerHidden2;
+import doubleos.deathgame.ablilty.*;
 import doubleos.deathgame.gui.CellularGame;
 import doubleos.deathgame.gui.DefectiveGame;
 import javafx.scene.control.Cell;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -56,8 +57,9 @@ public class GameVariable
     HashMap<String, Hidden> m_killerHiddenClass = new HashMap<>();
 
     HashMap<String, PlayerVariable> m_playerVariableMap = new HashMap<>();
+    HashMap<String, PlayerVariable> m_playerListVariable = new HashMap<>();
 
-    HashMap<String, PlayerVariable> m_playerVariable = new HashMap<>();
+
 
 
     GameStage m_GameStage = GameStage.LAB;
@@ -107,10 +109,29 @@ public class GameVariable
                     //Bukkit.broadcastMessage("@");
                     if(m_TimeStart == false)
                         this.cancel();
+                    if(m_GameTime_Min == 1)
+                    {
+                        if(m_GameTime_Sec == 59)
+                        {
+                            for(String s : m_killerPlayerList)
+                            {
+                                Player p = Bukkit.getPlayer(s);
+                                setBerserker(p);
+                            }
+                            for(Player loopPlayer :Bukkit.getOnlinePlayers())
+                            {
+                                if(loopPlayer.isOp())
+                                {
+                                    loopPlayer.sendMessage(ChatColor.GOLD + "[알림] "+  ChatColor.WHITE +" 살인마들이 폭주하였습니다.");
+                                }
+                            }
+                        }
+                    }
                     if(m_GameTime_Min == 0)
                     {
                         if(m_GameTime_Sec == 0)
                         {
+                            Bukkit.broadcastMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE +" 제한시간 20분이 종료되어 탈출구가 열립니다");
                             this.cancel();
                         }
                         else
@@ -236,6 +257,29 @@ public class GameVariable
         }
 
     }
+    void setBerserker(Player player)
+    {
+        GameVariable.Instance().getPlayerVariableMap().get(player.getName()).setKillerType(PlayerVariable.KillerType.BERSERKER);
+        PotionEffect effect = new PotionEffect(PotionEffectType.SPEED, 2400, 0);
+        player.addPotionEffect(effect, true);
+        GameVariable.Instance().setIsKillerCheckTras(true);
+        switch(GameVariable.Instance().getGameStage())
+        {
+            case LAB:
+                KillerHidden1 hidden1 = new KillerHidden1();
+                hidden1.initKillerHidden1();
+                break;
+            case CATHEDRAL:
+                KillerHidden2 hidden2 = new KillerHidden2();
+                hidden2.initKillerHidden2();
+                break;
+            case FACTORY:
+                KillerHidden3 hidden3 = new KillerHidden3();
+                hidden3.initKillerHidden3();
+                break;
+        }
+
+    }
 
     public String getHidden2Target()
     {
@@ -276,14 +320,14 @@ public class GameVariable
 
     public void setRepairBoxCount(int number)
     {
-        m_repairBoxCount = number;
+        MissionManager.Instance().setBoxRepair(number);
     }
     public int getRepairBoxCount()
     {
-        return m_repairBoxCount;
+        return MissionManager.Instance().getBoxRepair();
     }
 
-    public CellularGame getCellGameClassPlayer(Player player)
+    public CellularGame getCellGameClassPlayer(String player)
     {
         return m_cellGameClassPlayer.get(player);
     }
@@ -297,14 +341,14 @@ public class GameVariable
     }
 
 
-    public DefectiveGame getDefectiveGameClassPlayer(Player player)
+    public DefectiveGame getDefectiveGameClassPlayer(String player)
     {
         return m_defectiveGameClassPlayer.get(player);
     }
 
-    public void addDefectiveClassGetPlayer(DefectiveGame defclass, Player player)
+    public void addDefectiveClassGetPlayer(DefectiveGame defclass, String player)
     {
-        m_defectiveGameClassPlayer.put(player.getName(), defclass);
+        m_defectiveGameClassPlayer.put(player, defclass);
     }
     public HashMap<String, DefectiveGame> getdefectiveClassHash()
     {
@@ -318,13 +362,20 @@ public class GameVariable
     {
         m_killerHiddenClass.put(player.getName(), hiddenclass);
     }
-    public void addPlayerVarible(Player player, PlayerVariable variable)
+    public void addPlayerVarible()
     {
-        m_playerVariable.put(player.getName(), variable);
+        for(Player p : Bukkit.getOnlinePlayers())
+        {
+            if(!m_playerListVariable.get(p.getName()).getObserver())
+            {
+                m_playerVariableMap.put(p.getName(), m_playerListVariable.get(p.getName()));
+                addGamePlayerList(p);
+            }
+        }
     }
     public HashMap<String, PlayerVariable> getPlayerVariable()
     {
-        return m_playerVariable;
+        return m_playerVariableMap;
     }
 
     public void setTeleporting(boolean bool)
@@ -341,23 +392,21 @@ public class GameVariable
         return m_playerVariableMap;
     }
 
+    public HashMap<String, PlayerVariable> getPlayerListVariableMap()
+    {
+        return  m_playerListVariable;
+    }
+
     public void setMissionRotate()
     {
         if(m_MissionRotateNumber == 2)
         {
-            m_MissionRotateNumber = 2;
             MissionManager.Instance().setActiveMission(MissionManager.ActiveMission.MISSION2);
 
         }
         else if (m_MissionRotateNumber ==3)
         {
-            m_MissionRotateNumber = 3;
             MissionManager.Instance().setActiveMission(MissionManager.ActiveMission.MISSION3);
-        }
-        else if (m_MissionRotateNumber == 4)
-        {
-            m_MissionRotateNumber = 4;
-            MissionManager.Instance().setActiveMission(MissionManager.ActiveMission.MISSION4);
         }
         else
         {
@@ -374,18 +423,29 @@ public class GameVariable
         for(String stringPlayer : getGamePlayerList())
         {
             Player p = Bukkit.getPlayer(stringPlayer);
-            p.setGameMode(GameMode.SURVIVAL);
-            getPlayerVariableMap().get(p.getName()).resetPlayerVariable();
-            p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
+            if(p!= null)
+            {
+                if(getPlayerListVariableMap().get(stringPlayer) == null)
+                {
+                    PlayerVariable playerVariable = new PlayerVariable(p);
+                    getPlayerListVariableMap().put(stringPlayer, playerVariable);
+                }
+
+                p.setGameMode(GameMode.SURVIVAL);
+                getPlayerListVariableMap().get(p.getName()).resetPlayerVariable();
+                p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
+            }
+
         }
 
         m_GameTime_Min = 20;
         m_GameTime_Sec = 0;
 
 
+        GameItem.Instance().initGameItem();
         m_killerPlayerList.clear();
         m_GamePlayerList.clear();
-        m_playerVariable.clear();
+        m_playerVariableMap.clear();
 
         m_cellGameClassPlayer.clear();
         m_defectiveGameClassPlayer.clear();

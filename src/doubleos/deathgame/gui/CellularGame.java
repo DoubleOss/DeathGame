@@ -76,7 +76,6 @@ public class CellularGame implements Listener
         m_inv.setItem(22,createGuiItem(Material.REDSTONE_BLOCK, ChatColor.WHITE+"게임시작", ""));
 
         GameVariable.Instance().addCellGameClassGetPlayer(this, m_player);
-        Bukkit.broadcastMessage(Integer.toString(m_value.size()));
 
     }
 
@@ -94,8 +93,8 @@ public class CellularGame implements Listener
                     if(event.getCurrentItem().getType() == Material.REDSTONE_BLOCK)
                     {
                         playGame((Player) event.getWhoClicked(), event);
-                        GameVariable.Instance().getCellGameClassPlayer((Player)event.getWhoClicked()).m_gameStart = true;
-                        GameVariable.Instance().getCellGameClassPlayer((Player)event.getWhoClicked()).m_shuffling = true;
+                        GameVariable.Instance().getCellGameClassPlayer(event.getWhoClicked().getName()).m_gameStart = true;
+                        GameVariable.Instance().getCellGameClassPlayer(event.getWhoClicked().getName()).m_shuffling = true;
 
                     }
                 }
@@ -109,7 +108,7 @@ public class CellularGame implements Listener
     {
         if(event.getInventory().getTitle().equalsIgnoreCase("세포 게임"))
         {
-            CellularGame cell = GameVariable.Instance().getCellGameClassPlayer((Player)event.getWhoClicked());
+            CellularGame cell = GameVariable.Instance().getCellGameClassPlayer(event.getWhoClicked().getName());
             event.setCancelled(true);
             if(event.getCurrentItem() != null)
             {
@@ -132,7 +131,8 @@ public class CellularGame implements Listener
                                     @Override
                                     public void run()
                                     {
-                                        MissionManager.Instance().setMission2Success(true);
+                                        MissionManager.Instance().setMission1Success(true);
+                                        MissionManager.Instance().successMissionbox();
                                         cell.m_gameStart = false;
                                         event.getWhoClicked().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE + "세포찾기 미션을 클리어 하셨습니다.");
                                         event.getWhoClicked().closeInventory();
@@ -145,7 +145,7 @@ public class CellularGame implements Listener
                                             }
                                         }
                                     }
-                                }, 60l);
+                                }, 20l);
                             }
                         }
                     }
@@ -158,7 +158,7 @@ public class CellularGame implements Listener
     {
         if(event.getInventory().getTitle().equalsIgnoreCase("세포 게임"))
         {
-            CellularGame cell = GameVariable.Instance().getCellGameClassPlayer((Player)event.getPlayer());
+            CellularGame cell = GameVariable.Instance().getCellGameClassPlayer(event.getPlayer().getName());
             GameVariable.Instance().getcellClassHash().remove(m_player);
             cell.m_prizeCount = 0;
             cell.m_guiAnimationCount = 0;
@@ -204,14 +204,12 @@ public class CellularGame implements Listener
         BukkitTask task = new BukkitRunnable()
         {
 
-            ArrayList<String> arr = GameVariable.Instance().getCellGameClassPlayer(player).getResultArray();
-            CellularGame cell = GameVariable.Instance().getCellGameClassPlayer(player);
+            ArrayList<String> arr = GameVariable.Instance().getCellGameClassPlayer(player.getName()).getResultArray();
+            CellularGame cell = GameVariable.Instance().getCellGameClassPlayer(player.getName());
             @Override
             public void run()
             {
 
-                Bukkit.broadcastMessage(String.format("%d", cell.m_guiAnimationCount) );
-                Bukkit.broadcastMessage(Integer.toString(arr.size()));
 
                 if(cell.m_guiAnimationCount <= 53)
                 {
@@ -235,7 +233,7 @@ public class CellularGame implements Listener
                     if(event.getInventory().getItem(cell.m_guiAnimationCount-2).getType().equals(Material.STAINED_GLASS_PANE))
                     {
                         event.getInventory().setItem(53, createGuiGlassItem(Material.STAINED_GLASS_PANE, (short)7, "", ""));
-                        GameVariable.Instance().getCellGameClassPlayer(player).m_shuffling = false;
+                        GameVariable.Instance().getCellGameClassPlayer(player.getName()).m_shuffling = false;
                         cell.m_guiAnimationCount = 0;
                         this.cancel();
                     }

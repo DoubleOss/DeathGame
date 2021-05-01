@@ -44,8 +44,13 @@ public class Hidden2Gui implements Listener
         int loopnumber = 0;
         for(String stringPlayer : GameVariable.Instance().getGamePlayerList())
         {
+            loopnumber++;
             Player p = Bukkit.getPlayer(stringPlayer);
-            m_inv.setItem(slot[loopnumber],createGuiItem(Material.RED_ROSE, String.format(ChatColor.WHITE + p.getName()), null));
+            if(!GameVariable.Instance().getOrignalKillerPlayer().equals(p))
+            {
+                m_inv.setItem(slot[loopnumber],createGuiItem(Material.RED_ROSE, String.format(ChatColor.WHITE + p.getName()), null));
+            }
+
         }
 
     }
@@ -108,6 +113,11 @@ public class Hidden2Gui implements Listener
     {
         if(event.getInventory().getTitle().equalsIgnoreCase("기도 지정"))
         {
+
+            if(!event.getClick().equals(ClickType.LEFT))
+            {
+                return;
+            }
             m_target = Bukkit.getServer().getPlayer(event.getCurrentItem().getItemMeta().getDisplayName().replace("§f", ""));
             Player p = (Player) event.getWhoClicked();
             p.sendMessage(ChatColor.RED + "[죽음의 술래잡기]"+ ChatColor.WHITE + " " + ChatColor.RED + m_target.getName() + ChatColor.WHITE +" 님을 전도 대상으로 고르셨습니다.");

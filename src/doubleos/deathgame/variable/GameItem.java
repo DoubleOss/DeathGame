@@ -68,12 +68,14 @@ public class GameItem
         m_killerHidden3_Ability1_Item = createItem(Material.BLAZE_ROD, "은신", "");
         m_killerHidden3_Ability2_Item = createItem(Material.SUGAR, "눈알던지기", "");
 
-        m_FactoryHiddenItem_1 = new ItemStack(Material.DETECTOR_RAIL); // 빨간구슬
-        m_FactoryHiddenItem_2 = new ItemStack(Material.ACTIVATOR_RAIL); // 보라구슬
-        m_FactoryHiddenItem_3 = new ItemStack(Material.POWERED_RAIL); // 초록구슬
-        m_FactoryHiddenItem_4 = new ItemStack(Material.IRON_TRAPDOOR); // 곰인형 재단
-        m_FactoryHiddenItem_5 = new ItemStack(Material.DIODE); // 토끼인형 재단
-        m_FactoryHiddenItem_6 = new ItemStack(Material.REDSTONE_COMPARATOR); // 개인형 재단
+        m_FactoryHiddenItem_1 = new ItemStack(Material.QUARTZ); // 빨간구슬
+        m_FactoryHiddenItem_2 = new ItemStack(Material.PRISMARINE_CRYSTALS); // 보라구슬
+        m_FactoryHiddenItem_3 = new ItemStack(Material.GLOWSTONE_DUST); // 초록구슬
+        m_FactoryHiddenItem_4 = new ItemStack(Material.CHORUS_FRUIT); // 곰인형 재단
+        m_FactoryHiddenItem_5 = new ItemStack(Material.CHORUS_FRUIT_POPPED); // 토끼인형 재단
+        m_FactoryHiddenItem_6 = new ItemStack(Material.PRISMARINE_SHARD); // 개인형 재단
+
+
 
         addFactoryItemList();
     }

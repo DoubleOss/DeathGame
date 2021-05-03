@@ -4,10 +4,12 @@ import doubleos.deathgame.Main;
 import doubleos.deathgame.ablilty.*;
 import doubleos.deathgame.gui.CellularGame;
 import doubleos.deathgame.gui.DefectiveGame;
+import doubleos.deathgame.util.Utils;
 import javafx.scene.control.Cell;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -83,6 +85,8 @@ public class GameVariable
 
     int m_repairBoxCount = 0;
 
+    int m_escapePlayerCount = 0;
+
 
     boolean m_isKillerCheckTras = false;
     boolean m_TimeStart = false;
@@ -132,6 +136,12 @@ public class GameVariable
                         if(m_GameTime_Sec == 0)
                         {
                             Bukkit.broadcastMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE +" 제한시간 20분이 종료되어 탈출구가 열립니다");
+                            if(GameVariable.Instance().getGameStage().equals(GameStage.LAB))
+                                Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "탈출구활성화 연구소");
+                            else if(GameVariable.Instance().getGameStage().equals(GameStage.CATHEDRAL))
+                                Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "탈출구활성화 성당");
+                            else if(GameVariable.Instance().getGameStage().equals(GameStage.FACTORY))
+                                Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "탈출구활성화 인형공장");
                             this.cancel();
                         }
                         else
@@ -373,11 +383,14 @@ public class GameVariable
             }
         }
     }
-    public HashMap<String, PlayerVariable> getPlayerVariable()
+    public int getEscapePlayerCount()
     {
-        return m_playerVariableMap;
+        return  m_escapePlayerCount;
     }
-
+    public void setEscapePlayerCount(int number)
+    {
+        m_escapePlayerCount = number;
+    }
     public void setTeleporting(boolean bool)
     {
         m_teleporting = bool;
@@ -434,12 +447,14 @@ public class GameVariable
                 p.setGameMode(GameMode.SURVIVAL);
                 getPlayerListVariableMap().get(p.getName()).resetPlayerVariable();
                 p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
+                Utils.Instance().inventoryClear(p);
             }
 
         }
 
         m_GameTime_Min = 20;
         m_GameTime_Sec = 0;
+        m_escapePlayerCount=0;
 
 
         GameItem.Instance().initGameItem();
@@ -462,6 +477,9 @@ public class GameVariable
         m_GameState = GameState.END;
 
         MissionManager.Instance().resetMission();
+
+
+        Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "탈출구활성화 초기화");
 
         setTimeStart(false);
     }

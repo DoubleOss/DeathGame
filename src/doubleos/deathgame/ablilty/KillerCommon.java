@@ -56,6 +56,8 @@ public class KillerCommon implements Listener
     {
         player.getInventory().addItem(GameItem.Instance().m_killerCom_Ability1_Item);
         player.getInventory().addItem(GameItem.Instance().m_killerCom_Ability2_Item);
+        PotionEffect effect1 = new PotionEffect(PotionEffectType.SPEED, 24000, 0);
+        player.addPotionEffect(effect1, true);
     }
     @EventHandler
     void onMoveEvent(PlayerMoveEvent event)
@@ -90,7 +92,7 @@ public class KillerCommon implements Listener
         {
             if(gameVariable.getPlayerListVariableMap().get(event.getPlayer().getName()).getObserver())
                 return;
-            if(gameVariable.getPlayerVariable().get(event.getPlayer().getName()).getHumanType().equals(PlayerVariable.HumanType.KILLER))
+            if(gameVariable.getPlayerVariableMap().get(event.getPlayer().getName()).getHumanType().equals(PlayerVariable.HumanType.KILLER))
             {
                 Player killer = Bukkit.getPlayer(gameVariable.getKillerListName(event.getPlayer()));
                 if(event.getPlayer().equals(killer))
@@ -152,7 +154,7 @@ public class KillerCommon implements Listener
         for (String stringPlayer : GameVariable.Instance().getGamePlayerList())
         {
             Player p = Bukkit.getPlayer(stringPlayer);
-            if(GameVariable.Instance().getPlayerVariable().get(stringPlayer).getHumanType().equals(PlayerVariable.HumanType.HUMAN))
+            if(GameVariable.Instance().getPlayerVariableMap().get(stringPlayer).getHumanType().equals(PlayerVariable.HumanType.HUMAN))
             {
                 GlowAPI.setGlowing(p, GlowAPI.Color.WHITE, viewer);
             }

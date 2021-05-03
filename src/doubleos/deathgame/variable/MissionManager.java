@@ -328,6 +328,13 @@ public class MissionManager
                 p.sendTitle("[!]", ChatColor.GREEN+ "배전박스가 전부 수리되어 탈출구가 열렸습니다.", 1, 30, 1);
             }
             Bukkit.broadcastMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE +" 배전박스가 전부 수리되어 탈출구가 열렸습니다.");
+            if(GameVariable.Instance().getGameStage().equals(GameVariable.GameStage.LAB))
+                Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "탈출구활성화 연구소");
+            else if(GameVariable.Instance().getGameStage().equals(GameVariable.GameStage.CATHEDRAL))
+                Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "탈출구활성화 성당");
+            else if(GameVariable.Instance().getGameStage().equals(GameVariable.GameStage.FACTORY))
+                Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "탈출구활성화 인형공장");
+
         }
     }
 

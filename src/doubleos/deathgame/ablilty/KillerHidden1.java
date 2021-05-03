@@ -132,7 +132,7 @@ public class KillerHidden1 implements Listener, Hidden
                         ItemStack stack1 = GameItem.Instance().m_killerHidden1_Ability1_Item;
                         if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack1.getType()))
                         {
-                            if(gameVariable.getPlayerVariable().get(event.getPlayer().getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER)
+                            if(gameVariable.getPlayerVariableMap().get(event.getPlayer().getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER)
                                     ||(mission.getMission1Success() == true && mission.getMission2Success() == true))
                             {
                                 if(m_skill1Cooltime <= 0)
@@ -146,7 +146,7 @@ public class KillerHidden1 implements Listener, Hidden
                         ItemStack stack2  = GameItem.Instance().m_killerHidden1_Ability2_Item;
                         if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack2.getType()))
                         {
-                            if(gameVariable.getPlayerVariable().get(event.getPlayer().getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER)
+                            if(gameVariable.getPlayerVariableMap().get(event.getPlayer().getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER)
                                     ||(mission.getMission1Success() == true && mission.getMission2Success() == true))
                             {
 
@@ -183,6 +183,8 @@ public class KillerHidden1 implements Listener, Hidden
                         ((Player) event.getHitEntity()).addPotionEffect(effect1, true);
                         ((Player) event.getHitEntity()).addPotionEffect(effect2, true);
                         ((Player) event.getHitEntity()).getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + " 당신은 실험체의 위산 분비 공격에 당해 독과 멀미에 걸립니다.");
+                        ((Player) event.getHitEntity()).getKiller().sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ ((Player) event.getHitEntity()).getPlayer().getName() + ChatColor.WHITE+ " 님이 위산 분비 공격에 당해 독과 멀미에 걸립니다.");
+
                         for(Player p :Bukkit.getOnlinePlayers())
                         {
                             if(p.isOp())

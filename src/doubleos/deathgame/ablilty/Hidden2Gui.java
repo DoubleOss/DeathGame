@@ -86,7 +86,6 @@ public class Hidden2Gui implements Listener
             {
                 return;
             }
-            Bukkit.broadcastMessage(event.getCurrentItem().toString());
             if(event.getCurrentItem().getType() != Material.AIR)
             {
                 if(GameVariable.Instance().getKillerHidden2().m_skill2Cooltime <= 0)
@@ -140,10 +139,6 @@ public class Hidden2Gui implements Listener
                     if(GameVariable.Instance().getKillerHidden2().m_skill2Cooltime <= 0)
                     {
                         GameVariable.Instance().setHidden2Targer(null);
-                        this.cancel();
-                    }
-                    else if(GameVariable.Instance().getHidden2Target() == null)
-                    {
                         this.cancel();
                     }
                     else

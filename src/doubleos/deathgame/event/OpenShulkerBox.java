@@ -26,16 +26,18 @@ public class OpenShulkerBox implements Listener
             {
                 if(GameVariable.Instance().getPlayerListVariableMap().get(event.getPlayer().getName()).getObserver())
                     return;
-                if(gameVariable.getPlayerVariable().get(event.getPlayer().getName()).getHumanType().equals(PlayerVariable.HumanType.HUMAN))
+                if(gameVariable.getPlayerVariableMap().get(event.getPlayer().getName()).getHumanType().equals(PlayerVariable.HumanType.HUMAN))
                 {
                     event.setCancelled(true);
                     return;
                 }
 
             }
-            else if (eventBlock.getType().equals(Material.LIME_SHULKER_BOX))
+            else if(eventBlock.getType().equals(Material.LIME_SHULKER_BOX))
             {
-                if(gameVariable.getPlayerVariable().get(event.getPlayer().getName()).getHumanType().equals(PlayerVariable.HumanType.KILLER))
+                if(GameVariable.Instance().getPlayerListVariableMap().get(event.getPlayer().getName()).getObserver())
+                    return;
+                if(gameVariable.getPlayerVariableMap().get(event.getPlayer().getName()).getHumanType().equals(PlayerVariable.HumanType.KILLER))
                 {
                     event.setCancelled(true);
                     return;

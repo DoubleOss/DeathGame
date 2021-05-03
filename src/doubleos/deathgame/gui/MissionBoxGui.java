@@ -46,8 +46,24 @@ public class MissionBoxGui implements Listener
         String missingName2 = missionManager.getMission2Title();
 
 
-        m_inv.setItem(2, createGuiItem(Material.DIAMOND_BLOCK, missingName1, ""));
-        m_inv.setItem(6,createGuiItem(Material.EMERALD, missingName2, ""));
+        String loreName1 = "";
+        String loreName2 = "";
+
+        if (missingName1.equalsIgnoreCase("물약제조"))
+            loreName1 = "좌측 창에서 제작하고 싶은 물약을 선택한 후, \n우측 창에 뜨는 재료들을 파밍해 빈 칸에 재료를 넣어주십시오.";
+        if (missingName2.equalsIgnoreCase("해킹"))
+            loreName2 = "버튼을 클릭하여 대기하는 미션입니다.";
+        if (missingName1.equalsIgnoreCase("소독"))
+            loreName1 = "버튼을 클릭하여 대기하는 미션입니다.";
+        if (missingName2.equalsIgnoreCase("기계 수리"))
+            loreName2 = "맵에 숨겨져있는 톱니바퀴3개를 찾아 \n빈 칸에 넣고 수리버튼을 누르는 미션입니다.";
+        if (missingName1.equalsIgnoreCase("세포 찾기"))
+            loreName1 = " 빠르게 지나다니는 인형들 사이에 \n숨어있는 불량품을 찾으시오. (무제한으로 클릭가능) ";
+        if (missingName2.equalsIgnoreCase("불량품 찾기"))
+            loreName2 = "빠르게 지나다니는 인형들 사이에  \n숨어있는 불량품을 찾으시오. (무제한으로 클릭가능)";
+
+        m_inv.setItem(2, createGuiItem(Material.DIAMOND_BLOCK, ChatColor.WHITE + missingName1, ChatColor.WHITE + loreName1));
+        m_inv.setItem(6,createGuiItem(Material.EMERALD, ChatColor.WHITE + missingName2, ChatColor.WHITE + loreName2));
 
     }
 
@@ -62,7 +78,7 @@ public class MissionBoxGui implements Listener
             {
                 if(event.getCurrentItem().getItemMeta().getDisplayName() == null)
                     return;
-                if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("물약제조"))
+                if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.WHITE + "물약제조"))
                 {
                     if(!MissionManager.Instance().getMission1Success())
                     {
@@ -73,7 +89,7 @@ public class MissionBoxGui implements Listener
 
 
                 }
-                else if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("해킹"))
+                else if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.WHITE + "해킹"))
                 {
                     if(!MissionManager.Instance().getMission2Success())
                     {
@@ -83,7 +99,7 @@ public class MissionBoxGui implements Listener
                     }
 
                 }
-                else if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("소독"))
+                else if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.WHITE + "소독"))
                 {
                     if(!MissionManager.Instance().getMission1Success())
                     {
@@ -93,7 +109,7 @@ public class MissionBoxGui implements Listener
                     }
 
                 }
-                else if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("기계 수리"))
+                else if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.WHITE + "기계 수리"))
                 {
                     if(!MissionManager.Instance().getMission2Success())
                     {
@@ -104,7 +120,7 @@ public class MissionBoxGui implements Listener
                     }
 
                 }
-                else if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("세포 찾기"))
+                else if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.WHITE + "세포 찾기"))
                 {
                     if(!MissionManager.Instance().getMission1Success())
                     {
@@ -114,7 +130,7 @@ public class MissionBoxGui implements Listener
                     }
 
                 }
-                else if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("불량품 찾기"))
+                else if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.WHITE + "불량품 찾기"))
                 {
                     if(!MissionManager.Instance().getMission2Success())
                     {

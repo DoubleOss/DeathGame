@@ -32,11 +32,11 @@ public class Damage implements Listener
                 {
                     double damage = 0;
                     if(gameVariable.getPlayerVariableMap().get(event.getEntity().getName()).getKillerType().equals(PlayerVariable.KillerType.COMMON))
-                        damage = 2;
+                        damage = 0.7;
                     else if (gameVariable.getPlayerVariableMap().get(event.getEntity().getName()).getKillerType().equals(PlayerVariable.KillerType.HIDDEN))
-                        damage = 4;
+                        damage = 1.2;
                     else
-                        damage = 5;
+                        damage = 1.7;
                     event.setDamage(damage);
                 }
 

@@ -50,34 +50,70 @@ public class FactoryHidden implements Listener
         if(GameVariable.Instance().getGameStage().equals(GameVariable.GameStage.FACTORY))
         {
             MissionManager mission = MissionManager.Instance();
-            if(event.getItem().getType().equals(Material.DROPPER) && !event.getPlayer().isOp())
-                event.setCancelled(true);
-            for(Location loc : MissionManager.Instance().getFactoryLoc())
+
+            if(event.getClickedBlock().getType().equals(Material.POWERED_RAIL))
             {
-                if(loc.equals(event.getClickedBlock().getLocation()))
+                if(!event.getPlayer().isOp())
+                    event.setCancelled(true);
+                for(Location loc : MissionManager.Instance().getFactoryLoc())
                 {
-                    if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+                    if(loc.equals(event.getClickedBlock().getLocation()))
                     {
-                        if (event.getHand() != EquipmentSlot.HAND)
+                        if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
                         {
-                            return;
-                        }
-                        for(ItemStack item : GameItem.Instance().m_itemList)
-                        {
-                            if(item.getType().equals(event.getItem().getType()))
+                            if (event.getHand() != EquipmentSlot.HAND)
                             {
-                                event.getClickedBlock().setType(event.getItem().getType());
-                                event.getPlayer().getInventory().remove(event.getItem().getType());
-                                mission.setFactoryHiddenCount(mission.getFactoryHiddenCount()+1);
-                                if(mission.getFactoryHiddenCount() == 6)
+                                return;
+                            }
+                            for(ItemStack item : GameItem.Instance().m_itemList)
+                            {
+                                if(item.getType().equals(event.getItem().getType()))
                                 {
-                                    Bukkit.broadcastMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE +" 제단의 봉인이 풀렸습니다.");
+                                    if(event.getItem().getType().equals(Material.CHORUS_FRUIT))
+                                    {
+                                        event.getClickedBlock().setType(Material.IRON_TRAPDOOR);
+                                    }
+                                    else if(event.getItem().getType().equals(Material.CHORUS_FRUIT_POPPED))
+                                    {
+                                        //event.getClickedBlock().setType(Material.DIODE);
+                                        event.getClickedBlock().setType(Material.getBlockMaterial(356));
+                                        event.getClickedBlock().setType(Material.getBlockMaterial(356));
+
+                                    }
+                                    else if(event.getItem().getType().equals(Material.PRISMARINE_SHARD))
+                                    {
+                                        //event.getClickedBlock().setType(Material.REDSTONE_COMPARATOR);
+                                        event.getClickedBlock().setType(Material.getBlockMaterial(404));
+                                    }
+                                    else if(event.getItem().getType().equals(Material.PRISMARINE_CRYSTALS))
+                                    {
+                                        event.getClickedBlock().setType(Material.ACTIVATOR_RAIL);
+                                    }
+                                    else if(event.getItem().getType().equals(Material.QUARTZ))
+                                    {
+                                        event.getClickedBlock().setType(Material.DETECTOR_RAIL);
+                                    }
+                                    else if(event.getItem().getType().equals(Material.GLOWSTONE_DUST))
+                                    {
+                                        event.getClickedBlock().setType(Material.REDSTONE_WIRE);
+                                    }
+                                    event.getPlayer().getInventory().remove(event.getItem().getType());
+                                    mission.setFactoryHiddenCount(mission.getFactoryHiddenCount()+1);
+
+                                    if(mission.getFactoryHiddenCount() == 12)
+                                    {
+                                        Bukkit.broadcastMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE +" 인형으로 둔갑한 사악한 귀신이 제단에 봉인되었습니다");
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+
         }
     }
+
+
+
 }

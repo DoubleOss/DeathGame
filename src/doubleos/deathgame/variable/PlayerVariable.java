@@ -29,6 +29,7 @@ public class PlayerVariable
     boolean m_observer = false;
     boolean m_repair = false;
     boolean m_soundPlaying = false;
+    boolean m_escape = false;
 
     FileConfiguration config;
 
@@ -41,6 +42,7 @@ public class PlayerVariable
         m_player = player.getName();
         m_humanType = HumanType.HUMAN;
         m_killerType = KillerType.NONE;
+        m_escape = false;
         //Main.instance.variablePlayer.put(m_player, this);
         GameVariable.Instance().getPlayerListVariableMap().put(player.getName(), this);
     }
@@ -58,6 +60,7 @@ public class PlayerVariable
         m_observer = false;
         m_repair = false;
         m_soundPlaying = false;
+        m_escape = false;
     }
 
     public void saveConfig()
@@ -67,6 +70,14 @@ public class PlayerVariable
 
 
 
+    public boolean getEscape()
+    {
+        return m_escape;
+    }
+    public void setEscape(boolean bool)
+    {
+       m_escape = bool;
+    }
     public void setRepair(boolean repair)
     {
         m_repair = repair;

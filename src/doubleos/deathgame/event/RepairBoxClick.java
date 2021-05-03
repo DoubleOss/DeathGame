@@ -61,12 +61,17 @@ public class RepairBoxClick implements Listener
                                         @Override
                                         public void run()
                                         {
-                                            if((map.get(event.getClickedBlock().getLocation()).gethealth() == 7))
+                                            if((map.get(event.getClickedBlock().getLocation()).gethealth() == 7) || (map.get(event.getClickedBlock().getLocation()).gethealth() == 30) || (map.get(event.getClickedBlock().getLocation()).gethealth() == 45))
                                             {
-                                                if(!map.get(event.getClickedBlock().getLocation()).getMiniGame())
+                                                if(map.get(event.getClickedBlock().getLocation()).getMiniGameCount() < 3)
                                                 {
-                                                    event.getPlayer().sendPluginMessage(Main.instance, "DeathGame", String.format("MiniGame" + "_" + "true").getBytes());
+                                                    if(!map.get(event.getClickedBlock().getLocation()).getMiniGame())
+                                                    {
+                                                        map.get(event.getClickedBlock().getLocation()).setMiniGameCount(map.get(event.getClickedBlock().getLocation()).getMiniGameCount()+1);
+                                                        event.getPlayer().sendPluginMessage(Main.instance, "DeathGame", String.format("MiniGame" + "_" + "true").getBytes());
+                                                    }
                                                 }
+
                                             }
 
                                             if(event.getPlayer().getLocation().distance(event.getClickedBlock().getLocation()) > 3)
@@ -79,18 +84,18 @@ public class RepairBoxClick implements Listener
                                                 this.cancel();
 
                                             }
-                                            else if ((map.get(event.getClickedBlock().getLocation()).gethealth() >= 60))
+                                            else if ((map.get(event.getClickedBlock().getLocation()).gethealth() > 60))
                                             {
                                                 mission.getRepairBoxClassMap().get(event.getClickedBlock().getLocation()).setRepairing(false);
                                                 variableMap.get(event.getPlayer().getName()).setRepair(false);
                                                 mission.setBoxRepair(mission.getBoxRepair()+1);
-                                                Bukkit.broadcastMessage(String.format("%d", mission.getBoxRepair()));
+                                                //Bukkit.broadcastMessage(String.format("%d", mission.getBoxRepair()));
                                                 mission.getRepairBoxClassMap().get(event.getClickedBlock().getLocation()).setRepair(true);
                                                 mission.getRepairBoxClassMap().get(event.getClickedBlock().getLocation()).setMiniGame(true);
                                                 event.getPlayer().sendTitle("[!]", ChatColor.GREEN+ "수리가 완료되었습니다.", 1, 30, 1);
                                                 this.cancel();
                                             }
-                                            else if (map.get(event.getClickedBlock().getLocation()).gethealth() < 60)
+                                            else if (map.get(event.getClickedBlock().getLocation()).gethealth() <= 60)
                                             {
                                                 mission.getRepairBoxClassMap().get(event.getClickedBlock().getLocation()).setRepairing(true);
                                                 map.get(event.getClickedBlock().getLocation()).sethealth(map.get(event.getClickedBlock().getLocation()).gethealth() + 1);

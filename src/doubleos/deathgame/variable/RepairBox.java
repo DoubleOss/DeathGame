@@ -10,7 +10,7 @@ public class RepairBox
 
     boolean m_repairing = false;
 
-    int m_MiniGameCount = 3;
+    int m_MiniGameCount = 0;
 
 
     public boolean getRepairing()

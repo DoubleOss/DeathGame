@@ -159,7 +159,6 @@ public class PotionMakeGui implements Listener
                     {
                         if(event.getCurrentItem().getType().equals(event.getInventory().getItem(slot[i]).getType()))
                         {
-                            Bukkit.broadcastMessage(event.getInventory().getItem(slot[i]).toString());
                             if(getGuiSlotAir(event.getInventory()) != 100)
                             {
                                 event.getInventory().setItem(getGuiSlotAir(event.getInventory()), event.getInventory().getItem(slot[i]));

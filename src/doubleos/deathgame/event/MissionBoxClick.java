@@ -25,14 +25,14 @@ public class MissionBoxClick implements Listener
         MissionManager missionManager = MissionManager.Instance();
         if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
         {
-            if (event.getHand() != EquipmentSlot.HAND)
-            {
-                return;
-            }
-            if(GameVariable.Instance().getPlayerListVariableMap().get(event.getPlayer().getName()).getObserver())
-                return;
             if(eventBlock.getType().equals(Material.PISTON_STICKY_BASE))
             {
+                if (event.getHand() != EquipmentSlot.HAND)
+                {
+                    return;
+                }
+                if(GameVariable.Instance().getPlayerListVariableMap().get(event.getPlayer().getName()).getObserver())
+                    return;
                 for(int i =0; i<missionManager.getMissionBoxList().size(); i++)
                 {
 
@@ -40,9 +40,9 @@ public class MissionBoxClick implements Listener
                     {
                         if(!missionManager.getMissionBoxMap().get(eventBlock.getLocation()).getBoxUse())
                         {
-                            event.getPlayer().sendMessage(String.format(gameVariable.getPlayerVariable().get(player).getHumanType().toString()));
+                            //event.getPlayer().sendMessage(String.format(gameVariable.getPlayerVariableMap().get(player).getHumanType().toString()));
 
-                            if(gameVariable.getPlayerVariable().get(event.getPlayer().getName()).getHumanType().equals(PlayerVariable.HumanType.KILLER))
+                            if(gameVariable.getPlayerVariableMap().get(event.getPlayer().getName()).getHumanType().equals(PlayerVariable.HumanType.KILLER))
                             {
                                 missionManager.m_MissionBoxUseLocation = eventBlock.getLocation();
                                 MissionBoxGui boxgui = new MissionBoxGui();

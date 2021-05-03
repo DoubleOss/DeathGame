@@ -82,7 +82,7 @@ public class Utils
         lab_locations.add(new Location(Bukkit.getWorld("world"), -364, 71, 41));
         lab_locations.add(new Location(Bukkit.getWorld("world"), -361, 79, -50));
         lab_locations.add(new Location(Bukkit.getWorld("world"), -323, 79, 18));
-        lab_locations.add(new Location(Bukkit.getWorld("world"), -313, 62, 19));
+        lab_locations.add(new Location(Bukkit.getWorld("world"), -312, 62, 20));
         lab_locations.add(new Location(Bukkit.getWorld("world"), -325, 62, -28));
 
         cathedral_locations.add(new Location(Bukkit.getWorld("world"), -513, 62, 100));

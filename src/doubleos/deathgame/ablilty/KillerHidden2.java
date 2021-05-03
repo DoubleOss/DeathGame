@@ -122,7 +122,7 @@ public class KillerHidden2 implements Listener , Hidden
                         ItemStack stack1 = GameItem.Instance().m_killerHidden2_Ability1_Item;
                         if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack1.getType()))
                         {
-                            if(gamevariable.getPlayerVariable().get(event.getPlayer().getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER)
+                            if(gamevariable.getPlayerVariableMap().get(event.getPlayer().getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER)
                                     ||(mission.getMission1Success() == true && mission.getMission2Success() == true))
                             {
                                 if(m_skill1Cooltime <= 0)
@@ -140,10 +140,10 @@ public class KillerHidden2 implements Listener , Hidden
                         ItemStack stack2 = GameItem.Instance().m_killerHidden2_Ability2_Item;
                         if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack2.getType()))
                         {
-                            if(gamevariable.getPlayerVariable().get(event.getPlayer().getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER)
+                            if(gamevariable.getPlayerVariableMap().get(event.getPlayer().getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER)
                                     ||(mission.getMission1Success() == true && mission.getMission2Success() == true))
                             {
-                                if(m_skill2Cooltime <= 0)
+                                if(this.m_skill2Cooltime <= 0)
                                 {
                                     gamevariable.setKillerHidden2(this);
                                     Bukkit.dispatchCommand(event.getPlayer(), "죽술 전도");

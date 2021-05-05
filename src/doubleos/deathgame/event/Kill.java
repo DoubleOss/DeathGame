@@ -1,5 +1,6 @@
 package doubleos.deathgame.event;
 
+import doubleos.deathgame.Main;
 import doubleos.deathgame.ablilty.KillerCommon;
 import doubleos.deathgame.command.GameCommand;
 import doubleos.deathgame.variable.GameVariable;
@@ -13,6 +14,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 public class Kill implements Listener
 {
@@ -46,6 +49,7 @@ public class Kill implements Listener
                         GameVariable.Instance().getPlayerVariableMap().get(event.getEntity().getName()).setHumanType(PlayerVariable.HumanType.KILLER);
                         GameVariable.Instance().addKillerListName(event.getEntity());
                         GameVariable.Instance().setHidden2Targer(null);
+                        setKillColltime(event.getEntity().getKiller());
 
                         for(Player p1 : Bukkit.getOnlinePlayers())
                         {
@@ -73,6 +77,7 @@ public class Kill implements Listener
                     {
                         event.getEntity().getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + ": 당신은 살인마에 의해 살해 당하였습니다.");
                         GameVariable.Instance().getPlayerVariableMap().get(event.getEntity().getPlayer().getName()).setObserver(true);
+                        setKillColltime(event.getEntity().getKiller());
                         if(GameVariable.Instance().getGamePlayerList().size() - GameVariable.Instance().getKillerPlayerList().size() - getGameDeathCount() == 0)
                         {
                             for(Player p2 : Bukkit.getOnlinePlayers())
@@ -82,7 +87,7 @@ public class Kill implements Listener
                                 p2.performCommand("spawn");
                                 GameVariable.Instance().GameReset();
                             }
-                            event.getEntity().performCommand("영상 전체재생 death.mp4");
+                            Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(),"영상 전체재생 death.mp4");
                         }
                     }
                     else
@@ -91,7 +96,7 @@ public class Kill implements Listener
                         GameVariable.Instance().getPlayerVariableMap().get(event.getEntity().getPlayer().getName()).setObserver(true);
                         GameVariable.Instance().setHidden2Targer(null);
                         GameVariable.Instance().getOrignalKillerPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + ": 전도에 실패 하셨습니다.");
-
+                        setKillColltime(event.getEntity().getKiller());
                         for(Player p : Bukkit.getOnlinePlayers())
                         {
                             if(p.isOp())
@@ -107,8 +112,9 @@ public class Kill implements Listener
                                 p2.sendMessage( ChatColor.GREEN+ " 모든 생존자들이 죽어 게임이 종료됩니다.");
                                 p2.performCommand("spawn");
                                 GameVariable.Instance().GameReset();
-                                event.getEntity().performCommand("영상 전체재생 death.mp4");
+
                             }
+                            Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(),"영상 전체재생 death.mp4");
 
                         }
                     }
@@ -120,6 +126,7 @@ public class Kill implements Listener
                     {
                         event.getEntity().getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + ": 당신은 살인마에 의해 살해 당하였습니다.");
                         GameVariable.Instance().getPlayerVariableMap().get(event.getEntity().getPlayer().getName()).setObserver(true);
+                        setKillColltime(event.getEntity().getKiller());
                         if(GameVariable.Instance().getGamePlayerList().size() - GameVariable.Instance().getKillerPlayerList().size() - getGameDeathCount() == 0)
                         {
                             for(Player p2 : Bukkit.getOnlinePlayers())
@@ -128,9 +135,9 @@ public class Kill implements Listener
                                 p2.sendMessage( ChatColor.GREEN+ " 모든 생존자들이 죽어 게임이 종료됩니다.");
                                 p2.performCommand("spawn");
                                 GameVariable.Instance().GameReset();
-                                event.getEntity().performCommand("영상 전체재생 death.mp4");
-
                             }
+                            Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(),"영상 전체재생 death.mp4");
+
                         }
 
                     }
@@ -166,6 +173,39 @@ public class Kill implements Listener
     }
 
 
+    void setKillColltime(Player p)
+    {
+        GameVariable gameVariable = GameVariable.Instance();
+        if(!gameVariable.getKillCoolTime())
+        {
+            gameVariable.setKillCoolTimeTimer(30);
+            p.sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + " 상대방을 죽여 다음 킬은 " +gameVariable.getKillCoolTimeTimer()+ " 초 이후에 가능합니다.");
+            gameVariable.setKillCoolTime(true);
+            BukkitTask task = new BukkitRunnable()
+            {
+                @Override
+                public void run()
+                {
+                    if(gameVariable.getKillCoolTimeTimer() <= 0)
+                    {
+                        gameVariable.setKillCoolTime(false);
+                    }
+                    else if(gameVariable.getGameState().equals(GameVariable.GameState.END))
+                    {
+                        gameVariable.setKillCoolTime(false);
+                        this.cancel();
+                    }
+                    else
+                    {
+                        gameVariable.setKillCoolTimeTimer(gameVariable.getKillCoolTimeTimer()-1);
+                    }
+
+                }
+            }.runTaskTimer(Main.instance, 20l, 20l);
+        }
+    }
+
+
 
     boolean checkPlayingGamePlayer(Player player)
     {
@@ -178,6 +218,7 @@ public class Kill implements Listener
         }
         return false;
     }
+
 
     int getGameDeathCount()
     {

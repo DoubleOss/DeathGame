@@ -74,7 +74,7 @@ public class Scoreboard
                         scoreboard.add(mission.getMission2Title() + ": " + mission2_Suc, 7);
 
                         HashMap<String, Hidden> hiddenclass = GameVariable.Instance().getKillerHiddenClass();
-                        if(hiddenclass.isEmpty() == false)
+                        if(hiddenclass.isEmpty() == false && player.equals(gamevariable.getOrignalKillerPlayer()))
                         {
                             String hidden_Time = "        ";
                             if((hiddenclass.get(player.getName())) instanceof KillerHidden1)
@@ -92,6 +92,11 @@ public class Scoreboard
                             scoreboard.add("     ", 6);
                             scoreboard.add( "변신시간: " + hidden_Time, 5);
                         }
+                        else if(player.isOp() || variableMap.get(player.getName()).getObserver())
+                        {
+                            scoreboard.add("     ", 6);
+                            scoreboard.add( "킬 쿨타임: " + gamevariable.getKillCoolTimeTimer() + " 초", 5);
+                        }
 
                     }
                     if (player.isOp() || variableMap.get(player.getName()).getObserver())
@@ -99,9 +104,14 @@ public class Scoreboard
                         scoreboard.add("       ", 4);
                         scoreboard.add("켜진 배전박스 " + gamevariable.getRepairBoxCount() + "/" + 8+ChatColor.DARK_GREEN+ " 개", 3);
                     }
-                    else
+                    else if (variableMap.get(player.getName()).getHumanType().equals(PlayerVariable.HumanType.HUMAN))
                     {
                         scoreboard.add("켜진 배전박스 " + gamevariable.getRepairBoxCount() + "/" + 8+ChatColor.DARK_GREEN+ " 개", 8);
+                    }
+                    else if (variableMap.get(player.getName()).getHumanType().equals(PlayerVariable.HumanType.KILLER))
+                    {
+                        scoreboard.add("     ", 6);
+                        scoreboard.add("켜진 배전박스 " + gamevariable.getRepairBoxCount() + "/" + 8+ChatColor.DARK_GREEN+ " 개", 5);
                     }
                     scoreboard.send(player);
                     scoreboard.update();

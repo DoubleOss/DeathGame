@@ -1,5 +1,6 @@
 package doubleos.deathgame.variable;
 
+import catserver.server.CatServer;
 import doubleos.deathgame.Main;
 import doubleos.deathgame.ablilty.*;
 import doubleos.deathgame.gui.CellularGame;
@@ -87,6 +88,8 @@ public class GameVariable
 
     int m_escapePlayerCount = 0;
 
+    int m_killCoolTimeTimer = 0;
+
 
     boolean m_isKillerCheckTras = false;
     boolean m_TimeStart = false;
@@ -94,6 +97,8 @@ public class GameVariable
     boolean m_Checkkiller = false;
 
     boolean m_teleporting = false;
+
+    boolean m_killCoolTime = false;
 
 
 
@@ -317,7 +322,25 @@ public class GameVariable
     }
 
 
+    public void setKillCoolTime(boolean bool)
+    {
+        m_killCoolTime = bool;
+    }
 
+    public boolean getKillCoolTime()
+    {
+        return m_killCoolTime;
+    }
+
+    public int getKillCoolTimeTimer()
+    {
+        return m_killCoolTimeTimer;
+    }
+
+    public void setKillCoolTimeTimer(int time)
+    {
+        m_killCoolTimeTimer = time;
+    }
     public int getMissionRotateNumber()
     {
         return m_MissionRotateNumber;
@@ -473,10 +496,13 @@ public class GameVariable
 
         m_Checkkiller = false;
         m_isKillerCheckTras = false;
+        m_killCoolTime = false;
+        m_killCoolTimeTimer = 0;
 
         m_GameState = GameState.END;
 
         MissionManager.Instance().resetMission();
+        
 
 
         Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "탈출구활성화 초기화");

@@ -11,6 +11,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -93,6 +94,13 @@ public class RepairBoxClick implements Listener
                                                 mission.getRepairBoxClassMap().get(event.getClickedBlock().getLocation()).setRepair(true);
                                                 mission.getRepairBoxClassMap().get(event.getClickedBlock().getLocation()).setMiniGame(true);
                                                 event.getPlayer().sendTitle("[!]", ChatColor.GREEN+ "수리가 완료되었습니다.", 1, 30, 1);
+                                                for(Player p : Bukkit.getOnlinePlayers())
+                                                {
+                                                    if(p.isOp())
+                                                    {
+                                                        p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ event.getPlayer().getName() + ChatColor.WHITE+ " 님이 배전박스를 수리 하셨습니다.");
+                                                    }
+                                                }
                                                 this.cancel();
                                             }
                                             else if (map.get(event.getClickedBlock().getLocation()).gethealth() <= 60)
@@ -112,6 +120,10 @@ public class RepairBoxClick implements Listener
                                     event.getPlayer().sendPluginMessage(Main.instance, "DeathGame", String.format("MiniGame" + "_" + "false").getBytes());
                                     Utils.Instance().sendTitle(event.getPlayer(), "[!]", "수리가 이미 완료된 박스 입니다.", 1, 30, 1, ChatColor.RED);
                                 }
+                            }
+                            else
+                            {
+                                Utils.Instance().sendTitle(event.getPlayer(), "[!]", "누군가 수리를 이미 진행중 입니다.", 1, 30, 1, ChatColor.RED);
                             }
 
                         }

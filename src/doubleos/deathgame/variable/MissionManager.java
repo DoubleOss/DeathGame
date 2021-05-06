@@ -108,12 +108,14 @@ public class MissionManager
 
     void killerHiddenChange()
     {
+        GameVariable gameVariable = GameVariable.Instance();
         if(m_mission1_Success && m_mission2_Success)
         {
-            if(!GameVariable.Instance().getIsKillerCheckTras())
+            if(!gameVariable.getIsKillerCheckTras())
             {
-                GameVariable.Instance().setIsKillerCheckTras(true);
-                switch(GameVariable.Instance().getGameStage())
+                gameVariable.setIsKillerCheckTras(true);
+                gameVariable.getPlayerVariableMap().get(gameVariable.getOrignalKillerPlayer().getName()).setKillerType(PlayerVariable.KillerType.HIDDEN);
+                switch(gameVariable.getGameStage())
                 {
                     case LAB:
                         KillerHidden1 hidden1 = new KillerHidden1();
@@ -150,14 +152,14 @@ public class MissionManager
         }
         else if(GameVariable.Instance().getGameStage().equals(GameVariable.GameStage.CATHEDRAL))
         {
-            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -559, 63, 77));
-            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -543, 63, 54));
-            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -501, 63, 70));
-            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -507, 64, 85));
-            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -488, 71, 84));
-            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -555, 63, 46));
-            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -532, 70, 61));
-            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -537, 63, 59));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -537, 56, 20));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -529, 55, 97));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -491, 55, 14));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -547, 55, 47));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -532, 64, 18));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -578, 63, 78));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -518, 63, 91));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -493, 71, 72 ));
 
         }
         else if(GameVariable.Instance().getGameStage().equals(GameVariable.GameStage.FACTORY))
@@ -192,20 +194,21 @@ public class MissionManager
         }
         else if(GameVariable.Instance().getGameStage().equals(GameVariable.GameStage.CATHEDRAL))
         {
-            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -512, 62, 41));
-            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -568, 70, 56));
-            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -498, 63, 69));
-            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -523, 62, 75));
+            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -511, 54, 38 ));
+            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -541, 55, 61));
+            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -581, 54, 96));
+            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -526, 62, 19));
+            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -581, 62, 69));
+            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -496, 63, 68));
 
         }
         else if(GameVariable.Instance().getGameStage().equals(GameVariable.GameStage.FACTORY))
         {
-            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -374, 69, 144));
+            m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -374, 69, 114));
             m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -441, 62, 132));
             m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -398, 62, 163));
             m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -393, 62, 75));
             m_missionBoxList.add(new Location(Bukkit.getWorld("world"), -391, 62, 92));
-
         }
         for(int i = 0; i<m_missionBoxList.size(); i++)
         {

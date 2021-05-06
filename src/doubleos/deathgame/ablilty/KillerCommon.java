@@ -8,10 +8,13 @@ import doubleos.deathgame.variable.PlayerVariable;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -42,8 +45,9 @@ public class KillerCommon implements Listener
 
 
     int m_skill2_Cooltime = 0;
+    int m_skillArrowCoolTime = 0;
 
-    ArrayList<Location> m_skill1_pos = new ArrayList();
+    //ArrayList<Location> m_skill1_pos = new ArrayList();
 
 
     public KillerCommon()
@@ -54,11 +58,11 @@ public class KillerCommon implements Listener
 
     public void initCommon(Player player)
     {
-        player.getInventory().addItem(GameItem.Instance().m_killerCom_Ability1_Item);
         player.getInventory().addItem(GameItem.Instance().m_killerCom_Ability2_Item);
-        PotionEffect effect1 = new PotionEffect(PotionEffectType.SPEED, 24000, 0);
-        player.addPotionEffect(effect1, true);
+        //PotionEffect effect1 = new PotionEffect(PotionEffectType.SPEED, 24000, 0);
+        //player.addPotionEffect(effect1, true);
     }
+    /*
     @EventHandler
     void onMoveEvent(PlayerMoveEvent event)
     {
@@ -84,6 +88,8 @@ public class KillerCommon implements Listener
 
     }
 
+     */
+
     @EventHandler
     void onRightClickEvent(PlayerInteractEvent event)
     {
@@ -94,6 +100,7 @@ public class KillerCommon implements Listener
                 return;
             if(gameVariable.getPlayerVariableMap().get(event.getPlayer().getName()).getHumanType().equals(PlayerVariable.HumanType.KILLER))
             {
+
                 Player killer = Bukkit.getPlayer(gameVariable.getKillerListName(event.getPlayer()));
                 if(event.getPlayer().equals(killer))
                 {
@@ -101,6 +108,22 @@ public class KillerCommon implements Listener
                     {
                         return;
                     }
+                    if(event.getAction().equals(Action.RIGHT_CLICK_AIR))
+                    {
+                        if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.DIAMOND_AXE))
+                        {
+
+                            if(m_skillArrowCoolTime <= 0)
+                            {
+                                shootArrow(event.getPlayer());
+                            }
+                            else
+                                event.getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +" 쿨타임이 " + m_skillArrowCoolTime+ "초 남으셨습니다.");
+
+                        }
+                    }
+
+                    /*
                     if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
                     {
                         ItemStack stack1 = GameItem.Instance().m_killerCom_Ability1_Item;
@@ -111,10 +134,9 @@ public class KillerCommon implements Listener
                             Location blockpos = event.getClickedBlock().getLocation().add( new Vector(0, 1, 0));
                             m_skill1_pos.add(blockpos);
                             blockpos.getBlock().setType(Material.RAILS);
-
-
                         }
                     }
+                     */
                     if(event.getAction().equals(Action.RIGHT_CLICK_AIR))
                     {
                         //탐지능력
@@ -125,7 +147,7 @@ public class KillerCommon implements Listener
                             {
                                 initGlowing(event.getPlayer());
                                 event.getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +" 탐지 능력을 사용하셨습니다.");
-                                m_skill2_Cooltime = 20;
+                                m_skill2_Cooltime = 60;
                                 StartSkill2Cooltime();
                                 for(Player p :Bukkit.getOnlinePlayers())
                                 {
@@ -171,6 +193,7 @@ public class KillerCommon implements Listener
     }
 
 
+    /*
     void setSkill1Effect(Player p)
     {
         PotionEffect effect2 = new PotionEffect(PotionEffectType.SLOW, 100, 100);
@@ -206,8 +229,9 @@ public class KillerCommon implements Listener
             }
         }, 100l);
 
-
     }
+
+     */
 
     void StartSkill2Cooltime()
     {
@@ -228,6 +252,36 @@ public class KillerCommon implements Listener
         }.runTaskTimer(Main.instance, 0l, 20l);
 
     }
+
+
+    void shootArrow(Player p)
+    {
+        Arrow arrow = p.launchProjectile(Arrow.class);
+
+        arrow.setShooter(p);
+        arrow.setPickupStatus(Arrow.PickupStatus.DISALLOWED);
+
+        arrow.setVelocity(p.getLocation().getDirection().normalize().multiply(2));
+        m_skillArrowCoolTime = 10;
+
+        BukkitTask task = new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                if(m_skillArrowCoolTime <= 0)
+                {
+                    this.cancel();
+                }
+                else
+                {
+                    m_skillArrowCoolTime--;
+                }
+            }
+        }.runTaskTimer(Main.instance, 0l, 20l);
+
+    }
+
 
 
 

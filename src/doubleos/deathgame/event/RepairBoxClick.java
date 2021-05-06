@@ -93,6 +93,7 @@ public class RepairBoxClick implements Listener
                                                 //Bukkit.broadcastMessage(String.format("%d", mission.getBoxRepair()));
                                                 mission.getRepairBoxClassMap().get(event.getClickedBlock().getLocation()).setRepair(true);
                                                 mission.getRepairBoxClassMap().get(event.getClickedBlock().getLocation()).setMiniGame(true);
+                                                event.getPlayer().sendPluginMessage(Main.instance, "DeathGame", String.format("LoadingBar" + "_" + "false").getBytes());
                                                 event.getPlayer().sendTitle("[!]", ChatColor.GREEN+ "수리가 완료되었습니다.", 1, 30, 1);
                                                 for(Player p : Bukkit.getOnlinePlayers())
                                                 {

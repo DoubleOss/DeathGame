@@ -63,13 +63,6 @@ public class PlayerVariable
         m_escape = false;
     }
 
-    public void saveConfig()
-    {
-
-    }
-
-
-
     public boolean getEscape()
     {
         return m_escape;

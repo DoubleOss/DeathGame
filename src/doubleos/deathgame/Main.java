@@ -37,6 +37,9 @@ public class Main extends JavaPlugin
         Bukkit.getPluginManager().registerEvents(new Damage(), this);
         Bukkit.getPluginManager().registerEvents(new Quit(), this);
         Bukkit.getPluginManager().registerEvents(new HealthRegen(), this);
+        Bukkit.getPluginManager().registerEvents(new GlowStoneInventoryEvent(), this);
+
+
 
         Bukkit.getPluginManager().registerEvents(new PlayerMove(), this);
         Bukkit.getPluginManager().registerEvents(new MissionBoxClick(), this);
@@ -46,6 +49,7 @@ public class Main extends JavaPlugin
 
 
 
+        Bukkit.getPluginManager().registerEvents(new HumanCommon(), this);
 
         Bukkit.getPluginManager().registerEvents(new KillerCommon(), this);
         Bukkit.getPluginManager().registerEvents(new KillerHidden1(), this);

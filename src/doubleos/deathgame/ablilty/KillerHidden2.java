@@ -68,9 +68,7 @@ public class KillerHidden2 implements Listener , Hidden
             @Override
             public void run()
             {
-                if(GameVariable.Instance().getGameState().equals(GameVariable.GameState.END))
-                    this.cancel();
-                if(m_hiddenAbliltyTime <= 0)
+                if(m_hiddenAbliltyTime <= 0 || GameVariable.Instance().getGameState().equals(GameVariable.GameState.END))
                 {
                     killer.getInventory().setHelmet(air);
                     killer.sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +" 변신이 풀렸습니다!");
@@ -81,6 +79,7 @@ public class KillerHidden2 implements Listener , Hidden
                     gamevariable.setMissionRotate();
                     gamevariable.setIsKillerCheckTras(false);
                     gamevariable.getKillerHiddenClass().remove(killer.getName());
+                    gamevariable.getPlayerVariableMap().get(killer.getName()).setKillerType(PlayerVariable.KillerType.COMMON);
                     MissionManager.Instance().resetMissionBox();
                     for(Player p :Bukkit.getOnlinePlayers())
                     {

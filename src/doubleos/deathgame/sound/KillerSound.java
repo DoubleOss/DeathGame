@@ -23,8 +23,15 @@ public class KillerSound implements Listener
         m_player = player.getName();
         HashMap<String, PlayerVariable> variableMap = GameVariable.Instance().getPlayerVariableMap();
         Player killer = Bukkit.getPlayer(m_player);
-        final int[] m_soundSpeed = {2000};
+        if(!variableMap.get(player.getName()).getSoundPlaying())
+        {
+            variableMap.get(player.getName()).setSoundPlaying(true);
+            player.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "true").getBytes());
+        }
+
         /*
+        final int[] m_soundSpeed = {2000};
+
         BukkitTask task = new BukkitRunnable()
         {
             @Override

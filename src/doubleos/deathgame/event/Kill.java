@@ -23,33 +23,32 @@ public class Kill implements Listener
     @EventHandler
     void onDeathEvent(PlayerDeathEvent event)
     {
-        if(GameVariable.Instance().getKillerListName(event.getEntity().getKiller()) != null)
+        GameVariable gameVariable = GameVariable.Instance();
+        if(checkPlayingGamePlayer(event.getEntity().getPlayer()))
         {
-            if(checkPlayingGamePlayer(event.getEntity().getPlayer()))
+            event.setDeathMessage("");
+            for(Player p : Bukkit.getOnlinePlayers())
             {
-
-                event.setDeathMessage("");
-                for(Player p : Bukkit.getOnlinePlayers())
+                if(p.isOp())
                 {
-                    if(p.isOp())
-                    {
-                        p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.WHITE + "살인마 " + ChatColor.RED + event.getEntity().getKiller().getName() + ChatColor.WHITE + "님이 "
-                                +ChatColor.GOLD+ event.getEntity().getPlayer().getName() +ChatColor.WHITE + " 님을 살해 하셨습니다." );
-                    }
+                    p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.WHITE + "살인마 " + ChatColor.RED + event.getEntity().getKiller().getName() + ChatColor.WHITE + "님이 "
+                            +ChatColor.GOLD+ event.getEntity().getPlayer().getName() +ChatColor.WHITE + " 님을 살해 하셨습니다." );
                 }
-                if(GameVariable.Instance().getGameStage().equals(GameVariable.GameStage.CATHEDRAL))
+            }
+            if(gameVariable.getGameStage().equals(GameVariable.GameStage.CATHEDRAL))
+            {
+                Bukkit.broadcastMessage("@@");
+                if(gameVariable.getHidden2Target() != null)
                 {
-                    if(GameVariable.Instance().getHidden2Target().equals(event.getEntity().getPlayer().getName()))
+                    if(gameVariable.getHidden2Target().equalsIgnoreCase(event.getEntity().getName()))
                     {
-
                         KillerCommon common = new KillerCommon();
                         common.initCommon(event.getEntity());
-                        //event.getEntity().performCommand("살인자연구소시작아이템 설정");
                         event.getEntity().getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + " 당신은 전도를 받아 살인마로 다시 부활합니다.");
-                        GameVariable.Instance().getPlayerVariableMap().get(event.getEntity().getName()).setHumanType(PlayerVariable.HumanType.KILLER);
-                        GameVariable.Instance().addKillerListName(event.getEntity());
-                        GameVariable.Instance().setHidden2Targer(null);
-                        setKillColltime(event.getEntity().getKiller());
+                        gameVariable.getPlayerVariableMap().get(event.getEntity().getName()).setHumanType(PlayerVariable.HumanType.KILLER);
+                        gameVariable.addKillerListName(event.getEntity());
+                        gameVariable.setHidden2Targer(null);
+                        //setKillColltime(event.getEntity().getKiller());
 
                         for(Player p1 : Bukkit.getOnlinePlayers())
                         {
@@ -60,43 +59,25 @@ public class Kill implements Listener
                         }
                         //if(GameVariable.Instance().getGamePlayerList().size() == GameVariable.Instance().getKillerPlayerList().size())
                         int deathCount = getGameDeathCount();
-                        if(GameVariable.Instance().getGamePlayerList().size() - GameVariable.Instance().getKillerPlayerList().size() - deathCount == 0)
+                        if(gameVariable.getGamePlayerList().size() - GameVariable.Instance().getKillerPlayerList().size() - deathCount == 0)
                         {
                             for(Player p2 : Bukkit.getOnlinePlayers())
                             {
                                 p2.sendTitle("[!]", ChatColor.GREEN+ "남은 기자들이 살인마로 변하여 게임이 종료됩니다.", 1, 30, 1);
                                 p2.sendMessage( ChatColor.GREEN+ "남은 기자들이 살인마로 변하여 게임이 종료됩니다.");
                                 p2.performCommand("spawn");
-                                GameVariable.Instance().GameReset();
+                                gameVariable.GameReset();
                             }
 
-                        }
-
-                    }
-                    else if(GameVariable.Instance().getHidden2Target() == null)
-                    {
-                        event.getEntity().getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + ": 당신은 살인마에 의해 살해 당하였습니다.");
-                        GameVariable.Instance().getPlayerVariableMap().get(event.getEntity().getPlayer().getName()).setObserver(true);
-                        setKillColltime(event.getEntity().getKiller());
-                        if(GameVariable.Instance().getGamePlayerList().size() - GameVariable.Instance().getKillerPlayerList().size() - getGameDeathCount() == 0)
-                        {
-                            for(Player p2 : Bukkit.getOnlinePlayers())
-                            {
-                                p2.sendTitle("[!]", ChatColor.GREEN+ " 모든 생존자들이 죽어 게임이 종료됩니다.", 1, 30, 1);
-                                p2.sendMessage( ChatColor.GREEN+ " 모든 생존자들이 죽어 게임이 종료됩니다.");
-                                p2.performCommand("spawn");
-                                GameVariable.Instance().GameReset();
-                            }
-                            Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(),"영상 전체재생 death.mp4");
                         }
                     }
                     else
                     {
                         event.getEntity().getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + ": 당신은 살인마에 의해 살해 당하였습니다.");
-                        GameVariable.Instance().getPlayerVariableMap().get(event.getEntity().getPlayer().getName()).setObserver(true);
-                        GameVariable.Instance().setHidden2Targer(null);
-                        GameVariable.Instance().getOrignalKillerPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + ": 전도에 실패 하셨습니다.");
-                        setKillColltime(event.getEntity().getKiller());
+                        gameVariable.getPlayerVariableMap().get(event.getEntity().getPlayer().getName()).setObserver(true);
+                        gameVariable.setHidden2Targer(null);
+                        gameVariable.getOrignalKillerPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + ": 전도에 실패 하셨습니다.");
+                        //setKillColltime(event.getEntity().getKiller());
                         for(Player p : Bukkit.getOnlinePlayers())
                         {
                             if(p.isOp())
@@ -104,41 +85,57 @@ public class Kill implements Listener
                                 p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.WHITE + "살인마의 전도에 실패 하였습니다");
                             }
                         }
-                        if(GameVariable.Instance().getGamePlayerList().size() - GameVariable.Instance().getKillerPlayerList().size() - getGameDeathCount() == 0)
+                        if(gameVariable.getGamePlayerList().size() - GameVariable.Instance().getKillerPlayerList().size() - getGameDeathCount() == 0)
                         {
                             for(Player p2 : Bukkit.getOnlinePlayers())
                             {
                                 p2.sendTitle("[!]", ChatColor.GREEN+ " 모든 생존자들이 죽어 게임이 종료됩니다.", 1, 30, 1);
                                 p2.sendMessage( ChatColor.GREEN+ " 모든 생존자들이 죽어 게임이 종료됩니다.");
                                 p2.performCommand("spawn");
-                                GameVariable.Instance().GameReset();
+                                gameVariable.GameReset();
 
                             }
                             Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(),"영상 전체재생 death.mp4");
 
                         }
                     }
-
                 }
-                else
+                else if(gameVariable.getHidden2Target() == null)
                 {
-                    if(GameVariable.Instance().getHidden2Target() == null)
+                    event.getEntity().getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + ": 당신은 살인마에 의해 살해 당하였습니다.");
+                    gameVariable.getPlayerVariableMap().get(event.getEntity().getPlayer().getName()).setObserver(true);
+                    //setKillColltime(event.getEntity().getKiller());
+                    if(gameVariable.getGamePlayerList().size() - gameVariable.getKillerPlayerList().size() - getGameDeathCount() == 0)
                     {
-                        event.getEntity().getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + ": 당신은 살인마에 의해 살해 당하였습니다.");
-                        GameVariable.Instance().getPlayerVariableMap().get(event.getEntity().getPlayer().getName()).setObserver(true);
-                        setKillColltime(event.getEntity().getKiller());
-                        if(GameVariable.Instance().getGamePlayerList().size() - GameVariable.Instance().getKillerPlayerList().size() - getGameDeathCount() == 0)
+                        for(Player p2 : Bukkit.getOnlinePlayers())
                         {
-                            for(Player p2 : Bukkit.getOnlinePlayers())
-                            {
-                                p2.sendTitle("[!]", ChatColor.GREEN+ " 모든 생존자들이 죽어 게임이 종료됩니다.", 1, 30, 1);
-                                p2.sendMessage( ChatColor.GREEN+ " 모든 생존자들이 죽어 게임이 종료됩니다.");
-                                p2.performCommand("spawn");
-                                GameVariable.Instance().GameReset();
-                            }
-                            Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(),"영상 전체재생 death.mp4");
-
+                            p2.sendTitle("[!]", ChatColor.GREEN+ " 모든 생존자들이 죽어 게임이 종료됩니다.", 1, 30, 1);
+                            p2.sendMessage( ChatColor.GREEN+ " 모든 생존자들이 죽어 게임이 종료됩니다.");
+                            p2.performCommand("spawn");
+                            gameVariable.GameReset();
                         }
+                        Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(),"영상 전체재생 death.mp4");
+                    }
+                }
+
+            }
+            else
+            {
+                if(gameVariable.getHidden2Target() == null)
+                {
+                    event.getEntity().getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + ": 당신은 살인마에 의해 살해 당하였습니다.");
+                    gameVariable.getPlayerVariableMap().get(event.getEntity().getPlayer().getName()).setObserver(true);
+                    //setKillColltime(event.getEntity().getKiller());
+                    if(gameVariable.getGamePlayerList().size() - GameVariable.Instance().getKillerPlayerList().size() - getGameDeathCount() == 0)
+                    {
+                        for(Player p2 : Bukkit.getOnlinePlayers())
+                        {
+                            p2.sendTitle("[!]", ChatColor.GREEN+ " 모든 생존자들이 죽어 게임이 종료됩니다.", 1, 30, 1);
+                            p2.sendMessage( ChatColor.GREEN+ " 모든 생존자들이 죽어 게임이 종료됩니다.");
+                            p2.performCommand("spawn");
+                            gameVariable.GameReset();
+                        }
+                        Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(),"영상 전체재생 death.mp4");
 
                     }
 
@@ -147,21 +144,32 @@ public class Kill implements Listener
             }
 
         }
+
     }
 
     @EventHandler
     void onRespawn(PlayerRespawnEvent event)
     {
+        GameVariable gameVariable = GameVariable.Instance();
         if(checkPlayingGamePlayer(event.getPlayer()))
         {
-            if(GameVariable.Instance().getPlayerVariableMap().get(event.getPlayer().getName()).getObserver())
+            if(gameVariable.getPlayerVariableMap().get(event.getPlayer().getName()).getObserver())
             {
                 //event.getPlayer().setGameMode(GameMode.SPECTATOR);
-                Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "Gamemode 3 "+event.getPlayer().getName());
+                BukkitTask task = new BukkitRunnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        event.getPlayer().performCommand("관전");
+                        this.cancel();
+                    }
+                }.runTaskTimer(Main.instance, 20l, 20l);
+
             }
-            else if(GameVariable.Instance().getGameStage().equals(GameVariable.GameStage.CATHEDRAL))
+            else if(gameVariable.getGameStage().equals(GameVariable.GameStage.CATHEDRAL))
             {
-                if(GameVariable.Instance().getPlayerVariableMap().get(event.getPlayer().getName()).getHumanType().equals(PlayerVariable.HumanType.KILLER))
+                if(gameVariable.getPlayerVariableMap().get(event.getPlayer().getName()).getHumanType().equals(PlayerVariable.HumanType.KILLER))
                 {
                     Location loc = new Location(Bukkit.getWorld("world"), -532, 62, 67);
                     event.getPlayer().teleport(loc);
@@ -223,11 +231,12 @@ public class Kill implements Listener
     int getGameDeathCount()
     {
         int deathCount = 0;
+        GameVariable gameVariable = GameVariable.Instance();
         for(String s : GameVariable.Instance().getGamePlayerList())
         {
-            if(GameVariable.Instance().getPlayerVariableMap().get(s).getHumanType().equals(PlayerVariable.HumanType.HUMAN))
+            if(gameVariable.getPlayerVariableMap().get(s).getHumanType().equals(PlayerVariable.HumanType.HUMAN))
             {
-                if(GameVariable.Instance().getPlayerVariableMap().get(s).getObserver())
+                if(gameVariable.getPlayerVariableMap().get(s).getObserver())
                 {
                     deathCount++;
                 }

@@ -92,11 +92,14 @@ public class Scoreboard
                             scoreboard.add("     ", 6);
                             scoreboard.add( "변신시간: " + hidden_Time, 5);
                         }
+                        /*
                         else if(player.isOp() || variableMap.get(player.getName()).getObserver())
                         {
                             scoreboard.add("     ", 6);
                             scoreboard.add( "킬 쿨타임: " + gamevariable.getKillCoolTimeTimer() + " 초", 5);
                         }
+
+                         */
 
                     }
                     if (player.isOp() || variableMap.get(player.getName()).getObserver())

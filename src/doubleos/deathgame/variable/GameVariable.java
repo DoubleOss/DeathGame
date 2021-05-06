@@ -10,6 +10,7 @@ import javafx.scene.control.Cell;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -55,6 +56,9 @@ public class GameVariable
     ArrayList<String> m_GamePlayerList = new ArrayList<>();
     ArrayList<String> m_killerPlayerList = new ArrayList<>();
 
+    ArrayList<Location> m_humanTrapLocList = new ArrayList<>();
+
+
     HashMap<String, CellularGame> m_cellGameClassPlayer = new HashMap<>();
     HashMap<String, DefectiveGame> m_defectiveGameClassPlayer = new HashMap<>();
     HashMap<String, Hidden> m_killerHiddenClass = new HashMap<>();
@@ -75,7 +79,7 @@ public class GameVariable
 
     KillerHidden2 m_KillerHidden2;
 
-    String m_hidden2Target;
+    String m_hidden2Target = null;
 
 
 
@@ -322,6 +326,14 @@ public class GameVariable
     }
 
 
+    public void addHumanTrapLocList(Location loc)
+    {
+        m_humanTrapLocList.add(loc);
+    }
+    public ArrayList<Location> getHumanTrapLocList()
+    {
+        return m_humanTrapLocList;
+    }
     public void setKillCoolTime(boolean bool)
     {
         m_killCoolTime = bool;
@@ -488,6 +500,7 @@ public class GameVariable
         m_cellGameClassPlayer.clear();
         m_defectiveGameClassPlayer.clear();
         m_killerHiddenClass.clear();
+        m_humanTrapLocList.clear();
 
         m_teleporting = false;
 

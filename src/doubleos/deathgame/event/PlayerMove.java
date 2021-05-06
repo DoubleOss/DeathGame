@@ -10,14 +10,11 @@ public class PlayerMove implements Listener
     @EventHandler
     void onPlayerMoveEvent(PlayerMoveEvent event)
     {
-        /*
         if(GameVariable.Instance().getTeleporting())
             event.getPlayer().setWalkSpeed(0);
         else
             event.getPlayer().setWalkSpeed(0.2f);
 
-
-         */
     }
 
 }

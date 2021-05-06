@@ -5,6 +5,7 @@ import doubleos.deathgame.scoreboard.Scoreboard;
 import doubleos.deathgame.variable.GameVariable;
 import doubleos.deathgame.variable.PlayerVariable;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,9 +17,10 @@ public class Join implements Listener
     @EventHandler
     public void fristJoin(PlayerJoinEvent event)
     {
-        if(GameVariable.Instance().getGameState().equals(GameVariable.GameState.END))
+        if(GameVariable.Instance().getPlayerListVariableMap().get(event.getPlayer().getName()) == null)
         {
             PlayerVariable variable = new PlayerVariable(event.getPlayer());
+            event.setJoinMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE +event.getPlayer().getName() +" 님이 접속하셨습니다.");
         }
     }
 
@@ -37,7 +39,8 @@ public class Join implements Listener
                 if(event.getPlayer().equals(p))
                 {
                     Scoreboard scoreboard = new Scoreboard(event.getPlayer());
-
+                    GameVariable.Instance().getPlayerVariableMap().get(p.getName()).setSoundPlaying(true);
+                    p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "true").getBytes());
                 }
             }
 

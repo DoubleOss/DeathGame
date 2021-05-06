@@ -35,7 +35,6 @@ public class MissionBoxClick implements Listener
                     return;
                 for(int i =0; i<missionManager.getMissionBoxList().size(); i++)
                 {
-
                     if(missionManager.getMissionBoxList().get(i).equals(event.getClickedBlock().getLocation()))
                     {
                         if(!missionManager.getMissionBoxMap().get(eventBlock.getLocation()).getBoxUse())

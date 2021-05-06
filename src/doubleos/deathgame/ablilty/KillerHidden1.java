@@ -46,6 +46,7 @@ public class KillerHidden1 implements Listener, Hidden
 
     public void initKillerHidden1()
     {
+        GameVariable gameVariable = GameVariable.Instance();
         this.m_killerName = GameVariable.Instance().getOrignalKillerPlayer().getName();
         Player killer = Bukkit.getPlayer(m_killerName);
         m_hiddenAbliltyTime = 120;
@@ -54,7 +55,7 @@ public class KillerHidden1 implements Listener, Hidden
         killer.getInventory().addItem(GameItem.Instance().m_killerHidden1_Ability1_Item);
         killer.getInventory().addItem(GameItem.Instance().m_killerHidden1_Ability2_Item);
 
-        GameVariable.Instance().addKillerHiddenClass(killer, this);
+        gameVariable.addKillerHiddenClass(killer, this);
 
         ItemStack helmet = new ItemStack(Material.PUMPKIN);
         ItemStack air = new ItemStack(Material.AIR);
@@ -73,19 +74,18 @@ public class KillerHidden1 implements Listener, Hidden
             @Override
             public void run()
             {
-                if(GameVariable.Instance().getGameState().equals(GameVariable.GameState.END))
-                    this.cancel();
-                if(m_hiddenAbliltyTime <= 0)
+                if(m_hiddenAbliltyTime <= 0 || gameVariable.getGameState().equals(GameVariable.GameState.END))
                 {
                     killer.getInventory().setHelmet(air);
                     killer.sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE +" 변신이 풀렸습니다!");
                     killer.getInventory().remove(GameItem.Instance().m_killerHidden1_Ability1_Item);
                     killer.getInventory().remove(GameItem.Instance().m_killerHidden1_Ability2_Item);
                     m_hiddenAbliltyTime = 0;
-                    GameVariable.Instance().setMissionRotateNumber(GameVariable.Instance().getMissionRotateNumber()+1);
-                    GameVariable.Instance().setMissionRotate();
-                    GameVariable.Instance().setIsKillerCheckTras(false);
-                    GameVariable.Instance().getKillerHiddenClass().remove(killer.getName());
+                    gameVariable.setMissionRotateNumber(gameVariable.getMissionRotateNumber()+1);
+                    gameVariable.setMissionRotate();
+                    gameVariable.setIsKillerCheckTras(false);
+                    gameVariable.getKillerHiddenClass().remove(killer.getName());
+                    gameVariable.getPlayerVariableMap().get(m_killerName).setKillerType(PlayerVariable.KillerType.COMMON);
                     MissionManager.Instance().resetMissionBox();
                     for(Player p :Bukkit.getOnlinePlayers())
                     {
@@ -98,8 +98,8 @@ public class KillerHidden1 implements Listener, Hidden
                 }
                 else
                 {
-                    if(!GameVariable.Instance().getGameState().equals(GameVariable.GameState.PAUSE) &&
-                            !GameVariable.Instance().getPlayerVariableMap().get(killer.getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER))
+                    if(!gameVariable.getGameState().equals(GameVariable.GameState.PAUSE) &&
+                            !gameVariable.getPlayerVariableMap().get(killer.getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER))
                     {
                         m_hiddenAbliltyTime--;
                     }
@@ -179,11 +179,11 @@ public class KillerHidden1 implements Listener, Hidden
                     PotionEffect effect2 = new PotionEffect(PotionEffectType.CONFUSION, 100, 0);
                     if(event.getHitEntity() instanceof Player)
                     {
-                        ((Player) event.getHitEntity()).getPlayer().damage(4);
+                        ((Player) event.getHitEntity()).getPlayer().damage(4, GameVariable.Instance().getOrignalKillerPlayer());
                         ((Player) event.getHitEntity()).addPotionEffect(effect1, true);
                         ((Player) event.getHitEntity()).addPotionEffect(effect2, true);
                         ((Player) event.getHitEntity()).getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + " 당신은 실험체의 위산 분비 공격에 당해 독과 멀미에 걸립니다.");
-                        ((Player) event.getHitEntity()).getKiller().sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ ((Player) event.getHitEntity()).getPlayer().getName() + ChatColor.WHITE+ " 님이 위산 분비 공격에 당해 독과 멀미에 걸립니다.");
+                        ((Player) event.getHitEntity()).getKiller().sendMessage(ChatColor.GOLD + "[죽음의 술래잡기]"+ ChatColor.RED+ ((Player) event.getHitEntity()).getPlayer().getName() + ChatColor.WHITE+ " 님이 위산 분비 공격에 당해 독과 멀미에 걸립니다.");
 
                         for(Player p :Bukkit.getOnlinePlayers())
                         {

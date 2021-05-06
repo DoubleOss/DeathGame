@@ -23,8 +23,9 @@ public class GameItem
         return _instance;
     }
 
-    public ItemStack m_killerCom_Ability1_Item;
-    public ItemStack m_killerCom_Ability1_Block;
+    public ItemStack m_humanCom_Ability1_Item;
+
+    public ItemStack m_humanCom_Ability1_Block;
 
     public ItemStack m_killerCom_Ability2_Item;
 
@@ -39,6 +40,8 @@ public class GameItem
     public ItemStack m_killerHidden3_Ability1_Item;
     public ItemStack m_killerHidden3_Ability2_Item;
 
+    public ItemStack m_glowStone_Item;
+
     public ItemStack m_FactoryHiddenItem_1;
     public ItemStack m_FactoryHiddenItem_2;
     public ItemStack m_FactoryHiddenItem_3;
@@ -52,8 +55,10 @@ public class GameItem
 
     public void initGameItem()
     {
-        m_killerCom_Ability1_Item = createItem(Material.FLINT, "덫", "", 3);
-        m_killerCom_Ability1_Block = createItem(Material.CARPET, "덫", "", 1);
+        m_glowStone_Item = createItem(Material.GLOWSTONE, "랜턴", "");
+
+        m_humanCom_Ability1_Item = createItem(Material.FLINT, "덫", "");
+        m_humanCom_Ability1_Block = createItem(Material.CARPET, "덫", "");
 
         m_killerCom_Ability2_Item = createItem(Material.FEATHER, "탐지", "");
 

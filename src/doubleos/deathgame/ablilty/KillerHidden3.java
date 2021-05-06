@@ -70,9 +70,7 @@ public class KillerHidden3 implements Listener , Hidden
             @Override
             public void run()
             {
-                if(GameVariable.Instance().getGameState().equals(GameVariable.GameState.END))
-                    this.cancel();
-                if(m_hiddenAbliltyTime <= 0)
+                if(m_hiddenAbliltyTime <= 0 || GameVariable.Instance().getGameState().equals(GameVariable.GameState.END))
                 {
                     killer.getInventory().setHelmet(air);
                     killer.sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE+ ": 변신이 풀렸습니다!");
@@ -83,6 +81,7 @@ public class KillerHidden3 implements Listener , Hidden
                     gamevariable.setMissionRotate();
                     gamevariable.setIsKillerCheckTras(false);
                     gamevariable.getKillerHiddenClass().remove(killer.getName());
+                    gamevariable.getPlayerVariableMap().get(killer.getName()).setKillerType(PlayerVariable.KillerType.COMMON);
                     m_skill1Active = false;
                     MissionManager.Instance().resetMissionBox();
                     removeInvisible(killer);
@@ -199,7 +198,7 @@ public class KillerHidden3 implements Listener , Hidden
                     {
                         ((Player) event.getHitEntity()).addPotionEffect(effect1, true);
                         ((Player) event.getHitEntity()).getPlayer().sendMessage("당신은 인형의 눈알에 맞아 잠시 구속에 걸립니다.");
-                        ((Player) event.getHitEntity()).getKiller().sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ ((Player) event.getHitEntity()).getPlayer().getName() +
+                        ((Player) event.getHitEntity()).getKiller().sendMessage(ChatColor.GOLD + "[죽음의 술래잡기] "+ ChatColor.RED+ ((Player) event.getHitEntity()).getPlayer().getName() +
                                 ChatColor.WHITE+ " 인형의 눈알에 맞아 잠시 구속에 걸립니다.");
 
                         for(Player p :Bukkit.getOnlinePlayers())

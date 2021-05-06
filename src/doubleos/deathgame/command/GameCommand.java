@@ -11,6 +11,7 @@ import doubleos.deathgame.gui.PotionMakeGui;
 import doubleos.deathgame.scoreboard.Scoreboard;
 import doubleos.deathgame.sound.KillerSound;
 import doubleos.deathgame.util.Utils;
+import doubleos.deathgame.variable.GameItem;
 import doubleos.deathgame.variable.GameVariable;
 import doubleos.deathgame.variable.MissionManager;
 import doubleos.deathgame.variable.PlayerVariable;
@@ -22,6 +23,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.inventivetalent.glow.GlowAPI;
 
 import java.util.ArrayList;
@@ -87,14 +90,15 @@ public class GameCommand implements CommandExecutor
                                     {
                                         KillerCommon common = new KillerCommon();
                                         Player killer = Bukkit.getPlayer(gamevariable.getGamePlayerList().get(0));
-
                                         gamevariable.getPlayerVariableMap().get(killer.getName()).setHumanType(PlayerVariable.HumanType.KILLER);
+                                        gamevariable.getPlayerVariableMap().get(killer.getName()).setKillerType(PlayerVariable.KillerType.COMMON);
                                         sender.sendMessage(killer.getName());
+                                        giveItem();
                                         common.initCommon(killer);
                                         gamevariable.addKillerListName(killer);
                                         gamevariable.setOrignalKillerPlayer(killer);
                                         gamevariable.setCheckKiller(true);
-                                        giveItem();
+
 
                                         //타이틀로
                                         killer.sendTitle("[!]", "당신은 살인마로 선정되셨습니다.", 0, 40, 0);
@@ -102,25 +106,48 @@ public class GameCommand implements CommandExecutor
                                     else
                                     {
                                         player.sendMessage("킬러가 이미 존재함으로 킬러 뽑기는 스킵됩니다.");
-                                        playSound();
                                     }
 
                                     player.sendMessage("테스트 " + gamevariable.getGamePlayerList());
                                     player.sendMessage("테스트2 " + gamevariable.getPlayerVariableMap().get(gamevariable.getGamePlayerList().get(0)).getHumanType());
 
-                                    GameVariable.Instance().setTimeStart(true);
-                                    GameVariable.Instance().setTeleporting(false);
-
                                 }
                             }, 40l);
-                            allPlayerScoreBoard();
-                            missionManager.initRepairBoxList();
-                            missionManager.initMissionBox();
-                            //playSound();
-                            for(String stringName : gamevariable.getGamePlayerList())
+                            BukkitTask tasks = new BukkitRunnable()
                             {
-                                Bukkit.getPlayer(stringName).setWalkSpeed(0.2f);
-                            }
+                                @Override
+                                public void run()
+                                {
+                                    allPlayerScoreBoard();
+                                    missionManager.initRepairBoxList();
+                                    missionManager.initMissionBox();
+                                    for(Player p1 : Bukkit.getOnlinePlayers())
+                                    {
+                                        p1.sendTitle("[!]", "15초 동안 스토리북을 읽을 시간이 주어집니다.", 0, 60, 0);
+                                    }
+                                    this.cancel();
+                                }
+                            }.runTaskTimer(Main.instance, 80l, 80l);
+
+                            BukkitTask task = new BukkitRunnable()
+                            {
+                                @Override
+                                public void run()
+                                {
+                                    for(String stringName : gamevariable.getGamePlayerList())
+                                    {
+                                        Bukkit.getPlayer(stringName).setWalkSpeed(0.2f);
+                                        Bukkit.getPlayer(stringName).sendTitle("[!]", "게임이 시작되었습니다.", 0, 60, 0);
+                                    }
+                                    GameVariable.Instance().setTimeStart(true);
+                                    GameVariable.Instance().setTeleporting(false);
+                                    Bukkit.broadcastMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE +" 게임이 시작되었습니다!");
+                                    this.cancel();
+
+                                }
+                            }.runTaskTimer(Main.instance, 300l, 300l);
+                            //playSound();
+
                         }
                         return true;
                     case "중지":
@@ -144,7 +171,7 @@ public class GameCommand implements CommandExecutor
                                 gamevariable.adminList.add(observer.getName());
                                 observer.sendMessage("관전 설정 되었습니다.");
                                 //observer.setGameMode(GameMode.SPECTATOR);
-                                Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "Gamemode 3 "+observer.getPlayer().getName());
+                                observer.getPlayer().performCommand("관전");
                             }
                             else
                             {
@@ -183,7 +210,6 @@ public class GameCommand implements CommandExecutor
                             gamevariable.addKillerListName(killer);
                             gamevariable.setOrignalKillerPlayer(killer);
                             gamevariable.setCheckKiller(true);
-
                             //액션바
                             //Bukkit.getPlayer(strings[1]).sendMessage("당신이 살인마로 지정되었습니다.");
                             return true;
@@ -242,22 +268,48 @@ public class GameCommand implements CommandExecutor
 
                         }
                         sender.sendMessage("");
+                        sender.sendMessage("");
+                        int rapaircount = 0;
+                        for(Location loc : missionManager.getRepairBoxList())
+                        {
+                            rapaircount++;
+                            String stringRepair = (missionManager.getRepairBoxClassMap().get(loc).getRepair() ?  ChatColor.GREEN +  "O" : ChatColor.RED + "X" );
+                            String stringHealth = String.valueOf(missionManager.getRepairBoxClassMap().get(loc).gethealth());
+                            String stringRepiring = (missionManager.getRepairBoxClassMap().get(loc).getRepairing() ? ChatColor.GREEN + "O" :  ChatColor.RED +"X");
+
+                            sender.sendMessage(ChatColor.WHITE + "배전박스 "+rapaircount+" - 수리 완료 : " + stringRepair + ChatColor.WHITE  +",  체력 : " + stringHealth + " | 60" + ",  수리 중 : " + stringRepiring);
+                        }
+                        sender.sendMessage("");
                         return true;
-                        
                     case "탈출완료":
                         if(!gamevariable.getPlayerVariableMap().get(sender.getName()).getEscape())
                         {
                             gamevariable.getPlayerVariableMap().get(sender.getName()).setEscape(true);
-                            int count = gamevariable.getGamePlayerList().size() - gamevariable.getKillerPlayerList().size();
+                            int deathCount = 0;
+                            for(Player p : Bukkit.getOnlinePlayers())
+                            {
+                                if(gamevariable.getPlayerVariableMap().get(p.getName()).getObserver())
+                                {
+                                    deathCount++;
+                                }
+                            }
+
+                            int count = gamevariable.getGamePlayerList().size() - gamevariable.getKillerPlayerList().size() - deathCount;
+                            gamevariable.setEscapePlayerCount(gamevariable.getEscapePlayerCount()+1);
                             for(Player p : Bukkit.getOnlinePlayers())
                             {
                                 if(p.isOp())
                                 {
-                                    p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ sender.getName() +  ChatColor.WHITE +" 님이 탈출 하셨습니다. 남은인원 : " + gamevariable.getEscapePlayerCount() + " |" + count);
+                                    p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ sender.getName() +  ChatColor.WHITE +" 님이 탈출 하셨습니다. 남은인원 : " + gamevariable.getEscapePlayerCount() + " | " + count);
                                 }
                             }
-
+                            if(gamevariable.getEscapePlayerCount() - count == 0 && gamevariable.getEscapePlayerCount() >= 3)
+                            {
+                                ((Player) sender).performCommand("");
+                            }
+                            return true;
                         }
+                        return true;
                     case "미션완료":
                         if(strings[1].isEmpty() == false || strings[1] != null)
                         {
@@ -428,26 +480,42 @@ public class GameCommand implements CommandExecutor
         {
             if(!gameVariable.getPlayerListVariableMap().get(p.getName()).getObserver())
             {
+                p.getInventory().addItem(GameItem.Instance().m_glowStone_Item);
                 if(gameVariable.getPlayerVariableMap().get(p.getName()).getHumanType().equals(PlayerVariable.HumanType.HUMAN))
                 {
                     if(!gameVariable.getPlayerListVariableMap().get(p.getName()).getObserver())
                     {
+                        p.getInventory().addItem(GameItem.Instance().m_humanCom_Ability1_Item);
                         if(gameVariable.getGameStage().equals(GameVariable.GameStage.LAB))
+                        {
                             p.performCommand("연구소시작아이템 지급");
+                        }
                         else if(gameVariable.getGameStage().equals(GameVariable.GameStage.CATHEDRAL))
+                        {
                             p.performCommand("성당시작아이템 지급");
+                        }
                         else if(gameVariable.getGameStage().equals(GameVariable.GameStage.FACTORY))
+                        {
                             p.performCommand("인형공장시작아이템 지급");
+                        }
+
                     }
                 }
                 else if(gameVariable.getPlayerVariableMap().get(p.getName()).getHumanType().equals(PlayerVariable.HumanType.KILLER))
                 {
                     if(gameVariable.getGameStage().equals(GameVariable.GameStage.LAB))
+                    {
                         p.performCommand("살인자연구소시작아이템 지급");
+                    }
                     else if(gameVariable.getGameStage().equals(GameVariable.GameStage.CATHEDRAL))
+                    {
                         p.performCommand("살인마성당시작아이템 지급");
+                    }
                     else if(gameVariable.getGameStage().equals(GameVariable.GameStage.FACTORY))
+                    {
                         p.performCommand("살인마인형공장시작아이템 지급");
+                    }
+
                 }
             }
         }
@@ -457,11 +525,11 @@ public class GameCommand implements CommandExecutor
     {
         if(number == 1)
         {
-            GameVariable.Instance().setGameStage(GameVariable.GameStage.LAB);
+            GameVariable.Instance().setGameStage(GameVariable.GameStage.CATHEDRAL);
         }
         else if(number == 2)
         {
-            GameVariable.Instance().setGameStage(GameVariable.GameStage.CATHEDRAL);
+            GameVariable.Instance().setGameStage(GameVariable.GameStage.LAB);
         }
         else if (number == 3)
         {
@@ -484,7 +552,7 @@ public class GameCommand implements CommandExecutor
     {
         p.sendMessage("      죽음의 술래잡기");
         p.sendMessage("/죽술 시작 [스테이지] - 게임을 시작합니다.");
-        p.sendMessage("[스테이지] - 1 : 연구소, 2 : 성당, 3: 공장");
+        p.sendMessage("[스테이지] - 1 : 성당, 2 : 연구소, 3: 공장");
         p.sendMessage("/죽술 초기화 - 게임을 리셋 시킵니다.");
         p.sendMessage("/죽술 플레이어 - 참가하는 플레이어 목록을 확인합니다.");
         p.sendMessage("/죽술 관전플레이어 - 관전하는 플레이어 목록을 확인합니다.");

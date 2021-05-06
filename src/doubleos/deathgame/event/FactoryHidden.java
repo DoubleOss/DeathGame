@@ -52,7 +52,6 @@ public class FactoryHidden implements Listener
         {
             MissionManager mission = MissionManager.Instance();
 
-            event.getPlayer().sendMessage(event.getAction().toString().toLowerCase());
             if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
             {
                 if (event.getHand() != EquipmentSlot.HAND)
@@ -111,6 +110,7 @@ public class FactoryHidden implements Listener
                                         if(mission.getFactoryHiddenCount() == 12)
                                         {
                                             Bukkit.broadcastMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE +" 인형으로 둔갑한 사악한 귀신이 제단에 봉인되었습니다");
+                                            Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "히든영상");
                                         }
                                     }
                                 }

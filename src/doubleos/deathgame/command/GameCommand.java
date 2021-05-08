@@ -64,7 +64,7 @@ public class GameCommand implements CommandExecutor
                     case "시작":
                         if(!strings[1].isEmpty() || strings[1] != null)
                         {
-                            gamevariable.GameReset();
+                            //gamevariable.GameReset();
                             gamevariable.setGameState(GameVariable.GameState.PLAY);
                             numberToSetStage(Integer.parseInt(strings[1]));
 
@@ -140,6 +140,7 @@ public class GameCommand implements CommandExecutor
                                     }
                                     GameVariable.Instance().setTimeStart(true);
                                     GameVariable.Instance().setTeleporting(false);
+                                    MissionManager.Instance().loopingRepairBox();
                                     Bukkit.broadcastMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE +" 게임이 시작되었습니다!");
                                     this.cancel();
 
@@ -202,7 +203,9 @@ public class GameCommand implements CommandExecutor
                             player.sendMessage("지정한 플레이어" + strings[1] + "으로 살인마 설정이 완료 되었습니다.");
                             KillerCommon common = new KillerCommon();
                             Player killer = Bukkit.getPlayer(strings[1]);
+                            gamevariable.getPlayerVariableMap().put(killer.getName(), gamevariable.getPlayerListVariableMap().get(killer.getName()));
                             gamevariable.getPlayerVariableMap().get(killer.getName()).setHumanType(PlayerVariable.HumanType.KILLER);
+                            gamevariable.getGamePlayerList().add(killer.getName());
                             sender.sendMessage(killer.getName());
                             common.initCommon(killer);
                             gamevariable.addKillerListName(killer);
@@ -275,7 +278,7 @@ public class GameCommand implements CommandExecutor
                             String stringHealth = String.valueOf(missionManager.getRepairBoxClassMap().get(loc).gethealth());
                             String stringRepiring = (missionManager.getRepairBoxClassMap().get(loc).getRepairing() ? ChatColor.GREEN + "O" :  ChatColor.RED +"X");
 
-                            sender.sendMessage(ChatColor.WHITE + "배전박스 "+rapaircount+" - 수리 완료 : " + stringRepair + ChatColor.WHITE  +",  체력 : " + stringHealth + " | 60" + ",  수리 중 : " + stringRepiring);
+                            sender.sendMessage(ChatColor.WHITE + "배전박스 "+rapaircount+" - 수리 완료 : " + stringRepair + ChatColor.WHITE  +",  체력 : " + stringHealth + " | 120" + ",  수리 중 : " + stringRepiring);
                         }
                         sender.sendMessage("");
                         return true;

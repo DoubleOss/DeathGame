@@ -1,5 +1,6 @@
 package doubleos.deathgame.variable;
 
+import doubleos.deathgame.Main;
 import doubleos.deathgame.ablilty.KillerHidden1;
 import doubleos.deathgame.ablilty.KillerHidden2;
 import doubleos.deathgame.ablilty.KillerHidden3;
@@ -7,6 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -133,6 +136,27 @@ public class MissionManager
             }
 
         }
+    }
+
+    public void loopingRepairBox()
+    {
+        GameVariable gameVariable = GameVariable.Instance();
+        BukkitTask task = new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                for(Location loc : m_repairBlock)
+                {
+                    RepairBox repair = getRepairBoxClassMap().get(loc);
+                    if(!repair.getRepairing() && repair.gethealth() > 0)
+                    {
+                        repair.sethealth(repair.gethealth() - 0.4f);
+                    }
+                }
+            }
+        }.runTaskTimer(Main.instance, 0l, 20l);
+
     }
 
     public void initRepairBoxList()

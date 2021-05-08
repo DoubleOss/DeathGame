@@ -55,16 +55,17 @@ public class RepairBoxClick implements Listener
                                 {
                                     int boxHealth = (int)mission.getRepairBoxClassMap().get(event.getClickedBlock().getLocation()).gethealth();
                                     variableMap.get(event.getPlayer().getName()).setRepair(true);
-                                    event.getPlayer().sendPluginMessage(Main.instance, "DeathGame", String.format("LoadingBar" + "_" + "true" + "_" + "60" +"_"+ "%d",boxHealth).getBytes());
+                                    event.getPlayer().sendPluginMessage(Main.instance, "DeathGame", String.format("LoadingBar" + "_" + "true" + "_" + "120" +"_"+ "%d",boxHealth).getBytes());
                                     event.getPlayer().sendTitle("[!]", ChatColor.GREEN+ "배전박스를 수리합니다" +ChatColor.RED+" 움직일 시 수리가 중단됩니다.", 1, 30, 1);
                                     BukkitTask task = new BukkitRunnable()
                                     {
                                         @Override
                                         public void run()
                                         {
-                                            if((map.get(event.getClickedBlock().getLocation()).gethealth() == 7) || (map.get(event.getClickedBlock().getLocation()).gethealth() == 30) || (map.get(event.getClickedBlock().getLocation()).gethealth() == 45))
+                                            if((map.get(event.getClickedBlock().getLocation()).gethealth() == 7) || (map.get(event.getClickedBlock().getLocation()).gethealth() == 20) || (map.get(event.getClickedBlock().getLocation()).gethealth() == 40)
+                                                    || (map.get(event.getClickedBlock().getLocation()).gethealth() == 60) || (map.get(event.getClickedBlock().getLocation()).gethealth() == 90))
                                             {
-                                                if(map.get(event.getClickedBlock().getLocation()).getMiniGameCount() < 3)
+                                                if(map.get(event.getClickedBlock().getLocation()).getMiniGameCount() < 5)
                                                 {
                                                     if(!map.get(event.getClickedBlock().getLocation()).getMiniGame())
                                                     {
@@ -85,7 +86,7 @@ public class RepairBoxClick implements Listener
                                                 this.cancel();
 
                                             }
-                                            else if ((map.get(event.getClickedBlock().getLocation()).gethealth() > 60))
+                                            else if ((map.get(event.getClickedBlock().getLocation()).gethealth() > 120))
                                             {
                                                 mission.getRepairBoxClassMap().get(event.getClickedBlock().getLocation()).setRepairing(false);
                                                 variableMap.get(event.getPlayer().getName()).setRepair(false);
@@ -104,7 +105,7 @@ public class RepairBoxClick implements Listener
                                                 }
                                                 this.cancel();
                                             }
-                                            else if (map.get(event.getClickedBlock().getLocation()).gethealth() <= 60)
+                                            else if (map.get(event.getClickedBlock().getLocation()).gethealth() <= 120)
                                             {
                                                 mission.getRepairBoxClassMap().get(event.getClickedBlock().getLocation()).setRepairing(true);
                                                 map.get(event.getClickedBlock().getLocation()).sethealth(map.get(event.getClickedBlock().getLocation()).gethealth() + 1);

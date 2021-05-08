@@ -413,8 +413,12 @@ public class GameVariable
         {
             if(!m_playerListVariable.get(p.getName()).getObserver())
             {
-                m_playerVariableMap.put(p.getName(), m_playerListVariable.get(p.getName()));
-                addGamePlayerList(p);
+                if(m_playerVariableMap.get(p.getName()) == null)
+                {
+                    m_playerVariableMap.put(p.getName(), m_playerListVariable.get(p.getName()));
+                    addGamePlayerList(p);
+                }
+
             }
         }
     }

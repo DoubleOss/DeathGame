@@ -57,7 +57,7 @@ public class GameItem
     {
         m_glowStone_Item = createItem(Material.GLOWSTONE, "랜턴", "");
 
-        m_humanCom_Ability1_Item = createItem(Material.FLINT, "덫", "");
+        m_humanCom_Ability1_Item = createItem(Material.FLINT, "덫", "", 2);
         m_humanCom_Ability1_Block = createItem(Material.CARPET, "덫", "");
 
         m_killerCom_Ability2_Item = createItem(Material.FEATHER, "탐지", "");

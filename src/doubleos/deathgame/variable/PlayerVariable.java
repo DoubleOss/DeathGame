@@ -33,6 +33,8 @@ public class PlayerVariable
 
     FileConfiguration config;
 
+    int m_life = 2;
+
 
     KillerType m_killerType;
 
@@ -43,6 +45,7 @@ public class PlayerVariable
         m_humanType = HumanType.HUMAN;
         m_killerType = KillerType.NONE;
         m_escape = false;
+        m_life = 2;
         //Main.instance.variablePlayer.put(m_player, this);
         GameVariable.Instance().getPlayerListVariableMap().put(player.getName(), this);
     }
@@ -61,6 +64,7 @@ public class PlayerVariable
         m_repair = false;
         m_soundPlaying = false;
         m_escape = false;
+        m_life = 2;
     }
 
     public boolean getEscape()
@@ -81,6 +85,14 @@ public class PlayerVariable
     }
 
 
+    public void setLife(int number)
+    {
+        m_life = number;
+    }
+    public int getLife()
+    {
+        return m_life;
+    }
     public void setHumanType(HumanType type)
     {
         m_humanType = type;

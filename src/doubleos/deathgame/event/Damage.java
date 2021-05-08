@@ -22,10 +22,12 @@ public class Damage implements Listener
     void onDamage(EntityDamageByEntityEvent event)
     {
         GameVariable gameVariable = GameVariable.Instance();
+
         if(event.getDamager() instanceof Player && event.getEntity() instanceof Player || event.getDamager() instanceof Arrow)
         {
             if(gameVariable.getGameState().equals(GameVariable.GameState.PLAY))
             {
+                Player victim = (Player)event.getEntity();
                 String killerName = "";
                 if(event.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE))
                 {
@@ -58,7 +60,6 @@ public class Damage implements Listener
                             //damage = 1.2;
                         else
                             damage = 2;
-                            //damage = 1.7;
                         event.setDamage(damage);
                         //Bukkit.broadcastMessage(String.valueOf(damage));
                         KillerSound killerSound = new KillerSound();

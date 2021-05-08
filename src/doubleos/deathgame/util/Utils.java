@@ -36,7 +36,7 @@ public class Utils
 
     public void randomAllTeleport()
     {
-        ArrayList<String> stringPlayers = new ArrayList<String>(GameVariable.Instance().getGamePlayerList());
+        ArrayList<String> stringPlayers = new ArrayList<>(GameVariable.Instance().getGamePlayerList());
 
         Collections.shuffle(stringPlayers);
         int i = 0;

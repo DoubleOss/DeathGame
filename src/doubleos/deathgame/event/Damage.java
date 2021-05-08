@@ -59,10 +59,22 @@ public class Damage implements Listener
                         else
                             damage = 2;
                             //damage = 1.7;
+                        int damageeLife = gameVariable.getPlayerVariableMap().get(event.getEntity().getName()).getLife();
+                        if( ((Player)event.getEntity()).getHealth() <= damage)
+                        {
+                            gameVariable.getPlayerVariableMap().get(event.getEntity().getName()).setLife(damageeLife - 1);
+                            if(gameVariable.getPlayerVariableMap().get(event.getEntity().getName()).getLife() >= 1)
+                            {
+                                damage = 0;
+                                ((Player)event.getEntity()).setHealth(10f);
+                                gameVariable.getPlayerVariableMap().get(event.getEntity().getName()).setLifeType(PlayerVariable.LifeType.MORIBUND);
+                            }
+                        }
                         event.setDamage(damage);
                         Bukkit.broadcastMessage(String.valueOf(damage));
                         KillerSound killerSound = new KillerSound();
                         killerSound.initSound(((Player) event.getEntity()));
+
                     }
                 }
                 else

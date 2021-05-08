@@ -76,22 +76,25 @@ public class KillerHidden3 implements Listener , Hidden
                     killer.sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE+ ": 변신이 풀렸습니다!");
                     killer.getInventory().remove(GameItem.Instance().m_killerHidden3_Ability1_Item);
                     killer.getInventory().remove(GameItem.Instance().m_killerHidden3_Ability2_Item);
-
-                    gamevariable.setMissionRotateNumber(GameVariable.Instance().getMissionRotateNumber()+1);
-                    gamevariable.setMissionRotate();
-                    gamevariable.setIsKillerCheckTras(false);
-                    gamevariable.getKillerHiddenClass().remove(killer.getName());
-                    gamevariable.getPlayerVariableMap().get(killer.getName()).setKillerType(PlayerVariable.KillerType.COMMON);
                     m_skill1Active = false;
-                    MissionManager.Instance().resetMissionBox();
                     removeInvisible(killer);
-                    for(Player p :Bukkit.getOnlinePlayers())
+                    if(!GameVariable.Instance().getGameState().equals(GameVariable.GameState.END))
                     {
-                        if(p.isOp())
+                        gamevariable.setMissionRotateNumber(GameVariable.Instance().getMissionRotateNumber()+1);
+                        gamevariable.setMissionRotate();
+                        gamevariable.setIsKillerCheckTras(false);
+                        gamevariable.getKillerHiddenClass().remove(killer.getName());
+                        gamevariable.getPlayerVariableMap().get(killer.getName()).setKillerType(PlayerVariable.KillerType.COMMON);
+                        MissionManager.Instance().resetMissionBox();
+                        for(Player p :Bukkit.getOnlinePlayers())
                         {
-                            p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ killer.getName() + ChatColor.WHITE+ " 님이 변신이 풀렸습니다.");
+                            if(p.isOp())
+                            {
+                                p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ killer.getName() + ChatColor.WHITE+ " 님이 변신이 풀렸습니다.");
+                            }
                         }
                     }
+
                     this.cancel();
                 }
                 if(!gamevariable.getGameState().equals(GameVariable.GameState.PAUSE)&&

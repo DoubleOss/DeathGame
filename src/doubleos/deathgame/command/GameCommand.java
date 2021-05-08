@@ -99,7 +99,6 @@ public class GameCommand implements CommandExecutor
                                         gamevariable.setOrignalKillerPlayer(killer);
                                         gamevariable.setCheckKiller(true);
 
-
                                         //타이틀로
                                         killer.sendTitle("[!]", "당신은 살인마로 선정되셨습니다.", 0, 40, 0);
                                     }
@@ -202,8 +201,7 @@ public class GameCommand implements CommandExecutor
                         {
                             player.sendMessage("지정한 플레이어" + strings[1] + "으로 살인마 설정이 완료 되었습니다.");
                             KillerCommon common = new KillerCommon();
-                            Player killer = Bukkit.getPlayer(gamevariable.getGamePlayerList().get(0));
-                            killer.performCommand("살인자연구소시작아이템 설정");
+                            Player killer = Bukkit.getPlayer(strings[1]);
                             gamevariable.getPlayerVariableMap().get(killer.getName()).setHumanType(PlayerVariable.HumanType.KILLER);
                             sender.sendMessage(killer.getName());
                             common.initCommon(killer);
@@ -293,7 +291,6 @@ public class GameCommand implements CommandExecutor
                                     deathCount++;
                                 }
                             }
-
                             int count = gamevariable.getGamePlayerList().size() - gamevariable.getKillerPlayerList().size() - deathCount;
                             gamevariable.setEscapePlayerCount(gamevariable.getEscapePlayerCount()+1);
                             for(Player p : Bukkit.getOnlinePlayers())
@@ -306,7 +303,9 @@ public class GameCommand implements CommandExecutor
                             if(gamevariable.getEscapePlayerCount() - count == 0 && gamevariable.getEscapePlayerCount() >= 3)
                             {
                                 ((Player) sender).performCommand("");
+                                gamevariable.GameReset();
                             }
+
                             return true;
                         }
                         return true;

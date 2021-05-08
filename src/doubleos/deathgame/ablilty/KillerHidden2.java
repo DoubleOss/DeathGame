@@ -74,18 +74,21 @@ public class KillerHidden2 implements Listener , Hidden
                     killer.sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +" 변신이 풀렸습니다!");
                     killer.getInventory().remove(GameItem.Instance().m_killerHidden2_Ability1_Item);
                     killer.getInventory().remove(GameItem.Instance().m_killerHidden2_Ability2_Item);
-
-                    gamevariable.setMissionRotateNumber(GameVariable.Instance().getMissionRotateNumber()+1);
-                    gamevariable.setMissionRotate();
-                    gamevariable.setIsKillerCheckTras(false);
-                    gamevariable.getKillerHiddenClass().remove(killer.getName());
-                    gamevariable.getPlayerVariableMap().get(killer.getName()).setKillerType(PlayerVariable.KillerType.COMMON);
-                    MissionManager.Instance().resetMissionBox();
-                    for(Player p :Bukkit.getOnlinePlayers())
+                    m_hiddenAbliltyTime = 0;
+                    if(!GameVariable.Instance().getGameState().equals(GameVariable.GameState.END))
                     {
-                        if(p.isOp())
+                        gamevariable.setMissionRotateNumber(GameVariable.Instance().getMissionRotateNumber()+1);
+                        gamevariable.setMissionRotate();
+                        gamevariable.setIsKillerCheckTras(false);
+                        gamevariable.getKillerHiddenClass().remove(killer.getName());
+                        gamevariable.getPlayerVariableMap().get(killer.getName()).setKillerType(PlayerVariable.KillerType.COMMON);
+                        MissionManager.Instance().resetMissionBox();
+                        for(Player p :Bukkit.getOnlinePlayers())
                         {
-                            p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ killer.getName() + ChatColor.WHITE+ " 님이 변신이 풀렸습니다.");
+                            if(p.isOp())
+                            {
+                                p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ killer.getName() + ChatColor.WHITE+ " 님이 변신이 풀렸습니다.");
+                            }
                         }
                     }
                     this.cancel();
@@ -145,7 +148,8 @@ public class KillerHidden2 implements Listener , Hidden
                                 if(this.m_skill2Cooltime <= 0)
                                 {
                                     gamevariable.setKillerHidden2(this);
-                                    Bukkit.dispatchCommand(event.getPlayer(), "죽술 전도");
+                                    event.getPlayer().performCommand("죽술 전도");
+                                    //Bukkit.dispatchCommand(event.getPlayer(), "죽술 전도");
                                 }
                                 else
                                 {

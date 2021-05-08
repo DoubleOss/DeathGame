@@ -2,6 +2,7 @@ package doubleos.deathgame.ablilty;
 
 import doubleos.deathgame.Main;
 import doubleos.deathgame.variable.GameVariable;
+import doubleos.deathgame.variable.PlayerVariable;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -39,15 +40,15 @@ public class Hidden2Gui implements Listener
     {
         m_inv = Bukkit.createInventory(null, 45, "기도 지정");
 
-        int[] slot = new int[]{11, 13, 15, 28, 30, 32, 34};
+        int[] slot = new int[]{10, 12, 14, 16, 28, 30, 32, 34};
 
         int loopnumber = 0;
         for(String stringPlayer : GameVariable.Instance().getGamePlayerList())
         {
-            loopnumber++;
             Player p = Bukkit.getPlayer(stringPlayer);
-            if(!GameVariable.Instance().getOrignalKillerPlayer().equals(p))
+            if(GameVariable.Instance().getPlayerVariableMap().get(p.getName()).getHumanType().equals(PlayerVariable.HumanType.HUMAN))
             {
+                loopnumber++;
                 m_inv.setItem(slot[loopnumber],createGuiItem(Material.RED_ROSE, String.format(ChatColor.WHITE + p.getName()), null));
             }
 
@@ -80,7 +81,6 @@ public class Hidden2Gui implements Listener
     {
         if(event.getInventory().getTitle().equalsIgnoreCase("기도 지정"))
         {
-
             event.setCancelled(true);
             if(!event.getClick().equals(ClickType.LEFT))
             {

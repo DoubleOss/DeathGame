@@ -81,17 +81,20 @@ public class KillerHidden1 implements Listener, Hidden
                     killer.getInventory().remove(GameItem.Instance().m_killerHidden1_Ability1_Item);
                     killer.getInventory().remove(GameItem.Instance().m_killerHidden1_Ability2_Item);
                     m_hiddenAbliltyTime = 0;
-                    gameVariable.setMissionRotateNumber(gameVariable.getMissionRotateNumber()+1);
-                    gameVariable.setMissionRotate();
-                    gameVariable.setIsKillerCheckTras(false);
-                    gameVariable.getKillerHiddenClass().remove(killer.getName());
-                    gameVariable.getPlayerVariableMap().get(m_killerName).setKillerType(PlayerVariable.KillerType.COMMON);
-                    MissionManager.Instance().resetMissionBox();
-                    for(Player p :Bukkit.getOnlinePlayers())
+                    if(gameVariable.getGameState().equals(GameVariable.GameState.END))
                     {
-                        if(p.isOp())
+                        gameVariable.setMissionRotateNumber(gameVariable.getMissionRotateNumber()+1);
+                        gameVariable.setMissionRotate();
+                        gameVariable.setIsKillerCheckTras(false);
+                        gameVariable.getKillerHiddenClass().remove(killer.getName());
+                        gameVariable.getPlayerVariableMap().get(m_killerName).setKillerType(PlayerVariable.KillerType.COMMON);
+                        MissionManager.Instance().resetMissionBox();
+                        for(Player p :Bukkit.getOnlinePlayers())
                         {
-                            p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ killer.getName() + ChatColor.WHITE+ " 님의 변신이 풀렸습니다.");
+                            if(p.isOp())
+                            {
+                                p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ killer.getName() + ChatColor.WHITE+ " 님의 변신이 풀렸습니다.");
+                            }
                         }
                     }
                     this.cancel();

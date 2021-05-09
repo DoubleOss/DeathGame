@@ -62,15 +62,15 @@ public class RepairBoxClick implements Listener
                                         @Override
                                         public void run()
                                         {
-                                            if((map.get(event.getClickedBlock().getLocation()).gethealth() == 7) || (map.get(event.getClickedBlock().getLocation()).gethealth() == 20) || (map.get(event.getClickedBlock().getLocation()).gethealth() == 40)
-                                                    || (map.get(event.getClickedBlock().getLocation()).gethealth() == 60) || (map.get(event.getClickedBlock().getLocation()).gethealth() == 90))
+                                            if((map.get(event.getClickedBlock().getLocation()).gethealth() == 10) || (map.get(event.getClickedBlock().getLocation()).gethealth() == 30) || (map.get(event.getClickedBlock().getLocation()).gethealth() == 50)
+                                                    || (map.get(event.getClickedBlock().getLocation()).gethealth() == 70) || (map.get(event.getClickedBlock().getLocation()).gethealth() == 90))
                                             {
                                                 if(map.get(event.getClickedBlock().getLocation()).getMiniGameCount() < 5)
                                                 {
                                                     if(!map.get(event.getClickedBlock().getLocation()).getMiniGame())
                                                     {
                                                         map.get(event.getClickedBlock().getLocation()).setMiniGameCount(map.get(event.getClickedBlock().getLocation()).getMiniGameCount()+1);
-                                                        event.getPlayer().sendPluginMessage(Main.instance, "DeathGame", String.format("MiniGame" + "_" + "true").getBytes());
+                                                        event.getPlayer().sendPluginMessage(Main.instance, "DeathGame", String.format("MiniGame" + "_" + "true" +"_"+ "repair").getBytes());
                                                     }
                                                 }
 

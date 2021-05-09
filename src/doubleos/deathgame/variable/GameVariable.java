@@ -7,12 +7,10 @@ import doubleos.deathgame.gui.CellularGame;
 import doubleos.deathgame.gui.DefectiveGame;
 import doubleos.deathgame.util.Utils;
 import javafx.scene.control.Cell;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -281,23 +279,8 @@ public class GameVariable
         GameVariable.Instance().getPlayerVariableMap().get(player.getName()).setKillerType(PlayerVariable.KillerType.BERSERKER);
         PotionEffect effect = new PotionEffect(PotionEffectType.SPEED, 2400, 0);
         player.addPotionEffect(effect, true);
-        GameVariable.Instance().setIsKillerCheckTras(true);
-        switch(GameVariable.Instance().getGameStage())
-        {
-            case LAB:
-                KillerHidden1 hidden1 = new KillerHidden1();
-                hidden1.initKillerHidden1();
-                break;
-            case CATHEDRAL:
-                KillerHidden2 hidden2 = new KillerHidden2();
-                hidden2.initKillerHidden2();
-                break;
-            case FACTORY:
-                KillerHidden3 hidden3 = new KillerHidden3();
-                hidden3.initKillerHidden3();
-                break;
-        }
-
+        ItemStack helmet = new ItemStack(Material.PUMPKIN);
+        player.getInventory().setHelmet(helmet);
     }
 
     public String getHidden2Target()

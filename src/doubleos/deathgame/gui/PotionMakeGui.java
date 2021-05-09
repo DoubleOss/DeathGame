@@ -189,7 +189,6 @@ public class PotionMakeGui implements Listener
                     event.getWhoClicked().getInventory().removeItem(new ItemStack[]{ new ItemStack(itemlist.get(1).getType(), itemlist.get(1).getAmount())});
                     event.getWhoClicked().getInventory().removeItem(new ItemStack[]{ new ItemStack(itemlist.get(2).getType(), itemlist.get(2).getAmount())});
                     MissionManager mission = MissionManager.Instance();
-                    mission.setMissionPotionCount(mission.getMission1PotionCount() + 1);
                     event.getWhoClicked().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE + ": 포션 제작 미션을 완료 하셨습니다.");
                     ItemStack item = new ItemStack(Material.AIR);
                     event.getInventory().setItem(30, item);

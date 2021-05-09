@@ -49,67 +49,10 @@ public class KillerHidden1 implements Listener, Hidden
         GameVariable gameVariable = GameVariable.Instance();
         this.m_killerName = GameVariable.Instance().getOrignalKillerPlayer().getName();
         Player killer = Bukkit.getPlayer(m_killerName);
-        m_hiddenAbliltyTime = 120;
         m_skill1Cooltime = 0;
 
         killer.getInventory().addItem(GameItem.Instance().m_killerHidden1_Ability1_Item);
         killer.getInventory().addItem(GameItem.Instance().m_killerHidden1_Ability2_Item);
-
-        gameVariable.addKillerHiddenClass(killer, this);
-
-        ItemStack helmet = new ItemStack(Material.PUMPKIN);
-        ItemStack air = new ItemStack(Material.AIR);
-
-        killer.getInventory().setHelmet(helmet);
-        for(Player p :Bukkit.getOnlinePlayers())
-        {
-            if(p.isOp())
-            {
-                p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ killer.getName() + ChatColor.WHITE+ " 님이 변신 하였습니다.");
-            }
-        }
-
-        BukkitTask task = new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                if(m_hiddenAbliltyTime <= 0 || gameVariable.getGameState().equals(GameVariable.GameState.END))
-                {
-                    killer.getInventory().setHelmet(air);
-                    killer.sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE +" 변신이 풀렸습니다!");
-                    killer.getInventory().remove(GameItem.Instance().m_killerHidden1_Ability1_Item);
-                    killer.getInventory().remove(GameItem.Instance().m_killerHidden1_Ability2_Item);
-                    m_hiddenAbliltyTime = 0;
-                    if(gameVariable.getGameState().equals(GameVariable.GameState.END))
-                    {
-                        gameVariable.setMissionRotateNumber(gameVariable.getMissionRotateNumber()+1);
-                        gameVariable.setMissionRotate();
-                        gameVariable.setIsKillerCheckTras(false);
-                        gameVariable.getKillerHiddenClass().remove(killer.getName());
-                        gameVariable.getPlayerVariableMap().get(m_killerName).setKillerType(PlayerVariable.KillerType.COMMON);
-                        MissionManager.Instance().resetMissionBox();
-                        for(Player p :Bukkit.getOnlinePlayers())
-                        {
-                            if(p.isOp())
-                            {
-                                p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ killer.getName() + ChatColor.WHITE+ " 님의 변신이 풀렸습니다.");
-                            }
-                        }
-                    }
-                    this.cancel();
-                }
-                else
-                {
-                    if(!gameVariable.getGameState().equals(GameVariable.GameState.PAUSE) &&
-                            !gameVariable.getPlayerVariableMap().get(killer.getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER))
-                    {
-                        m_hiddenAbliltyTime--;
-                    }
-
-                }
-            }
-        }.runTaskTimer(Main.instance, 0l, 20l);
     }
 
 
@@ -130,39 +73,27 @@ public class KillerHidden1 implements Listener, Hidden
                 }
                 if(event.getPlayer().equals(gameVariable.getOrignalKillerPlayer()))
                 {
-                    if(gameVariable.getIsKillerCheckTras() == true)
+                    ItemStack stack1 = GameItem.Instance().m_killerHidden1_Ability1_Item;
+                    if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack1.getType()))
                     {
-                        ItemStack stack1 = GameItem.Instance().m_killerHidden1_Ability1_Item;
-                        if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack1.getType()))
+                        if(m_skill1Cooltime <= 0)
+                            randomLocation(event.getPlayer());
+                        else
                         {
-                            if(gameVariable.getPlayerVariableMap().get(event.getPlayer().getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER)
-                                    ||(mission.getMission1Success() == true && mission.getMission2Success() == true))
-                            {
-                                if(m_skill1Cooltime <= 0)
-                                    randomLocation(event.getPlayer());
-                                else
-                                {
-                                    event.getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +" 쿨타임이 " + m_skill1Cooltime+ "초 남으셨습니다.");
-                                }
-                            }
-                        }
-                        ItemStack stack2  = GameItem.Instance().m_killerHidden1_Ability2_Item;
-                        if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack2.getType()))
-                        {
-                            if(gameVariable.getPlayerVariableMap().get(event.getPlayer().getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER)
-                                    ||(mission.getMission1Success() == true && mission.getMission2Success() == true))
-                            {
-
-                                if(m_skill2Cooltime <= 0)
-                                {
-                                    shootEgg(event.getPlayer());
-                                }
-                                else
-                                    event.getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +" 쿨타임이 " + m_skill2Cooltime+ "초 남으셨습니다.");
-
-                            }
+                            event.getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +" 쿨타임이 " + m_skill1Cooltime+ "초 남으셨습니다.");
                         }
                     }
+                    ItemStack stack2  = GameItem.Instance().m_killerHidden1_Ability2_Item;
+                    if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack2.getType()))
+                    {
+                        if(m_skill2Cooltime <= 0)
+                        {
+                            shootEgg(event.getPlayer());
+                        }
+                        else
+                            event.getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +" 쿨타임이 " + m_skill2Cooltime+ "초 남으셨습니다.");
+                    }
+
                 }
             }
         }
@@ -204,12 +135,18 @@ public class KillerHidden1 implements Listener, Hidden
 
     void shootEgg(Player p)
     {
+        GameVariable gameVariable = GameVariable.Instance();
         Egg egg = p.launchProjectile(Egg.class);
 
         egg.setShooter(p);
 
         egg.setVelocity(p.getLocation().getDirection().normalize().multiply(2));
-        m_skill2Cooltime = 30;
+        if(gameVariable.getPlayerVariableMap().get(p.getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER))
+        {
+            m_skill2Cooltime = 15;
+        }
+        else
+            m_skill2Cooltime = 30;
 
         BukkitTask task = new BukkitRunnable()
         {
@@ -231,7 +168,13 @@ public class KillerHidden1 implements Listener, Hidden
 
     void randomLocation(Player p)
     {
-        m_skill1Cooltime = 60;
+        GameVariable gameVariable = GameVariable.Instance();
+        if(gameVariable.getPlayerVariableMap().get(p.getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER))
+        {
+            m_skill2Cooltime = 30;
+        }
+        else
+            m_skill1Cooltime = 60;
         radnomTeleport(p);
 
         BukkitTask task = new BukkitRunnable()

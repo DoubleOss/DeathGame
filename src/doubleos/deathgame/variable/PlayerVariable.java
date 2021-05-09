@@ -17,7 +17,6 @@ public class PlayerVariable
     public enum KillerType
     {
         COMMON,
-        HIDDEN,
         BERSERKER,
         NONE;
     }
@@ -30,6 +29,9 @@ public class PlayerVariable
     boolean m_repair = false;
     boolean m_soundPlaying = false;
     boolean m_escape = false;
+    boolean m_soundKillerPlaying = false;
+    boolean m_boxOpen = false;
+    boolean m_miniGamePlaying = false;
 
     FileConfiguration config;
 
@@ -46,6 +48,9 @@ public class PlayerVariable
         m_killerType = KillerType.NONE;
         m_escape = false;
         m_life = 2;
+        m_soundKillerPlaying = false;
+        m_boxOpen = false;
+        m_miniGamePlaying = false;
         //Main.instance.variablePlayer.put(m_player, this);
         GameVariable.Instance().getPlayerListVariableMap().put(player.getName(), this);
     }
@@ -65,8 +70,36 @@ public class PlayerVariable
         m_soundPlaying = false;
         m_escape = false;
         m_life = 2;
+        m_soundKillerPlaying = false;
+        m_boxOpen = false;
+        m_miniGamePlaying = false;
     }
 
+
+    public boolean getMiniGamePlaying()
+    {
+        return m_miniGamePlaying;
+    }
+    public void setMiniGamePlaying(boolean bool)
+    {
+        m_miniGamePlaying = bool;
+    }
+    public boolean getBoxOpen()
+    {
+        return m_boxOpen;
+    }
+    public void setBoxOpen(boolean bool)
+    {
+        m_boxOpen = bool;
+    }
+    public boolean getSoundKillerPlaying()
+    {
+        return m_soundKillerPlaying;
+    }
+    public void setSoundKillerPlaying(boolean bool)
+    {
+        m_soundKillerPlaying = bool;
+    }
     public boolean getEscape()
     {
         return m_escape;

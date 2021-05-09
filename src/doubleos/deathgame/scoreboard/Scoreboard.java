@@ -10,6 +10,7 @@ import doubleos.deathgame.util.SimpleScoreboard;
 import doubleos.deathgame.variable.GameVariable;
 import doubleos.deathgame.variable.MissionManager;
 import doubleos.deathgame.variable.PlayerVariable;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -40,13 +41,14 @@ public class Scoreboard
                 {
                     GameVariable gamevariable = GameVariable.Instance();
                     HashMap<String, PlayerVariable> variableMap = gamevariable.getPlayerListVariableMap();
-
+                    MissionManager mission = MissionManager.Instance();
                     SimpleScoreboard scoreboard = new SimpleScoreboard(ChatColor.RED + "[죽음의 술래잡기]");
                     if(gamevariable.getGameState() == GameVariable.GameState.END)
                     {
                         this.cancel();
                         scoreboard.reset();
                         scoreboard.update();
+
                     }
                     if(variableMap.get(player.getName()).getObserver() || player.isOp())
                     {
@@ -64,57 +66,52 @@ public class Scoreboard
                     scoreboard.add("남은 시간: " + gamevariable.getGameTimeMin() + ChatColor.DARK_GREEN +" 분" + ChatColor.WHITE+" : " +
                             gamevariable.getGameTimeSec() +ChatColor.DARK_GREEN +ChatColor.WHITE + " 초", 10);
                     scoreboard.add("", 9);
-                    if(player.equals(gamevariable.getOrignalKillerPlayer()) || player.isOp() || variableMap.get(player.getName()).getObserver())
+
+                    int deathCount = 0;
+                    int escapeCount = 0;
+                    for(Player p : Bukkit.getOnlinePlayers())
                     {
-                        MissionManager mission = MissionManager.Instance();
-                        String mission1_Suc = (mission.getMission1Success() ? "완료" : "미수행");
-                        String mission2_Suc = (mission.getMission2Success() ? "완료" : "미수행");
-
-                        scoreboard.add(mission.getMission1Title() + ": " + mission1_Suc, 8);
-                        scoreboard.add(mission.getMission2Title() + ": " + mission2_Suc, 7);
-
-                        HashMap<String, Hidden> hiddenclass = GameVariable.Instance().getKillerHiddenClass();
-                        if(hiddenclass.isEmpty() == false && player.equals(gamevariable.getOrignalKillerPlayer()))
+                        if(gamevariable.getPlayerVariableMap().get(p.getName()).getObserver())
                         {
-                            String hidden_Time = "        ";
-                            if((hiddenclass.get(player.getName())) instanceof KillerHidden1)
-                            {
-                                hidden_Time = String.format("%d "+ChatColor.DARK_GREEN+ " 초", ((KillerHidden1)(hiddenclass.get(player.getName()))).m_hiddenAbliltyTime);
-                            }
-                            else if ((hiddenclass.get(player.getName())) instanceof KillerHidden2)
-                            {
-                                hidden_Time = String.format("%d"+ChatColor.DARK_GREEN+  " 초", ((KillerHidden2)(hiddenclass.get(player.getName()))).m_hiddenAbliltyTime);
-                            }
-                            else if((hiddenclass.get(player.getName())) instanceof KillerHidden3)
-                            {
-                                hidden_Time = String.format("%d"+ChatColor.DARK_GREEN+ " 초", ((KillerHidden3)(hiddenclass.get(player.getName()))).m_hiddenAbliltyTime);
-                            }
-                            scoreboard.add("     ", 6);
-                            scoreboard.add( "변신시간: " + hidden_Time, 5);
+                            deathCount++;
                         }
-                        /*
-                        else if(player.isOp() || variableMap.get(player.getName()).getObserver())
-                        {
-                            scoreboard.add("     ", 6);
-                            scoreboard.add( "킬 쿨타임: " + gamevariable.getKillCoolTimeTimer() + " 초", 5);
-                        }
+                        if(gamevariable.getPlayerVariableMap().get(p.getName()).getEscape())
+                            escapeCount++;
+                    }
+                    if(player.isOp() || variableMap.get(player.getName()).getObserver())
+                    {
 
-                         */
+                        int count = gamevariable.getGamePlayerList().size() - gamevariable.getKillerPlayerList().size() - deathCount;
+                        scoreboard.add("모든 플레이어 수: " + gamevariable.getGamePlayerList().size() + " 명", 8);
+                        scoreboard.add("모든 살인마 수: " + gamevariable.getKillerPlayerList().size() + " 명", 7);
+                        scoreboard.add("모든 생존자 수: " + (gamevariable.getGamePlayerList().size() - gamevariable.getKillerPlayerList().size())+ " 명", 6);
+                        scoreboard.add("             ", 5);
+                        scoreboard.add("남은 생존자 수: " + (gamevariable.getGamePlayerList().size() - gamevariable.getKillerPlayerList().size() - deathCount - escapeCount)+ " 명", 4);
+                        scoreboard.add("죽은 생존자 수: " + (deathCount)+ " 명", 3);
+                        scoreboard.add("탈출한 생존자 수: " + escapeCount+ " 명", 2);
 
                     }
                     if (player.isOp() || variableMap.get(player.getName()).getObserver())
                     {
-                        scoreboard.add("       ", 4);
-                        scoreboard.add("켜진 배전박스 " + gamevariable.getRepairBoxCount() + "/" + 8+ChatColor.DARK_GREEN+ " 개", 3);
+                        scoreboard.add("       ", 1);
+                        scoreboard.add("켜진 배전박스 " + gamevariable.getRepairBoxCount() + "/" + 8+ChatColor.DARK_GREEN+ " 개", 0);
                     }
                     else if (variableMap.get(player.getName()).getHumanType().equals(PlayerVariable.HumanType.HUMAN))
                     {
-                        scoreboard.add("켜진 배전박스 " + gamevariable.getRepairBoxCount() + "/" + 8+ChatColor.DARK_GREEN+ " 개", 8);
+                        scoreboard.add("       ", 9);
+                        scoreboard.add("켜진 배전박스: " + gamevariable.getRepairBoxCount() + "/" + 8+ChatColor.DARK_GREEN+ " 개", 8);
+                        scoreboard.add("     ", 7);
+                        scoreboard.add("남은 목숨: " + gamevariable.getPlayerVariableMap().get(player.getName()).getLife() + " 개", 6);
+                        scoreboard.add("               ", 5);
+
                     }
                     else if (variableMap.get(player.getName()).getHumanType().equals(PlayerVariable.HumanType.KILLER))
                     {
                         scoreboard.add("     ", 6);
                         scoreboard.add("켜진 배전박스 " + gamevariable.getRepairBoxCount() + "/" + 8+ChatColor.DARK_GREEN+ " 개", 5);
+                        scoreboard.add("             ", 4);
+                        scoreboard.add("남은 생존자 수: " + (gamevariable.getGamePlayerList().size() - gamevariable.getKillerPlayerList().size() - deathCount - escapeCount)+ " 명", 3);
+                        scoreboard.add("               ", 2);
                     }
                     scoreboard.send(player);
                     scoreboard.update();

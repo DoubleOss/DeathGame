@@ -131,8 +131,6 @@ public class DefectiveGame implements Listener
                                     @Override
                                     public void run()
                                     {
-                                        MissionManager.Instance().setMission2Success(true);
-                                        MissionManager.Instance().successMissionbox();
                                         cell.m_gameStart = false;
                                         event.getWhoClicked().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE + "불량품 찾기 미션을 클리어 하셨습니다.");
                                         event.getWhoClicked().closeInventory();

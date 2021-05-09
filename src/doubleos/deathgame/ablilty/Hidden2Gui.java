@@ -48,8 +48,8 @@ public class Hidden2Gui implements Listener
             Player p = Bukkit.getPlayer(stringPlayer);
             if(GameVariable.Instance().getPlayerVariableMap().get(p.getName()).getHumanType().equals(PlayerVariable.HumanType.HUMAN))
             {
-                loopnumber++;
                 m_inv.setItem(slot[loopnumber],createGuiItem(Material.RED_ROSE, String.format(ChatColor.WHITE + p.getName()), null));
+                loopnumber++;
             }
 
         }

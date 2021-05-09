@@ -21,9 +21,6 @@ public class Mission_Hacking
             {
                 player.setWalkSpeed(0.2f);
                 player.sendPluginMessage(Main.instance, "DeathGame", String.format("LoadingBar" + "_" + "false").getBytes());
-
-                MissionManager.Instance().setMission2Success(true);
-                MissionManager.Instance().successMissionbox();
                 this.cancel();
             }
         }.runTaskTimer(Main.instance, 300l, 300l);

@@ -1,13 +1,10 @@
 package doubleos.deathgame.event;
 
-import doubleos.deathgame.Main;
-import doubleos.deathgame.sound.KillerSound;
+import doubleos.deathgame.sound.HeartSound;
 import doubleos.deathgame.variable.GameVariable;
 import doubleos.deathgame.variable.PlayerVariable;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Arrow;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -53,17 +50,13 @@ public class Damage implements Listener
                     {
                         double damage = 0;
                         if(gameVariable.getPlayerVariableMap().get(killerName).getKillerType().equals(PlayerVariable.KillerType.COMMON))
-                            damage = 1;
-                            //damage = 0.7;
-                        else if (gameVariable.getPlayerVariableMap().get(killerName).getKillerType().equals(PlayerVariable.KillerType.HIDDEN))
-                            damage = 1.5;
-                            //damage = 1.2;
-                        else
                             damage = 2;
+                        else
+                            damage = 4;
                         event.setDamage(damage);
                         //Bukkit.broadcastMessage(String.valueOf(damage));
-                        KillerSound killerSound = new KillerSound();
-                        killerSound.initSound(((Player) event.getEntity()));
+                        HeartSound heartSound = new HeartSound();
+                        heartSound.initSound(((Player) event.getEntity()));
                     }
                 }
                 else
@@ -93,9 +86,6 @@ public class Damage implements Listener
                         if(gameVariable.getPlayerVariableMap().get(damager.getName()).getKillerType().equals(PlayerVariable.KillerType.COMMON))
                             damage = 1.2;
                             //damage = 0.7;
-                        else if (gameVariable.getPlayerVariableMap().get(damager.getName()).getKillerType().equals(PlayerVariable.KillerType.HIDDEN))
-                            damage = 1.5;
-                            //damage = 1.2;
                         else
                             damage = 2;
                         //damage = 1.7;

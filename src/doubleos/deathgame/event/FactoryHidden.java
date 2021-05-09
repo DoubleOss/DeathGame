@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -105,12 +106,18 @@ public class FactoryHidden implements Listener
                                         }
                                         event.getPlayer().getInventory().remove(event.getItem().getType());
                                         mission.setFactoryHiddenCount(mission.getFactoryHiddenCount()+1);
-                                        //Bukkit.broadcastMessage(String.valueOf(mission.getFactoryHiddenCount()));
                                         event.setCancelled(true);
-                                        if(mission.getFactoryHiddenCount() == 12)
+                                        for(Player p : Bukkit.getOnlinePlayers())
+                                        {
+                                            p.sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE +event.getPlayer().getName() + " 님이 제단에 물건을 올리셨습니다. " 
+                                                    + mission.getFactoryHiddenCount()+ " | 6개" );
+                                        }
+
+                                        if(mission.getFactoryHiddenCount() == 6)
                                         {
                                             Bukkit.broadcastMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE +" 인형으로 둔갑한 사악한 귀신이 제단에 봉인되었습니다");
                                             Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "히든영상");
+                                            GameVariable.Instance().GameReset();
                                         }
                                     }
                                 }

@@ -182,7 +182,7 @@ public class Kill implements Listener
                         Utils.Instance().randomTeleport(event.getPlayer());
                         this.cancel();
                     }
-                }.runTaskTimer(Main.instance, 20l, 20l);
+                }.runTaskTimer(Main.instance, 0l, 5l);
             }
             else if(gameVariable.getGameStage().equals(GameVariable.GameStage.CATHEDRAL))
             {

@@ -4,9 +4,6 @@ import doubleos.deathgame.Main;
 import doubleos.deathgame.variable.GameVariable;
 import doubleos.deathgame.variable.PlayerVariable;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -14,87 +11,74 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
 
-public class KillerSound implements Listener
+public class KillerSound
 {
-    String m_player;
-
     public void initSound(Player player)
     {
-        m_player = player.getName();
-        HashMap<String, PlayerVariable> variableMap = GameVariable.Instance().getPlayerVariableMap();
-        Player killer = Bukkit.getPlayer(m_player);
-        if(!variableMap.get(player.getName()).getSoundPlaying())
-        {
-            variableMap.get(player.getName()).setSoundPlaying(true);
-            player.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "true").getBytes());
-        }
 
-        /*
         final int[] m_soundSpeed = {2000};
-
+        HashMap<String, PlayerVariable> variableMap = GameVariable.Instance().getPlayerVariableMap();
+        GameVariable gameVariable = GameVariable.Instance();
+        Player killer = gameVariable.getOrignalKillerPlayer();
         BukkitTask task = new BukkitRunnable()
         {
             @Override
             public void run()
             {
-                for(String stringPlayer : GameVariable.Instance().getGamePlayerList())
+                for(String stringPlayer : gameVariable.getGamePlayerList())
                 {
                     Player p = Bukkit.getPlayer(stringPlayer);
-                    if(p.getName() != null)
+                    if(killer.isOnline())
                     {
-                        if(!p.getName().equals(killer.getName()))
+                        if(p.getName() != null)
                         {
-                            if(p.getLocation().distance(killer.getLocation()) <= 50)
+                            if(!p.getName().equals(killer.getName()))
                             {
-                                if(!variableMap.get(p.getName()).getHumanType().equals(PlayerVariable.HumanType.KILLER))
+                                if(p.getLocation().distance(killer.getLocation()) <= 30)
                                 {
-                                    if(m_soundSpeed[0] != getDistanceSoundSpeed(p.getLocation().distance(killer.getLocation())))
+                                    if(variableMap.get(p.getName()).getHumanType().equals(PlayerVariable.HumanType.HUMAN))
                                     {
-                                        m_soundSpeed[0] = getDistanceSoundSpeed(p.getLocation().distance(killer.getLocation()));
-                                        if(variableMap.get(p.getName()).getSoundPlaying())
+                                        if(m_soundSpeed[0] != getDistanceSoundSpeed(p.getLocation().distance(killer.getLocation())))
                                         {
-                                            p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
-                                            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable()
+                                            m_soundSpeed[0] = getDistanceSoundSpeed(p.getLocation().distance(killer.getLocation()));
+                                            if(m_soundSpeed[0] != 2000)
                                             {
-                                                @Override
-                                                public void run()
+                                                if (!variableMap.get(p.getName()).getSoundKillerPlaying())
                                                 {
-
-                                                    p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "true" + "_" + "%d", m_soundSpeed[0]).getBytes());
+                                                    variableMap.get(p.getName()).setSoundKillerPlaying(true);
+                                                    p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "true" + "_" + "killer" + "_" + "%d", m_soundSpeed[0]).getBytes());
                                                 }
-                                            }, 20l);
-                                        }
-                                        else
-                                        {
-                                            variableMap.get(p.getName()).setSoundPlaying(true);
-                                            //p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "true" + "_" + "%d", m_soundSpeed[0]).getBytes());
+                                            }
+                                            else
+                                            {
+                                                variableMap.get(p.getName()).setSoundKillerPlaying(false);
+                                                p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
+                                            }
                                         }
                                     }
+                                    else
+                                    {
+                                        variableMap.get(p.getName()).setSoundKillerPlaying(false);
+                                        p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
+                                    }
                                 }
-                                else
+                                else if (variableMap.get(p.getName()).getSoundKillerPlaying())
                                 {
-                                    variableMap.get(p.getName()).setSoundPlaying(false);
+                                    variableMap.get(p.getName()).setSoundKillerPlaying(false);
                                     p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
                                 }
-                            }
-                            else
-                            {
-                                variableMap.get(p.getName()).setSoundPlaying(false);
-                                p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
 
                             }
-
                         }
                     }
-
 
                 }
                 if(GameVariable.Instance().getGameState().equals(GameVariable.GameState.END))
                 {
-                    for(String stringPlayer : GameVariable.Instance().getGamePlayerList())
+                    for(String stringPlayer : gameVariable.getGamePlayerList())
                     {
                         Player p = Bukkit.getPlayer(stringPlayer);
-                        variableMap.get(p.getName()).setSoundPlaying(false);
+                        variableMap.get(p.getName()).setSoundKillerPlaying(false);
                         p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
                     }
                     this.cancel();
@@ -104,26 +88,23 @@ public class KillerSound implements Listener
 
         }.runTaskTimer(Main.instance, 0l , 20l);
 
-         */
-    }
+}
 
     int getDistanceSoundSpeed(double distance)
     {
-        if (distance <= 5)
+        if(distance <= 5)
+        {
+            return 450;
+        }
+        else if (distance <= 10)
         {
             return 500;
         }
-        else if (distance <= 25)
-        {
-            return  600;
-        }
-        else if (distance <= 40)
+        else if (distance <= 30)
         {
             return  800;
         }
         else
-        {
-            return  900;
-        }
+            return  2000;
     }
 }

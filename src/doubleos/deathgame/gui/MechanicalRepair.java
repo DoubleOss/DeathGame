@@ -148,7 +148,6 @@ public class MechanicalRepair implements Listener
             event.getWhoClicked().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE + ": 기계를 재작동 시키셨습니다.");
             //event.getWhoClicked().getInventory().remove(Material.GOLD_NUGGET);
             event.getWhoClicked().getInventory().removeItem(new ItemStack[]{ new ItemStack(Material.GOLD_NUGGET, 3)});
-            MissionManager.Instance().setMission2Success(true);
             event.getWhoClicked().closeInventory();
             for(Player p :Bukkit.getOnlinePlayers())
             {

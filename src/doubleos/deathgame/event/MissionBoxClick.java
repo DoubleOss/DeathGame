@@ -39,8 +39,6 @@ public class MissionBoxClick implements Listener
                     {
                         if(!missionManager.getMissionBoxMap().get(eventBlock.getLocation()).getBoxUse())
                         {
-                            //event.getPlayer().sendMessage(String.format(gameVariable.getPlayerVariableMap().get(player).getHumanType().toString()));
-
                             if(gameVariable.getPlayerVariableMap().get(event.getPlayer().getName()).getHumanType().equals(PlayerVariable.HumanType.KILLER))
                             {
                                 missionManager.m_MissionBoxUseLocation = eventBlock.getLocation();

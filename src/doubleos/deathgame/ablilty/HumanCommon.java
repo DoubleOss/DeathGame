@@ -29,21 +29,25 @@ public class HumanCommon implements Listener
     void onMoveEvent(PlayerMoveEvent event)
     {
         GameVariable gameVariable = GameVariable.Instance();
+        String stringPlayer = event.getPlayer().getName();
         if(gameVariable.getGameState().equals(GameVariable.GameState.PLAY))
         {
-            if(gameVariable.getPlayerVariableMap().get(event.getPlayer().getName()).getHumanType().equals(PlayerVariable.HumanType.KILLER))
+            if(gameVariable.getPlayerVariableMap().get(stringPlayer) != null)
             {
-                for(int i = 0; i<gameVariable.getHumanTrapLocList().size(); i++)
+                if(gameVariable.getPlayerVariableMap().get(stringPlayer).getHumanType().equals(PlayerVariable.HumanType.KILLER))
                 {
-                    //event.getPlayer().sendMessage(String.format("%f",event.getFrom().distance(m_skill1_pos.get(i))));
-                    if(event.getFrom().distance(gameVariable.getHumanTrapLocList().get(i)) <= 0.8)
+                    for(int i = 0; i<gameVariable.getHumanTrapLocList().size(); i++)
                     {
-                        Bukkit.getWorld("world").getBlockAt(gameVariable.getHumanTrapLocList().get(i)).setType(Material.AIR);
-                        gameVariable.getHumanTrapLocList().remove(i);
-                        setSkill1Effect(event.getPlayer());
+                        //event.getPlayer().sendMessage(String.format("%f",event.getFrom().distance(m_skill1_pos.get(i))));
+                        if(event.getFrom().distance(gameVariable.getHumanTrapLocList().get(i)) <= 0.8)
+                        {
+                            Bukkit.getWorld("world").getBlockAt(gameVariable.getHumanTrapLocList().get(i)).setType(Material.AIR);
+                            gameVariable.getHumanTrapLocList().remove(i);
+                            setSkill1Effect(event.getPlayer());
+                        }
                     }
-                }
 
+                }
             }
 
         }
@@ -63,18 +67,42 @@ public class HumanCommon implements Listener
                 {
                     return;
                 }
-                if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+                if(!gameVariable.getPlayerVariableMap().get(event.getPlayer().getName()).getRepair())
                 {
-                    ItemStack stack1 = GameItem.Instance().m_humanCom_Ability1_Item;
-                    stack1.setAmount(1);
-                    if (event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack1.getType()))
+                    if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
                     {
-                        event.getPlayer().getInventory().removeItem(stack1);
-                        Location blockpos = event.getClickedBlock().getLocation().add(new Vector(0, 1, 0));
-                        gameVariable.getHumanTrapLocList().add(blockpos);
-                        blockpos.getBlock().setType(Material.RAILS);
+                        if (event.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.FLINT))
+                        {
+                            GameItem.Instance().m_humanCom_Ability1_Item.setAmount(1);
+                            event.getPlayer().getInventory().removeItem(GameItem.Instance().m_humanCom_Ability1_Item);
+                            Location blockpos = event.getClickedBlock().getLocation().add(new Vector(0, 1, 0));
+                            gameVariable.getHumanTrapLocList().add(blockpos);
+                            blockpos.getBlock().setType(Material.RAILS);
+                        }
+                    }
+                    if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.RIGHT_CLICK_AIR))
+                    {
+                        if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.MAGMA_CREAM))
+                        {
+                            if(!gameVariable.getPlayerVariableMap().get(event.getPlayer().getName()).getHealKit())
+                            {
+                                event.getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +" 회복상자를 한번더 클릭하면 회복을 취소 할 수 있습니다.");
+                                gameVariable.getPlayerVariableMap().get(event.getPlayer().getName()).setHealKit(true);
+                                HealKit healKit = new HealKit();
+                                healKit.initHealKit(event.getPlayer());
+                            }
+                            else
+                            {
+                                gameVariable.getPlayerVariableMap().get(event.getPlayer().getName()).setHealKit(false);
+                                event.getPlayer().setWalkSpeed(0.2f);
+                                event.getPlayer().sendPluginMessage(Main.instance, "DeathGame", String.format("LoadingBar" + "_" + "false").getBytes());
+                            }
+                        }
                     }
                 }
+
+
+
 
             }
         }

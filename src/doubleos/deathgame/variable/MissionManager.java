@@ -121,7 +121,7 @@ public class MissionManager
                 for(Location loc : m_repairBlock)
                 {
                     RepairBox repair = getRepairBoxClassMap().get(loc);
-                    if(!repair.getRepairing() && repair.gethealth() > 0)
+                    if(!repair.getRepairing() && repair.gethealth() > 0 && !repair.getRepair())
                     {
                         repair.sethealth(repair.gethealth() - 0.4f);
                         if( repair.gethealth() < 0)
@@ -137,11 +137,10 @@ public class MissionManager
     {
         if(GameVariable.Instance().getGameStage().equals(GameVariable.GameStage.LAB))
         {
-
-            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -314, 63, 19));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -334, 80, 26));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -357, 72, -39));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -349, 72, 45));
             m_repairBlock.add(new Location(Bukkit.getWorld("world"), -311, 63, -48));
-            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -368, 63, -11));
-            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -315, 72, -6));
             //m_repairBlock.add(new Location(Bukkit.getWorld("world"), -357, 72, -39));
             //m_repairBlock.add(new Location(Bukkit.getWorld("world"), -349, 72, 45));
             //m_repairBlock.add(new Location(Bukkit.getWorld("world"), -349, 80, -29));
@@ -151,9 +150,9 @@ public class MissionManager
         else if(GameVariable.Instance().getGameStage().equals(GameVariable.GameStage.CATHEDRAL))
         {
             m_repairBlock.add(new Location(Bukkit.getWorld("world"), -537, 56, 20));
-            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -529, 55, 97));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -532, 64, 18));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -493, 71, 72));
             m_repairBlock.add(new Location(Bukkit.getWorld("world"), -491, 55, 14));
-            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -547, 55, 47));
             //m_repairBlock.add(new Location(Bukkit.getWorld("world"), -532, 64, 18));
             //m_repairBlock.add(new Location(Bukkit.getWorld("world"), -578, 63, 78));
             //m_repairBlock.add(new Location(Bukkit.getWorld("world"), -518, 63, 91));
@@ -163,8 +162,8 @@ public class MissionManager
         else if(GameVariable.Instance().getGameStage().equals(GameVariable.GameStage.FACTORY))
         {
             m_repairBlock.add(new Location(Bukkit.getWorld("world"), -418, 63, 98));
-            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -397, 63, 77));
-            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -384, 63, 99));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -423, 75, 156));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -420, 63, 144));
             m_repairBlock.add(new Location(Bukkit.getWorld("world"), -408, 63, 92));
             //m_repairBlock.add(new Location(Bukkit.getWorld("world"), -360, 63, 88));
             //m_repairBlock.add(new Location(Bukkit.getWorld("world"), -420, 63, 144));

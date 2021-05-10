@@ -24,6 +24,8 @@ public class GameItem
     }
 
     public ItemStack m_humanCom_Ability1_Item;
+    public ItemStack m_humanHeal_Ability1_Item;
+
 
     public ItemStack m_humanCom_Ability1_Block;
 
@@ -55,6 +57,7 @@ public class GameItem
 
     public void initGameItem()
     {
+        m_humanHeal_Ability1_Item = createItem(Material.MAGMA_CREAM, "구급상자", "");
         m_glowStone_Item = createItem(Material.GLOWSTONE, "랜턴", "");
 
         m_humanCom_Ability1_Item = createItem(Material.FLINT, "덫", "", 2);
@@ -102,7 +105,6 @@ public class GameItem
         final ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(ChatColor.WHITE + name);
-        meta.setLore(Arrays.asList(lore));
 
         item.setItemMeta(meta);
 

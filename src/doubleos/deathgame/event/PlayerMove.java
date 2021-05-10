@@ -10,10 +10,24 @@ public class PlayerMove implements Listener
     @EventHandler
     void onPlayerMoveEvent(PlayerMoveEvent event)
     {
-        if(GameVariable.Instance().getTeleporting())
-            event.getPlayer().setWalkSpeed(0);
-        else
-            event.getPlayer().setWalkSpeed(0.2f);
+        GameVariable gameVariable = GameVariable.Instance();
+        String stringPlayer = event.getPlayer().getName();
+        if(gameVariable.getGameState().equals(GameVariable.GameState.PLAY))
+        {
+            if(!gameVariable.getPlayerListVariableMap().get(stringPlayer).getObserver())
+            {
+                if(gameVariable.getTeleporting())
+                    event.getPlayer().setWalkSpeed(0);
+                else if(gameVariable.getPlayerVariableMap().get(stringPlayer) != null)
+                {
+                    if(!gameVariable.getPlayerVariableMap().get(stringPlayer).getHealKit())
+                        event.getPlayer().setWalkSpeed(0.2f);
+                }
+            }
+
+
+        }
+
 
     }
 

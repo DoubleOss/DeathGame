@@ -47,7 +47,7 @@ public class KillerHidden1 implements Listener, Hidden
     public void initKillerHidden1()
     {
         GameVariable gameVariable = GameVariable.Instance();
-        this.m_killerName = GameVariable.Instance().getOrignalKillerPlayer().getName();
+        this.m_killerName = gameVariable.getOrignalKillerPlayer().getName();
         Player killer = Bukkit.getPlayer(m_killerName);
         m_skill1Cooltime = 0;
 

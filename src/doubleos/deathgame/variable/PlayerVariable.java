@@ -32,6 +32,7 @@ public class PlayerVariable
     boolean m_soundKillerPlaying = false;
     boolean m_boxOpen = false;
     boolean m_miniGamePlaying = false;
+    boolean m_healKit = false;
 
     FileConfiguration config;
 
@@ -51,6 +52,7 @@ public class PlayerVariable
         m_soundKillerPlaying = false;
         m_boxOpen = false;
         m_miniGamePlaying = false;
+        m_healKit = false;
         //Main.instance.variablePlayer.put(m_player, this);
         GameVariable.Instance().getPlayerListVariableMap().put(player.getName(), this);
     }
@@ -73,9 +75,18 @@ public class PlayerVariable
         m_soundKillerPlaying = false;
         m_boxOpen = false;
         m_miniGamePlaying = false;
+        m_healKit = false;
     }
 
 
+    public boolean getHealKit()
+    {
+        return  m_healKit;
+    }
+    public void setHealKit(boolean bool)
+    {
+        m_healKit = bool;
+    }
     public boolean getMiniGamePlaying()
     {
         return m_miniGamePlaying;

@@ -191,6 +191,7 @@ public class KillerHidden3 implements Listener , Hidden
         PotionEffect effect = new PotionEffect(PotionEffectType.INVISIBILITY, 9999999, 0);
         p.addPotionEffect(effect, true);
         GameVariable gameVariable = GameVariable.Instance();
+        p.sendMessage(ChatColor.RED + "[죽음의 술래잡기]"+ ChatColor.WHITE+ " 은신을 사용 하셨습니다.");
         if(gameVariable.getPlayerVariableMap().get(p.getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER))
         {
             m_skill2Cooltime = 10;
@@ -229,6 +230,7 @@ public class KillerHidden3 implements Listener , Hidden
         p.removePotionEffect(PotionEffectType.INVISIBILITY);
         PotionEffect effect = new PotionEffect(PotionEffectType.SLOW, 40, 0);
         p.addPotionEffect(effect, true);
+        p.sendMessage(ChatColor.RED + "[죽음의 술래잡기]"+ ChatColor.WHITE+ " 은신을 해제 하셨습니다.");
         for(Player player :Bukkit.getOnlinePlayers())
         {
             if(player.isOp())

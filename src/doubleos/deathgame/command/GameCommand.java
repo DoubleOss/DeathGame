@@ -68,7 +68,6 @@ public class GameCommand implements CommandExecutor
                             //gamevariable.GameReset();
                             gamevariable.setGameState(GameVariable.GameState.PLAY);
                             numberToSetStage(Integer.parseInt(strings[1]));
-
                             Utils.Instance().broadcastTitle("[!]", String.format(ChatColor.GREEN+"잠시후 랜덤으로 살인마가 설정됩니다. "), 1, 60, 1, ChatColor.WHITE);
                             //Bukkit.broadcastMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +"잠시후 랜덤으로 킬러가 설정됩니다.");
                             addGamePlayerVariable();
@@ -260,6 +259,10 @@ public class GameCommand implements CommandExecutor
                             sender.sendMessage("체력 소리 여부: " + gamevariable.getPlayerListVariableMap().get(p.getName()).getSoundPlaying());
                             sender.sendMessage("아이템 미니게임 여부: " + gamevariable.getPlayerListVariableMap().get(p.getName()).getMiniGamePlaying());
                             sender.sendMessage("남은 체력 여부: " + gamevariable.getPlayerListVariableMap().get(p.getName()).getLife());
+                            sender.sendMessage("상자 오픈 가능 여부: " + gamevariable.getPlayerListVariableMap().get(p.getName()).getBoxOpen());
+                            sender.sendMessage("힐키트 사용중 여부: " + gamevariable.getPlayerListVariableMap().get(p.getName()).getHealKit());
+                            
+                            
                             return true;
                         }
                     case "게임정보":
@@ -316,9 +319,12 @@ public class GameCommand implements CommandExecutor
                                 ((Player) sender).performCommand("");
                                 gamevariable.GameReset();
                             }
-
                             return true;
                         }
+                        return true;
+                    case "게임템지급":
+                        ((Player) sender).getInventory().addItem(GameItem.Instance().m_humanHeal_Ability1_Item);
+                        ((Player) sender).getInventory().addItem(GameItem.Instance().m_humanCom_Ability1_Item);
                         return true;
                     case "살인마보기":
                         sender.sendMessage(gamevariable.getOrignalKillerPlayer().getName());
@@ -430,7 +436,7 @@ public class GameCommand implements CommandExecutor
                             }
                             else
                             {
-                                ((Player) sender).sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
+                                ((Player) sender).sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false" + "_" + "%s", strings[2]).getBytes());
                                 return true;
                             }
 

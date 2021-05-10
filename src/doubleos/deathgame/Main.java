@@ -27,7 +27,6 @@ public class Main extends JavaPlugin
     {
         instance = this;
 
-
         registercommand();
 
         getServer().getMessenger().registerOutgoingPluginChannel( this, "DeathGame");

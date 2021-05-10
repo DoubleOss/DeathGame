@@ -468,7 +468,9 @@ public class GameVariable
 
                 p.setGameMode(GameMode.SURVIVAL);
                 getPlayerListVariableMap().get(p.getName()).resetPlayerVariable();
-                p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
+                p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false" + "_" + "killer").getBytes());
+                p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false" + "_" + "heart").getBytes());
+
                 Utils.Instance().inventoryClear(p);
             }
 

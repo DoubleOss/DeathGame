@@ -54,6 +54,7 @@ public class Damage implements Listener
                         else
                             damage = 4;
                         event.setDamage(damage);
+
                         //Bukkit.broadcastMessage(String.valueOf(damage));
                         HeartSound heartSound = new HeartSound();
                         heartSound.initSound(((Player) event.getEntity()));

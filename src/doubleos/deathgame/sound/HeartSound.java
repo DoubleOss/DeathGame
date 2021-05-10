@@ -26,7 +26,8 @@ public class HeartSound implements Listener
         if(!variableMap.get(player.getName()).getSoundPlaying())
         {
             variableMap.get(player.getName()).setSoundPlaying(true);
-            player.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "true").getBytes());
+            player.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "true"+"_"+"heart").getBytes());
+
         }
 
         /*

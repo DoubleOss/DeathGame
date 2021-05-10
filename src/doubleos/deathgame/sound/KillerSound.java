@@ -28,7 +28,7 @@ public class KillerSound
                 for(String stringPlayer : gameVariable.getGamePlayerList())
                 {
                     Player p = Bukkit.getPlayer(stringPlayer);
-                    if(killer.isOnline())
+                    if(killer.isOnline() && p.isOnline())
                     {
                         if(p.getName() != null)
                         {
@@ -52,20 +52,20 @@ public class KillerSound
                                             else
                                             {
                                                 variableMap.get(p.getName()).setSoundKillerPlaying(false);
-                                                p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
+                                                p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false" + "_" + "killer").getBytes());
                                             }
                                         }
                                     }
                                     else
                                     {
                                         variableMap.get(p.getName()).setSoundKillerPlaying(false);
-                                        p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
+                                        p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false" + "_" + "killer").getBytes());
                                     }
                                 }
                                 else if (variableMap.get(p.getName()).getSoundKillerPlaying())
                                 {
                                     variableMap.get(p.getName()).setSoundKillerPlaying(false);
-                                    p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
+                                    p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false" + "_" + "killer").getBytes());
                                 }
 
                             }
@@ -79,7 +79,7 @@ public class KillerSound
                     {
                         Player p = Bukkit.getPlayer(stringPlayer);
                         variableMap.get(p.getName()).setSoundKillerPlaying(false);
-                        p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
+                        p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false" + "_" + "killer").getBytes());
                     }
                     this.cancel();
                 }

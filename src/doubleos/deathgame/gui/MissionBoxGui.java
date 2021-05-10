@@ -1,6 +1,6 @@
 package doubleos.deathgame.gui;
 
-import doubleos.deathgame.Main;
+import doubleos.deathgame.ablilty.HealKit;
 import doubleos.deathgame.variable.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,12 +14,9 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 public class MissionBoxGui implements Listener
 {
@@ -94,8 +91,6 @@ public class MissionBoxGui implements Listener
                     if(!MissionManager.Instance().getMission2Success())
                     {
                         event.getWhoClicked().closeInventory();
-                        Mission_Hacking hacking = new Mission_Hacking();
-                        hacking.initHacking((Player) event.getWhoClicked());
                     }
 
                 }

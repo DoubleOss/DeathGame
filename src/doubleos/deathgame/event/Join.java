@@ -40,7 +40,7 @@ public class Join implements Listener
                 {
                     Scoreboard scoreboard = new Scoreboard(event.getPlayer());
                     GameVariable.Instance().getPlayerVariableMap().get(p.getName()).setSoundPlaying(true);
-                    p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "true").getBytes());
+                    p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "true" + "_" + "heart").getBytes());
                 }
             }
 

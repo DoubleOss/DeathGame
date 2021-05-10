@@ -16,9 +16,15 @@ public class Quit implements Listener
     @EventHandler
     void onPlayerQuitEvent(PlayerQuitEvent event)
     {
-        HashMap<String, PlayerVariable> variableMap = GameVariable.Instance().getPlayerVariableMap();
-        variableMap.get(event.getPlayer().getName()).setSoundPlaying(false);
-        event.getPlayer().sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false").getBytes());
+        String playerString = event.getPlayer().getName();
+        GameVariable gameVariable = GameVariable.Instance();
+        if(gameVariable.getPlayerVariableMap().get(playerString) != null)
+        {
+            HashMap<String, PlayerVariable> variableMap = GameVariable.Instance().getPlayerVariableMap();
+            variableMap.get(playerString).setSoundPlaying(false);
+            event.getPlayer().sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false" + "_" + "killer").getBytes());
+
+        }
 
     }
 

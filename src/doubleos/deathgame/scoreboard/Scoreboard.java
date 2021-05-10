@@ -21,11 +21,11 @@ import java.util.HashMap;
 public class Scoreboard
 {
 
-    Player m_player;
+    String m_player;
 
     public Scoreboard(Player player)
     {
-        this.m_player = player;
+        m_player = player.getName();
         setScoreBoard(player);
 
     }
@@ -85,7 +85,7 @@ public class Scoreboard
                         scoreboard.add("모든 플레이어 수: " + gamevariable.getGamePlayerList().size() + " 명", 8);
                         scoreboard.add("모든 살인마 수: " + gamevariable.getKillerPlayerList().size() + " 명", 7);
                         scoreboard.add("모든 생존자 수: " + (gamevariable.getGamePlayerList().size() - gamevariable.getKillerPlayerList().size())+ " 명", 6);
-                        scoreboard.add("             ", 5);
+                        scoreboard.add(" ", 5);
                         scoreboard.add("남은 생존자 수: " + (gamevariable.getGamePlayerList().size() - gamevariable.getKillerPlayerList().size() - deathCount - escapeCount)+ " 명", 4);
                         scoreboard.add("죽은 생존자 수: " + (deathCount)+ " 명", 3);
                         scoreboard.add("탈출한 생존자 수: " + escapeCount+ " 명", 2);
@@ -93,25 +93,23 @@ public class Scoreboard
                     }
                     if (player.isOp() || variableMap.get(player.getName()).getObserver())
                     {
-                        scoreboard.add("       ", 1);
-                        scoreboard.add("켜진 배전박스 " + gamevariable.getRepairBoxCount() + "/" + 8+ChatColor.DARK_GREEN+ " 개", 0);
+                        scoreboard.add("  ", 1);
+                        scoreboard.add("켜진 배전박스 " + gamevariable.getRepairBoxCount() + "/" + 4+ChatColor.DARK_GREEN+ " 개", 0);
                     }
-                    else if (variableMap.get(player.getName()).getHumanType().equals(PlayerVariable.HumanType.HUMAN))
+                    else if (gamevariable.getPlayerVariableMap().get(player.getName()).getHumanType().equals(PlayerVariable.HumanType.HUMAN))
                     {
-                        scoreboard.add("       ", 9);
-                        scoreboard.add("켜진 배전박스: " + gamevariable.getRepairBoxCount() + "/" + 8+ChatColor.DARK_GREEN+ " 개", 8);
-                        scoreboard.add("     ", 7);
+                        scoreboard.add("켜진 배전박스: " + gamevariable.getRepairBoxCount() + "/" + 4+ChatColor.DARK_GREEN+ " 개", 8);
+                        scoreboard.add("    ", 7);
                         scoreboard.add("남은 목숨: " + gamevariable.getPlayerVariableMap().get(player.getName()).getLife() + " 개", 6);
-                        scoreboard.add("               ", 5);
+                        scoreboard.add("     ", 5);
 
                     }
-                    else if (variableMap.get(player.getName()).getHumanType().equals(PlayerVariable.HumanType.KILLER))
+                    else if (gamevariable.getPlayerVariableMap().get(player.getName()).getHumanType().equals(PlayerVariable.HumanType.KILLER))
                     {
-                        scoreboard.add("     ", 6);
-                        scoreboard.add("켜진 배전박스 " + gamevariable.getRepairBoxCount() + "/" + 8+ChatColor.DARK_GREEN+ " 개", 5);
-                        scoreboard.add("             ", 4);
-                        scoreboard.add("남은 생존자 수: " + (gamevariable.getGamePlayerList().size() - gamevariable.getKillerPlayerList().size() - deathCount - escapeCount)+ " 명", 3);
-                        scoreboard.add("               ", 2);
+                        scoreboard.add("켜진 배전박스 " + gamevariable.getRepairBoxCount() + "/" + 4+ChatColor.DARK_GREEN+ " 개", 8);
+                        scoreboard.add("             ", 7);
+                        scoreboard.add("남은 생존자 수: " + (gamevariable.getGamePlayerList().size() - gamevariable.getKillerPlayerList().size() - deathCount - escapeCount)+ " 명", 6);
+                        scoreboard.add("         ", 5);
                     }
                     scoreboard.send(player);
                     scoreboard.update();

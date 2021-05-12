@@ -37,7 +37,21 @@ public class GameVariable
         FACTORY;
     }
 
-    //싱글톤
+    //싱글톤  Initialization on demand holder idiom
+    private GameVariable(){}
+
+    private static class InnerInstanceGameVariableClazz
+    {
+        private static final GameVariable uniqueGameVariable = new GameVariable();
+    }
+
+    public static GameVariable Instance()
+    {
+        return InnerInstanceGameVariableClazz.uniqueGameVariable;
+    }
+
+
+    /*
     static private GameVariable _instance = null;
 
     static public GameVariable Instance()
@@ -48,6 +62,8 @@ public class GameVariable
         }
         return _instance;
     }
+
+     */
 
     public ArrayList<String> adminList = new ArrayList<>();
 

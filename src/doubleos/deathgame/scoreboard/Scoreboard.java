@@ -45,9 +45,10 @@ public class Scoreboard
                     SimpleScoreboard scoreboard = new SimpleScoreboard(ChatColor.RED + "[죽음의 술래잡기]");
                     if(gamevariable.getGameState() == GameVariable.GameState.END)
                     {
-                        this.cancel();
                         scoreboard.reset();
                         scoreboard.update();
+                        scoreboard.reset();
+                        this.cancel();
 
                     }
                     if(variableMap.get(player.getName()).getObserver() || player.isOp())
@@ -58,7 +59,7 @@ public class Scoreboard
                         }
                         else
                         {
-                            scoreboard.add("현재 살인마 " + gamevariable.getKillerPlayerList().get(0) + " 외 " + gamevariable.getKillerPlayerList().size() + "인", 12);
+                            scoreboard.add("현재 살인마 " + gamevariable.getKillerPlayerList().get(0) + " 외 " + (gamevariable.getKillerPlayerList().size()-1) + "인", 12);
                         }
                     }
 
@@ -69,13 +70,13 @@ public class Scoreboard
 
                     int deathCount = 0;
                     int escapeCount = 0;
-                    for(Player p : Bukkit.getOnlinePlayers())
+                    for(String stringPlayer : gamevariable.getGamePlayerList())
                     {
-                        if(gamevariable.getPlayerVariableMap().get(p.getName()).getObserver())
+                        if(gamevariable.getPlayerVariableMap().get(stringPlayer).getObserver())
                         {
                             deathCount++;
                         }
-                        if(gamevariable.getPlayerVariableMap().get(p.getName()).getEscape())
+                        if(gamevariable.getPlayerVariableMap().get(stringPlayer).getEscape())
                             escapeCount++;
                     }
                     if(player.isOp() || variableMap.get(player.getName()).getObserver())
@@ -94,11 +95,11 @@ public class Scoreboard
                     if (player.isOp() || variableMap.get(player.getName()).getObserver())
                     {
                         scoreboard.add("  ", 1);
-                        scoreboard.add("켜진 배전박스 " + gamevariable.getRepairBoxCount() + "/" + 4+ChatColor.DARK_GREEN+ " 개", 0);
+                        scoreboard.add("켜진 배전박스 " + gamevariable.getRepairBoxCount() + " / " + 4+ChatColor.DARK_GREEN+ " 개", 0);
                     }
                     else if (gamevariable.getPlayerVariableMap().get(player.getName()).getHumanType().equals(PlayerVariable.HumanType.HUMAN))
                     {
-                        scoreboard.add("켜진 배전박스: " + gamevariable.getRepairBoxCount() + "/" + 4+ChatColor.DARK_GREEN+ " 개", 8);
+                        scoreboard.add("켜진 배전박스: " + gamevariable.getRepairBoxCount() + " / " + 4+ChatColor.DARK_GREEN+ " 개", 8);
                         scoreboard.add("    ", 7);
                         scoreboard.add("남은 목숨: " + gamevariable.getPlayerVariableMap().get(player.getName()).getLife() + " 개", 6);
                         scoreboard.add("     ", 5);
@@ -106,7 +107,7 @@ public class Scoreboard
                     }
                     else if (gamevariable.getPlayerVariableMap().get(player.getName()).getHumanType().equals(PlayerVariable.HumanType.KILLER))
                     {
-                        scoreboard.add("켜진 배전박스 " + gamevariable.getRepairBoxCount() + "/" + 4+ChatColor.DARK_GREEN+ " 개", 8);
+                        scoreboard.add("켜진 배전박스 " + gamevariable.getRepairBoxCount() + " / " + 4+ChatColor.DARK_GREEN+ " 개", 8);
                         scoreboard.add("             ", 7);
                         scoreboard.add("남은 생존자 수: " + (gamevariable.getGamePlayerList().size() - gamevariable.getKillerPlayerList().size() - deathCount - escapeCount)+ " 명", 6);
                         scoreboard.add("         ", 5);
@@ -123,7 +124,7 @@ public class Scoreboard
 
             }
 
-        }.runTaskTimer(Main.instance,0l,20l);
+        }.runTaskTimer(Main.instance,20l,20l);
 
 
 

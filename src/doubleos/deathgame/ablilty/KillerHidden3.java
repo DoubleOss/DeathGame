@@ -77,7 +77,7 @@ public class KillerHidden3 implements Listener , Hidden
         {
             if(gameVariable.getPlayerListVariableMap().get(event.getPlayer().getName()).getObserver())
                 return;
-            if(event.getAction().equals(Action.RIGHT_CLICK_AIR))
+            if(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
             {
                 if (event.getHand() != EquipmentSlot.HAND)
                 {
@@ -92,8 +92,11 @@ public class KillerHidden3 implements Listener , Hidden
                         {
                             if(m_skill1Cooltime <= 0)
                             {
-
                                 setInvisible(event.getPlayer());
+                            }
+                            else
+                            {
+                                event.getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +" 쿨타임이 " + m_skill1Cooltime+ "초 남으셨습니다.");
                             }
                         }
                         else if(m_skill1Active == true)
@@ -104,15 +107,23 @@ public class KillerHidden3 implements Listener , Hidden
                     ItemStack stack2  = GameItem.Instance().m_killerHidden3_Ability2_Item;
                     if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(stack2.getType()))
                     {
-                        if(m_skill2Cooltime <= 0)
+                        if(!m_skill1Active)
                         {
-                            shootSnowBall(event.getPlayer());
+                            if(m_skill2Cooltime <= 0)
+                            {
+                                shootSnowBall(event.getPlayer());
+                            }
+                            else
+                            {
+                                event.getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +" 쿨타임이 " + m_skill2Cooltime+ "초 남으셨습니다.");
+
+                            }
                         }
                         else
                         {
-                            event.getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +" 쿨타임이 " + m_skill2Cooltime+ "초 남으셨습니다.");
-
+                            event.getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" + ChatColor.WHITE +" 은신중에는 사용 할 수 없습니다.");
                         }
+
                     }
                 }
             }
@@ -139,7 +150,7 @@ public class KillerHidden3 implements Listener , Hidden
 
                         for(Player p :Bukkit.getOnlinePlayers())
                         {
-                            if(p.isOp())
+                            if(GameVariable.Instance().getPlayerListVariableMap().get(p.getName()).getObserver())
                             {
                                 p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ ((Player) event.getHitEntity()).getPlayer().getName() +
                                         ChatColor.WHITE+ " 인형의 눈알에 맞아 잠시 구속에 걸립니다.");
@@ -161,10 +172,10 @@ public class KillerHidden3 implements Listener , Hidden
         GameVariable gameVariable = GameVariable.Instance();
         if(gameVariable.getPlayerVariableMap().get(p.getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER))
         {
-            m_skill2Cooltime = 15;
+            m_skill2Cooltime = 25;
         }
         else
-            m_skill2Cooltime = 30;
+            m_skill2Cooltime = 50;
 
         BukkitTask task = new BukkitRunnable()
         {
@@ -200,7 +211,7 @@ public class KillerHidden3 implements Listener , Hidden
             m_skill1Cooltime = 20;
         for(Player player :Bukkit.getOnlinePlayers())
         {
-            if(player.isOp())
+            if(GameVariable.Instance().getPlayerListVariableMap().get(player.getName()).getObserver())
             {
                 player.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.WHITE + "살인마가 " + ChatColor.RED +p.getPlayer().getName()+ ChatColor.WHITE + " 님이 은신을 사용하셨습니다.");
             }

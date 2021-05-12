@@ -34,29 +34,44 @@ public class KillerSound
                         {
                             if(!p.getName().equals(killer.getName()))
                             {
-                                if(p.getLocation().distance(killer.getLocation()) <= 30)
+                                double resultY = (p.getLocation().getY() - killer.getLocation().getY());
+                                if(resultY < 0)
+                                    resultY *= -1;
+                                if(resultY <= 4)
                                 {
-                                    if(variableMap.get(p.getName()).getHumanType().equals(PlayerVariable.HumanType.HUMAN))
+                                    if(p.getLocation().distance(killer.getLocation()) <= 50)
                                     {
-                                        if(m_soundSpeed[0] != getDistanceSoundSpeed(p.getLocation().distance(killer.getLocation())))
+                                        if(variableMap.get(p.getName()).getHumanType().equals(PlayerVariable.HumanType.HUMAN))
                                         {
-                                            m_soundSpeed[0] = getDistanceSoundSpeed(p.getLocation().distance(killer.getLocation()));
-                                            if(m_soundSpeed[0] != 2000)
+                                            if(m_soundSpeed[0] != getDistanceSoundSpeed(p.getLocation().distance(killer.getLocation())))
                                             {
-                                                if (!variableMap.get(p.getName()).getSoundKillerPlaying())
+                                                m_soundSpeed[0] = getDistanceSoundSpeed(p.getLocation().distance(killer.getLocation()));
+                                                if(m_soundSpeed[0] != 2000)
                                                 {
-                                                    variableMap.get(p.getName()).setSoundKillerPlaying(true);
-                                                    p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "true" + "_" + "killer" + "_" + "%d", m_soundSpeed[0]).getBytes());
+                                                    if (!variableMap.get(p.getName()).getSoundKillerPlaying())
+                                                    {
+                                                        variableMap.get(p.getName()).setSoundKillerPlaying(true);
+                                                        p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "true" + "_" + "killer" + "_" + "%d", m_soundSpeed[0]).getBytes());
+                                                    }
+                                                    else
+                                                    {
+                                                        p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "true" + "_" + "killer" + "_" + "%d", m_soundSpeed[0]).getBytes());
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    variableMap.get(p.getName()).setSoundKillerPlaying(false);
+                                                    p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false" + "_" + "killer").getBytes());
                                                 }
                                             }
-                                            else
-                                            {
-                                                variableMap.get(p.getName()).setSoundKillerPlaying(false);
-                                                p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false" + "_" + "killer").getBytes());
-                                            }
+                                        }
+                                        else
+                                        {
+                                            variableMap.get(p.getName()).setSoundKillerPlaying(false);
+                                            p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false" + "_" + "killer").getBytes());
                                         }
                                     }
-                                    else
+                                    else if (variableMap.get(p.getName()).getSoundKillerPlaying())
                                     {
                                         variableMap.get(p.getName()).setSoundKillerPlaying(false);
                                         p.sendPluginMessage(Main.instance, "DeathGame", String.format("HeartSound" + "_" + "false" + "_" + "killer").getBytes());
@@ -98,11 +113,15 @@ public class KillerSound
         }
         else if (distance <= 10)
         {
-            return 500;
+            return 600;
         }
         else if (distance <= 30)
         {
-            return  800;
+            return 800;
+        }
+        else if (distance <= 50)
+        {
+            return  1000;
         }
         else
             return  2000;

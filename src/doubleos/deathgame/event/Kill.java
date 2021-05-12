@@ -48,6 +48,8 @@ public class Kill implements Listener
                             common.initCommon(event.getEntity());
                             event.getEntity().getPlayer().sendMessage(ChatColor.RED + "[죽음의 술래잡기]" +ChatColor.WHITE + " 당신은 전도를 받아 살인마로 다시 부활합니다.");
                             gameVariable.getPlayerVariableMap().get(event.getEntity().getName()).setHumanType(PlayerVariable.HumanType.KILLER);
+                            gameVariable.getPlayerVariableMap().get(event.getEntity().getName()).setKillerType(PlayerVariable.KillerType.COMMON);
+
                             gameVariable.addKillerListName(event.getEntity());
                             gameVariable.setHidden2Targer(null);
                             //setKillColltime(event.getEntity().getKiller());
@@ -67,7 +69,7 @@ public class Kill implements Listener
                                 {
                                     p2.sendTitle("[!]", ChatColor.GREEN+ "남은 기자들이 살인마로 변하여 게임이 종료됩니다.", 1, 30, 1);
                                     p2.sendMessage( ChatColor.GREEN+ "남은 기자들이 살인마로 변하여 게임이 종료됩니다.");
-                                    p2.performCommand("spawn");
+                                    p2.performCommand("스폰");
                                     gameVariable.GameReset();
                                 }
 
@@ -93,7 +95,7 @@ public class Kill implements Listener
                                 {
                                     p2.sendTitle("[!]", ChatColor.GREEN+ " 모든 생존자들이 죽어 게임이 종료됩니다.", 1, 30, 1);
                                     p2.sendMessage( ChatColor.GREEN+ " 모든 생존자들이 죽어 게임이 종료됩니다.");
-                                    p2.performCommand("spawn");
+                                    p2.performCommand("스폰");
                                     gameVariable.GameReset();
 
                                 }
@@ -113,7 +115,7 @@ public class Kill implements Listener
                             {
                                 p2.sendTitle("[!]", ChatColor.GREEN+ " 모든 생존자들이 죽어 게임이 종료됩니다.", 1, 30, 1);
                                 p2.sendMessage( ChatColor.GREEN+ " 모든 생존자들이 죽어 게임이 종료됩니다.");
-                                p2.performCommand("spawn");
+                                p2.performCommand("스폰");
                                 gameVariable.GameReset();
                             }
                             Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(),"영상 전체재생 death.mp4");
@@ -134,7 +136,7 @@ public class Kill implements Listener
                             {
                                 p2.sendTitle("[!]", ChatColor.GREEN+ " 모든 생존자들이 죽어 게임이 종료됩니다.", 1, 30, 1);
                                 p2.sendMessage( ChatColor.GREEN+ " 모든 생존자들이 죽어 게임이 종료됩니다.");
-                                p2.performCommand("spawn");
+                                p2.performCommand("스폰");
                                 gameVariable.GameReset();
                             }
                             Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(),"영상 전체재생 death.mp4");
@@ -189,7 +191,15 @@ public class Kill implements Listener
                 if(gameVariable.getPlayerVariableMap().get(event.getPlayer().getName()).getHumanType().equals(PlayerVariable.HumanType.KILLER))
                 {
                     Location loc = new Location(Bukkit.getWorld("world"), -532, 62, 67);
-                    event.getPlayer().teleport(loc);
+                    BukkitTask task = new BukkitRunnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            event.getPlayer().teleport(loc);
+                            this.cancel();
+                        }
+                    }.runTaskTimer(Main.instance, 0l, 5l);
 
                 }
             }

@@ -33,6 +33,7 @@ public class PlayerVariable
     boolean m_boxOpen = false;
     boolean m_miniGamePlaying = false;
     boolean m_healKit = false;
+    boolean m_checkShulkerBoxCool = false;
 
     FileConfiguration config;
 
@@ -53,6 +54,7 @@ public class PlayerVariable
         m_boxOpen = false;
         m_miniGamePlaying = false;
         m_healKit = false;
+        m_checkShulkerBoxCool = false;
         //Main.instance.variablePlayer.put(m_player, this);
         GameVariable.Instance().getPlayerListVariableMap().put(player.getName(), this);
     }
@@ -76,9 +78,18 @@ public class PlayerVariable
         m_boxOpen = false;
         m_miniGamePlaying = false;
         m_healKit = false;
+        m_checkShulkerBoxCool = false;
     }
 
 
+    public boolean getCheckShulkerBoxCool()
+    {
+        return m_checkShulkerBoxCool;
+    }
+    public void setCheckShulkerBoxCool(boolean bool)
+    {
+        m_checkShulkerBoxCool = bool;
+    }
     public boolean getHealKit()
     {
         return  m_healKit;

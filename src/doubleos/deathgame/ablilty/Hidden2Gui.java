@@ -38,7 +38,7 @@ public class Hidden2Gui implements Listener
 
     public void initGuiItem()
     {
-        m_inv = Bukkit.createInventory(null, 45, "기도 지정");
+        m_inv = Bukkit.createInventory(null, 45, "전도 지정");
 
         int[] slot = new int[]{10, 12, 14, 16, 28, 30, 32, 34};
 
@@ -79,7 +79,7 @@ public class Hidden2Gui implements Listener
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event)
     {
-        if(event.getInventory().getTitle().equalsIgnoreCase("기도 지정"))
+        if(event.getInventory().getTitle().equalsIgnoreCase("전도 지정"))
         {
             event.setCancelled(true);
             if(!event.getClick().equals(ClickType.LEFT))
@@ -100,53 +100,56 @@ public class Hidden2Gui implements Listener
     @EventHandler
     public void onInventoryClick(final InventoryDragEvent event)
     {
-        if(event.getInventory().getTitle().equalsIgnoreCase("기도 지정"))
+        if(event.getInventory().getTitle().equalsIgnoreCase("전도 지정"))
         {
             event.setCancelled(true);
         }
     }
 
 
-    @EventHandler
     void hidden2Ablilty(InventoryClickEvent event)
     {
-        if(event.getInventory().getTitle().equalsIgnoreCase("기도 지정"))
+        if(event.getInventory().getTitle().equalsIgnoreCase("전도 지정"))
         {
 
             if(!event.getClick().equals(ClickType.LEFT))
             {
                 return;
             }
-            m_target = Bukkit.getServer().getPlayer(event.getCurrentItem().getItemMeta().getDisplayName().replace("§f", ""));
-            Player p = (Player) event.getWhoClicked();
-            p.sendMessage(ChatColor.RED + "[죽음의 술래잡기]"+ ChatColor.WHITE + " " + ChatColor.RED + m_target.getName() + ChatColor.WHITE +" 님을 전도 대상으로 고르셨습니다.");
-            GameVariable.Instance().setHidden2Targer(m_target);
-            GameVariable.Instance().getKillerHidden2().m_skill2Cooltime = 120;
-            for(Player player :Bukkit.getOnlinePlayers())
+            if(GameVariable.Instance().getHidden2Target() == null)
             {
-                if(player.isOp())
+                m_target = Bukkit.getServer().getPlayer(event.getCurrentItem().getItemMeta().getDisplayName().replace("§f", ""));
+                Player p = (Player) event.getWhoClicked();
+                p.sendMessage(ChatColor.RED + "[죽음의 술래잡기]"+ ChatColor.WHITE + " " + ChatColor.RED + m_target.getName() + ChatColor.WHITE +" 님을 전도 대상으로 고르셨습니다.");
+                GameVariable.Instance().setHidden2Targer(m_target);
+                GameVariable.Instance().getKillerHidden2().m_skill2Cooltime = 90;
+                event.getWhoClicked().closeInventory();
+                for(Player player :Bukkit.getOnlinePlayers())
                 {
-                    player.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.WHITE + "살인마가 " + ChatColor.RED +m_target.getPlayer().getName()+ ChatColor.WHITE + " 님을 전도 대상으로 고르셨습니다.");
+                    if(player.isOp())
+                    {
+                        player.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.WHITE + "살인마가 " + ChatColor.RED +m_target.getPlayer().getName()+ ChatColor.WHITE + " 님을 전도 대상으로 고르셨습니다.");
+                    }
                 }
+                BukkitTask task = new BukkitRunnable()
+                {
+                    @Override
+                    public void run()
+                    {
+
+                        if(GameVariable.Instance().getKillerHidden2().m_skill2Cooltime <= 0)
+                        {
+                            GameVariable.Instance().setHidden2Targer(null);
+                            this.cancel();
+                        }
+                        else
+                        {
+                            GameVariable.Instance().getKillerHidden2().m_skill2Cooltime--;
+                        }
+                    }
+                }.runTaskTimer(Main.instance, 0l, 20l);
             }
 
-            BukkitTask task = new BukkitRunnable()
-            {
-                @Override
-                public void run()
-                {
-
-                    if(GameVariable.Instance().getKillerHidden2().m_skill2Cooltime <= 0)
-                    {
-                        GameVariable.Instance().setHidden2Targer(null);
-                        this.cancel();
-                    }
-                    else
-                    {
-                        GameVariable.Instance().getKillerHidden2().m_skill2Cooltime--;
-                    }
-                }
-            }.runTaskTimer(Main.instance, 0l, 20l);
         }
 
     }

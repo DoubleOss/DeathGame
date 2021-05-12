@@ -22,7 +22,7 @@ public class Damage implements Listener
 
         if(event.getDamager() instanceof Player && event.getEntity() instanceof Player || event.getDamager() instanceof Arrow)
         {
-            if(gameVariable.getGameState().equals(GameVariable.GameState.PLAY))
+            if(gameVariable.getGameState().equals(GameVariable.GameState.PLAY) || !gameVariable.getTeleporting())
             {
                 Player victim = (Player)event.getEntity();
                 String killerName = "";
@@ -39,7 +39,8 @@ public class Damage implements Listener
                 {
                     killerName = event.getDamager().getName();
                 }
-                if(gameVariable.getPlayerVariableMap().get(killerName).getHumanType().equals(PlayerVariable.HumanType.HUMAN))
+                if(gameVariable.getPlayerVariableMap().get(killerName).getHumanType().equals(PlayerVariable.HumanType.HUMAN) ||
+                gameVariable.getPlayerVariableMap().get(event.getDamager().getName()).equals(PlayerVariable.HumanType.KILLER))
                 {
                     event.setCancelled(true);
                     return;
@@ -66,6 +67,10 @@ public class Damage implements Listener
                     event.setCancelled(true);
                 }
 
+            }
+            else
+            {
+                event.setCancelled(true);
             }
         }
     }

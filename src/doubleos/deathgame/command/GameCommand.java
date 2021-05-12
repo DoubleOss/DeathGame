@@ -45,14 +45,6 @@ public class GameCommand implements CommandExecutor
             GameVariable gamevariable = GameVariable.Instance();
             MissionManager missionManager = MissionManager.Instance();
             Player player = (Player)sender;
-            if(s.equalsIgnoreCase("공지"))
-            {
-                if(!s.isEmpty())
-                {
-                    Utils.Instance().broadcastTitle(" [!]", strings.toString(), 1, 20, 1, ChatColor.WHITE);
-                    return true;
-                }
-            }
             if(s.equalsIgnoreCase("죽술"))
             {
                 if(strings.length <1)
@@ -106,6 +98,11 @@ public class GameCommand implements CommandExecutor
                                     else
                                     {
                                         player.sendMessage("킬러가 이미 존재함으로 킬러 뽑기는 스킵됩니다.");
+                                        giveItem();
+                                        KillerCommon common = new KillerCommon();
+                                        common.initCommon(gamevariable.getOrignalKillerPlayer());
+                                        numberToSetStageAbility(Integer.parseInt(strings[1]));
+
                                     }
 
                                     player.sendMessage("테스트 " + gamevariable.getGamePlayerList());
@@ -123,7 +120,7 @@ public class GameCommand implements CommandExecutor
                                     missionManager.initMissionBox();
                                     for(Player p1 : Bukkit.getOnlinePlayers())
                                     {
-                                        p1.sendTitle("[!]", "15초 동안 스토리북을 읽을 시간이 주어집니다.", 0, 60, 0);
+                                        p1.sendTitle("[!]", "30초 동안 스토리북을 읽을 시간이 주어집니다.", 0, 60, 0);
                                     }
                                     this.cancel();
                                 }
@@ -148,7 +145,7 @@ public class GameCommand implements CommandExecutor
                                     this.cancel();
 
                                 }
-                            }.runTaskTimer(Main.instance, 300l, 300l);
+                            }.runTaskTimer(Main.instance, 600l, 600l);
                             //playSound();
 
                         }
@@ -185,6 +182,7 @@ public class GameCommand implements CommandExecutor
                             }
                             return true;
                         }
+                        return true;
 
                     case "플레이어":
                         player.sendMessage("참가중인 플레이어: " + gamevariable.getGamePlayerList());
@@ -208,9 +206,10 @@ public class GameCommand implements CommandExecutor
                             Player killer = Bukkit.getPlayer(strings[1]);
                             gamevariable.getPlayerVariableMap().put(killer.getName(), gamevariable.getPlayerListVariableMap().get(killer.getName()));
                             gamevariable.getPlayerVariableMap().get(killer.getName()).setHumanType(PlayerVariable.HumanType.KILLER);
+                            gamevariable.getPlayerVariableMap().get(killer.getName()).setKillerType(PlayerVariable.KillerType.COMMON);
                             gamevariable.getGamePlayerList().add(killer.getName());
                             sender.sendMessage(killer.getName());
-                            common.initCommon(killer);
+                            //common.initCommon(killer);
                             gamevariable.addKillerListName(killer);
                             gamevariable.setOrignalKillerPlayer(killer);
                             gamevariable.setCheckKiller(true);
@@ -218,6 +217,15 @@ public class GameCommand implements CommandExecutor
                             //Bukkit.getPlayer(strings[1]).sendMessage("당신이 살인마로 지정되었습니다.");
                             return true;
                         }
+                        return true;
+                    case "구속해제":
+                        if((strings[1].isEmpty())==false || strings[1] != null)
+                        {
+                            Player p3 = Bukkit.getPlayer(strings[1]);
+                            p3.setWalkSpeed(0.2f);
+                        }
+                        return true;
+
                     case "전도":
                         Hidden2Gui hidden2Gui = new Hidden2Gui();
                         hidden2Gui.initGuiItem();
@@ -261,10 +269,9 @@ public class GameCommand implements CommandExecutor
                             sender.sendMessage("남은 체력 여부: " + gamevariable.getPlayerListVariableMap().get(p.getName()).getLife());
                             sender.sendMessage("상자 오픈 가능 여부: " + gamevariable.getPlayerListVariableMap().get(p.getName()).getBoxOpen());
                             sender.sendMessage("힐키트 사용중 여부: " + gamevariable.getPlayerListVariableMap().get(p.getName()).getHealKit());
-                            
-                            
                             return true;
                         }
+                        return true;
                     case "게임정보":
                         sender.sendMessage("");
                         sender.sendMessage("     게임 정보");
@@ -294,32 +301,51 @@ public class GameCommand implements CommandExecutor
                         sender.sendMessage("");
                         return true;
                     case "탈출완료":
-                        if(!gamevariable.getPlayerVariableMap().get(sender.getName()).getEscape())
+                        if(strings[1] != null)
                         {
-                            gamevariable.getPlayerVariableMap().get(sender.getName()).setEscape(true);
-                            int deathCount = 0;
-                            for(Player p : Bukkit.getOnlinePlayers())
+                            Player p4 = Bukkit.getPlayer(strings[1]);
+                            if(!gamevariable.getPlayerListVariableMap().get(p4).getObserver())
                             {
-                                if(gamevariable.getPlayerVariableMap().get(p.getName()).getObserver())
+                                if(gamevariable.getPlayerVariableMap().get(p4.getName()).getHumanType().equals(PlayerVariable.HumanType.HUMAN))
                                 {
-                                    deathCount++;
+                                    if(!gamevariable.getPlayerVariableMap().get(p4.getName()).getEscape())
+                                    {
+                                        gamevariable.getPlayerVariableMap().get(p4.getName()).setEscape(true);
+                                        int deathCount = 0;
+                                        for(Player p : Bukkit.getOnlinePlayers())
+                                        {
+                                            if(gamevariable.getPlayerVariableMap().get(p.getName()) != null)
+                                            {
+                                                if(gamevariable.getPlayerVariableMap().get(p.getName()).getObserver())
+                                                {
+                                                    deathCount++;
+                                                }
+                                            }
+
+                                        }
+                                        int count = gamevariable.getGamePlayerList().size() - gamevariable.getKillerPlayerList().size() - deathCount;
+                                        gamevariable.setEscapePlayerCount(gamevariable.getEscapePlayerCount()+1);
+                                        for(Player p : Bukkit.getOnlinePlayers())
+                                        {
+                                            if(p.isOp())
+                                            {
+                                                p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ p4.getName() +  ChatColor.WHITE +" 님이 탈출 하셨습니다. 남은인원 : " + gamevariable.getEscapePlayerCount() + " | " + count);
+                                            }
+                                        }
+                                        if(count - gamevariable.getEscapePlayerCount() == 0 && gamevariable.getEscapePlayerCount() >= 3)
+                                        {
+                                            for(Player p2 : Bukkit.getOnlinePlayers())
+                                            {
+                                                if(p2.isOp())
+                                                    p2.sendMessage(ChatColor.GOLD + "[알림] " + ChatColor.WHITE +" 게임이 종료되었습니다.");
+                                            }
+                                            //gamevariable.GameReset();
+                                        }
+                                        return true;
+                                    }
                                 }
+
                             }
-                            int count = gamevariable.getGamePlayerList().size() - gamevariable.getKillerPlayerList().size() - deathCount;
-                            gamevariable.setEscapePlayerCount(gamevariable.getEscapePlayerCount()+1);
-                            for(Player p : Bukkit.getOnlinePlayers())
-                            {
-                                if(p.isOp())
-                                {
-                                    p.sendMessage(ChatColor.GOLD + "[알림] "+ ChatColor.RED+ sender.getName() +  ChatColor.WHITE +" 님이 탈출 하셨습니다. 남은인원 : " + gamevariable.getEscapePlayerCount() + " | " + count);
-                                }
-                            }
-                            if(gamevariable.getEscapePlayerCount() - count == 0 && gamevariable.getEscapePlayerCount() >= 3)
-                            {
-                                ((Player) sender).performCommand("");
-                                gamevariable.GameReset();
-                            }
-                            return true;
                         }
                         return true;
                     case "게임템지급":

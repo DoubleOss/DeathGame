@@ -119,6 +119,7 @@ public class FactoryHidden implements Listener
                                             Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "히든영상");
                                             GameVariable.Instance().GameReset();
                                         }
+                                        return;
                                     }
                                 }
                             }

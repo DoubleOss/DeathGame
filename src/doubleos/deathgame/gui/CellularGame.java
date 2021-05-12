@@ -83,6 +83,7 @@ public class CellularGame implements Listener
     @EventHandler
     public void onInventoryClickGameStart(InventoryClickEvent event)
     {
+
         if(event.getInventory().getTitle().equalsIgnoreCase("세포 게임"))
         {
             event.setCancelled(true);

@@ -25,7 +25,20 @@ public class MissionManager
         MISSION3;
     }
 
+    private MissionManager(){}
+
+    private static class InnerInstanceMissionManagerClazz
+    {
+        private static final MissionManager uniqueGameVariable = new MissionManager();
+    }
+
+    public static MissionManager Instance()
+    {
+        return MissionManager.InnerInstanceMissionManagerClazz.uniqueGameVariable;
+    }
+
     //싱글톤
+    /*
     static private MissionManager _instance = null;
 
     static public MissionManager Instance()
@@ -36,6 +49,8 @@ public class MissionManager
         }
         return _instance;
     }
+
+     */
     HashMap<Location, RepairBox> m_repairBoxClassMap = new HashMap<>();
     ArrayList<Location> m_repairBlock = new ArrayList<>();
 
@@ -99,6 +114,7 @@ public class MissionManager
         m_mission2_Success = false;
 
         m_Mission1_PotionCount = 0;
+        m_FactoryHiddenCount = 0;
         m_BoxRepair = 0;
 
         m_repairBoxClassMap.clear();
@@ -162,9 +178,10 @@ public class MissionManager
         else if(GameVariable.Instance().getGameStage().equals(GameVariable.GameStage.FACTORY))
         {
             m_repairBlock.add(new Location(Bukkit.getWorld("world"), -418, 63, 98));
+            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -408, 63, 92));
             m_repairBlock.add(new Location(Bukkit.getWorld("world"), -423, 75, 156));
             m_repairBlock.add(new Location(Bukkit.getWorld("world"), -420, 63, 144));
-            m_repairBlock.add(new Location(Bukkit.getWorld("world"), -408, 63, 92));
+
             //m_repairBlock.add(new Location(Bukkit.getWorld("world"), -360, 63, 88));
             //m_repairBlock.add(new Location(Bukkit.getWorld("world"), -420, 63, 144));
             //m_repairBlock.add(new Location(Bukkit.getWorld("world"), -371, 63, 146));
@@ -308,7 +325,7 @@ public class MissionManager
     public void setBoxRepair(int number)
     {
         m_BoxRepair = number;
-        if(m_BoxRepair >= 8)
+        if(m_BoxRepair >= getRepairBoxList().size())
         {
             for(String stringPlayer : GameVariable.Instance().getGamePlayerList())
             {

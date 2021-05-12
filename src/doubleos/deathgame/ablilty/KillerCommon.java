@@ -108,7 +108,7 @@ public class KillerCommon implements Listener
                     {
                         return;
                     }
-                    if(event.getAction().equals(Action.RIGHT_CLICK_AIR))
+                    if(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
                     {
                         if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.DIAMOND_AXE))
                         {
@@ -137,7 +137,7 @@ public class KillerCommon implements Listener
                         }
                     }
                      */
-                    if(event.getAction().equals(Action.RIGHT_CLICK_AIR))
+                    if(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
                     {
                         //탐지능력
                         ItemStack stack2 = GameItem.Instance().m_killerCom_Ability2_Item;

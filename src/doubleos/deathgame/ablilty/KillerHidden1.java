@@ -65,7 +65,7 @@ public class KillerHidden1 implements Listener, Hidden
         {
             if(gameVariable.getPlayerListVariableMap().get(event.getPlayer().getName()).getObserver())
                 return;
-            if(event.getAction().equals(Action.RIGHT_CLICK_AIR))
+            if(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
             {
                 if (event.getHand() != EquipmentSlot.HAND)
                 {
@@ -143,10 +143,10 @@ public class KillerHidden1 implements Listener, Hidden
         egg.setVelocity(p.getLocation().getDirection().normalize().multiply(2));
         if(gameVariable.getPlayerVariableMap().get(p.getName()).getKillerType().equals(PlayerVariable.KillerType.BERSERKER))
         {
-            m_skill2Cooltime = 15;
+            m_skill2Cooltime = 25;
         }
         else
-            m_skill2Cooltime = 30;
+            m_skill2Cooltime = 50;
 
         BukkitTask task = new BukkitRunnable()
         {

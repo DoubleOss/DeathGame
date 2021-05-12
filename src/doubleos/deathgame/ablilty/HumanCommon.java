@@ -39,7 +39,7 @@ public class HumanCommon implements Listener
                     for(int i = 0; i<gameVariable.getHumanTrapLocList().size(); i++)
                     {
                         //event.getPlayer().sendMessage(String.format("%f",event.getFrom().distance(m_skill1_pos.get(i))));
-                        if(event.getFrom().distance(gameVariable.getHumanTrapLocList().get(i)) <= 0.8)
+                        if(event.getFrom().distance(gameVariable.getHumanTrapLocList().get(i)) <= 1)
                         {
                             Bukkit.getWorld("world").getBlockAt(gameVariable.getHumanTrapLocList().get(i)).setType(Material.AIR);
                             gameVariable.getHumanTrapLocList().remove(i);
